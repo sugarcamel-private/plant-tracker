@@ -6,17 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>🌿 植物手帖</title>
-<script>
-if (navigator.onLine) {
-  fetch(location.href, { cache: 'no-cache' })
-    .then(res => {
-      const etag = res.headers.get('etag') || res.headers.get('last-modified');
-      const stored = sessionStorage.getItem('_etag');
-      if (etag && stored && etag !== stored) location.reload();
-      if (etag) sessionStorage.setItem('_etag', etag);
-    }).catch(() => {});
-}
-</script>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -312,6 +301,8 @@ if (navigator.onLine) {
             <span class="opt-menu-toggle-label">時間まで記録する</span>
             <button class="toggle-sw" id="time-toggle" onclick="toggleTimeSetting()"></button>
           </div>
+          <div class="opt-menu-divider"></div>
+          <button class="opt-menu-item" onclick="location.reload()">🔄 最新に更新</button>
           <div class="opt-menu-divider"></div>
           <button class="opt-menu-item danger" onclick="confirmReset();closeOptMenu()">🗑 全データを削除</button>
         </div>
