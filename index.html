@@ -406,7 +406,7 @@ let editingPlantId = null;
 let selectedEmoji = '🌿';
 let selectedLogTypes = new Set(); // multi-select
 let selectedLogPlantId = null;
-let currentLogFilter = 'all';
+let currentLogFilter = new Set(['all']);
 let calYear, calMonth;
 let calWeekStart = null;
 let selectedCalDate = null;
@@ -555,12 +555,14 @@ function renderPlants() {
       </div>
       <div class="card-detail" id="detail-${p.id}">
         <div class="detail-grid">
-          <div class="detail-item"><div class="detail-label">💧 最終水やり</div><div class="detail-value ${lw?'':'none'}">${lw?formatDateRel(lw.date):'未記録'}</div></div>
-          <div class="detail-item"><div class="detail-label">🌱 最終施肥</div><div class="detail-value ${lf?'':'none'}">${lf?formatDateRel(lf.date):'未記録'}</div></div>
-          <div class="detail-item"><div class="detail-label">☀️ 置き場所</div><div class="detail-value ${p.location?'':'none'}">${p.location||'未設定'}</div></div>
-          <div class="detail-item"><div class="detail-label">🌱 栽培開始日</div><div class="detail-value ${p.startDate?'':'none'}">${p.startDate ? formatStartDate(p.startDate) : '未設定'}</div></div>
-          <div class="detail-item"><div class="detail-label">💧 水やり間隔</div><div class="detail-value ${p.waterInterval?'':'none'}">${p.waterInterval?p.waterInterval+'日ごと':'未設定'}</div></div>
+          ${lw ? `<div class="detail-item"><div class="detail-label">💧 最終水やり</div><div class="detail-value">${formatDateRel(lw.date)}</div></div>` : ''}
+          ${lf ? `<div class="detail-item"><div class="detail-label">🌱 最終施肥</div><div class="detail-value">${formatDateRel(lf.date)}</div></div>` : ''}
+          ${p.startDate ? `<div class="detail-item"><div class="detail-label">📅 栽培開始日</div><div class="detail-value">${formatStartDate(p.startDate)}</div></div>` : ''}
+          ${p.location ? `<div class="detail-item"><div class="detail-label">☀️ 置き場所</div><div class="detail-value">${p.location}</div></div>` : ''}
+          ${p.waterInterval ? `<div class="detail-item"><div class="detail-label">💧 水やり間隔</div><div class="detail-value">${p.waterInterval}日ごと</div></div>` : ''}
+          ${p.fertilizeInterval ? `<div class="detail-item"><div class="detail-label">🌱 施肥間隔</div><div class="detail-value">${p.fertilizeInterval}日ごと</div></div>` : ''}
         </div>
+        ${p.memo ? `<div class="detail-item" style="margin-top:8px;"><div class="detail-label">📝 メモ</div><div class="detail-value">${p.memo}</div></div>` : ''}
         ${recent.length ? `
         <div class="recent-logs">
           <div class="recent-logs-title">最近の記録</div>
@@ -823,17 +825,32 @@ function updateLogPlantFilter() {
     plants.map(p=>`<option value="${p.id}" ${p.id===cur?'selected':''}>${p.emoji} ${p.name}</option>`).join('');
 }
 function filterLogs(type, btn) {
-  currentLogFilter = type;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
+  if (type === 'all') {
+    // allをタップ → すべて選択にリセット
+    currentLogFilter = new Set(['all']);
+  } else {
+    currentLogFilter.delete('all');
+    if (currentLogFilter.has(type)) {
+      // 選択中をタップ → 解除
+      currentLogFilter.delete(type);
+      // 何も選択されなくなったらallに戻す
+      if (currentLogFilter.size === 0) currentLogFilter = new Set(['all']);
+    } else {
+      currentLogFilter.add(type);
+    }
+  }
+  // ボタンのactive状態を更新
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.classList.toggle('active', currentLogFilter.has(c.dataset.type));
+  });
   renderLogs();
 }
 function renderLogs() {
-  const typeF  = currentLogFilter;
+  const isAll = currentLogFilter.has('all');
   const plantF = document.getElementById('log-plant-filter').value;
   let filtered = [...logs];
-  if (typeF!=='all') filtered = filtered.filter(l=>l.type===typeF);
-  if (plantF!=='all') filtered = filtered.filter(l=>l.plantId===plantF);
+  if (!isAll) filtered = filtered.filter(l => currentLogFilter.has(l.type));
+  if (plantF !== 'all') filtered = filtered.filter(l => l.plantId === plantF);
   filtered.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
   const container = document.getElementById('timeline-list');
