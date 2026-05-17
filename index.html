@@ -604,11 +604,13 @@ function handleAddBtn() {
 // ===== RESET =====
 function confirmReset() {
   showConfirm('🗑','すべてのデータを削除しますか？',
-    '植物と記録がすべて消去され、ローカルストレージも解放されます。この操作は取り消せません。',
+    '植物と記録、詳細項目の選択肢がすべて消去されます。この操作は取り消せません。',
     '削除する', true, () => {
       localStorage.removeItem('plants');
       localStorage.removeItem('logs');
+      localStorage.removeItem('masterOptions');
       plants = []; logs = [];
+      masterOptions = JSON.parse(JSON.stringify(DEFAULT_OPTIONS));
       renderPlants(); updateLogPlantFilter();
       if (currentTab === 'logs') renderLogs();
       if (currentTab === 'calendar') renderCalendar();
