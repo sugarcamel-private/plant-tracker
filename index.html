@@ -28,8 +28,21 @@
   .header-btns { display: flex; gap: 8px; }
   .add-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--sage-dark); border: none; color: white; font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(74,107,78,0.35); transition: transform 0.15s; }
   .add-btn:active { transform: scale(0.93); }
-  .reset-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(192,97,74,0.1); border: none; color: var(--danger); font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
-  .reset-btn:active { transform: scale(0.93); }
+  .opt-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--mist); border: none; color: var(--ink-light); font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; position: relative; }
+  .opt-btn:active { transform: scale(0.93); }
+  .opt-menu { position: absolute; top: 48px; right: 0; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 24px rgba(30,42,31,0.15); border: 1px solid rgba(122,158,126,0.15); min-width: 220px; overflow: hidden; z-index: 150; display: none; animation: popIn 0.15s ease; }
+  .opt-menu.open { display: block; }
+  .opt-menu-item { display: flex; align-items: center; gap: 12px; padding: 14px 18px; font-size: 14px; font-weight: 500; color: var(--ink); cursor: pointer; transition: background 0.1s; font-family: 'DM Sans', sans-serif; border: none; background: none; width: 100%; text-align: left; }
+  .opt-menu-item:active { background: var(--mist); }
+  .opt-menu-item.danger { color: var(--danger); }
+  .opt-menu-divider { height: 1px; background: var(--mist); margin: 4px 0; }
+  .opt-menu-section { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: var(--earth-light); padding: 8px 18px 4px; text-transform: uppercase; }
+  .opt-menu-toggle { display: flex; align-items: center; gap: 12px; padding: 12px 18px; font-size: 14px; font-weight: 500; color: var(--ink); font-family: 'DM Sans', sans-serif; }
+  .opt-menu-toggle-label { flex: 1; }
+  .toggle-sw { width: 44px; height: 26px; border-radius: 13px; background: var(--cream-dark); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; border: none; }
+  .toggle-sw.on { background: var(--sage-dark); }
+  .toggle-sw::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; top: 3px; left: 3px; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .toggle-sw.on::after { transform: translateX(18px); }
 
   /* TABS */
   .tabs { display: flex; overflow-x: auto; scrollbar-width: none; }
@@ -145,7 +158,37 @@
   .cal-day.selected-day { background: rgba(122,158,126,0.12); }
   .cal-has-log { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); margin-top: 3px; }
 
-  /* DATE SELECT PICKER */
+  .export-btn { width: 100%; padding: 13px; border-radius: 14px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: var(--mist); color: var(--ink-light); display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.15s; margin-bottom: 10px; }
+  .export-btn:active { opacity: 0.7; }
+  .export-section-title { font-family: 'Shippori Mincho', serif; font-size: 14px; font-weight: 600; color: var(--earth-light); margin: 20px 0 10px; }
+  /* ITEM SELECTOR */
+  .item-selector { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .item-chip { padding: 7px 13px; border-radius: 20px; border: 1.5px solid var(--cream-dark); background: transparent; font-size: 13px; font-weight: 500; color: var(--ink-light); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .item-chip.selected { background: var(--sage-dark); border-color: var(--sage-dark); color: white; }
+  .item-chip-add { padding: 7px 11px; border-radius: 20px; border: 1.5px dashed var(--sage-light); background: transparent; font-size: 13px; color: var(--sage); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .item-chip-add:active { opacity: 0.7; }
+  /* ITEM OPTIONS SHEET */
+  .options-sheet-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 400; display: none; align-items: flex-end; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .options-sheet-overlay.open { display: flex; }
+  .options-sheet { background: var(--card-bg); border-radius: 24px 24px 0 0; width: 100%; max-height: 70vh; overflow-y: auto; padding: 0 0 24px; animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1); }
+  .options-sheet-handle { width: 36px; height: 4px; background: var(--cream-dark); border-radius: 2px; margin: 12px auto 8px; }
+  .options-sheet-title { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); padding: 8px 20px 12px; border-bottom: 1px solid var(--mist); }
+  .options-sheet-list { padding: 8px 16px; }
+  .options-sheet-item { display: flex; align-items: center; justify-content: space-between; padding: 11px 4px; border-bottom: 1px solid rgba(168,197,171,0.15); }
+  .options-sheet-item:last-child { border-bottom: none; }
+  .options-sheet-item-label { font-size: 15px; color: var(--ink); }
+  .options-sheet-del-btn { width: 28px; height: 28px; border-radius: 8px; border: none; background: rgba(192,97,74,0.08); color: var(--danger); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .options-sheet-add-row { display: flex; gap: 8px; padding: 12px 16px 0; }
+  .options-sheet-add-input { flex: 1; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; }
+  .options-sheet-add-input:focus { border-color: var(--sage); }
+  .options-sheet-add-btn { padding: 11px 18px; border-radius: 12px; border: none; background: var(--sage-dark); color: white; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+  .temp-row { display: flex; gap: 8px; align-items: center; }
+  .temp-input { width: 72px; padding: 12px 10px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; text-align: center; -webkit-appearance: none; appearance: none; }
+  .temp-input:focus { border-color: var(--sage); }
+  .temp-sep { font-size: 14px; color: var(--earth-light); }
+  .bool-selector { display: flex; gap: 8px; }
+  .bool-chip { flex: 1; padding: 11px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: transparent; font-size: 15px; font-weight: 500; color: var(--ink-light); cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.15s; }
+  .bool-chip.selected { background: var(--sage-dark); border-color: var(--sage-dark); color: white; }
   .date-select-row { display: flex; gap: 6px; align-items: center; }
   .date-select { flex: 1; padding: 12px 8px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
   .date-select:focus { border-color: var(--sage); }
@@ -242,7 +285,26 @@
   <div class="header-inner">
     <div class="app-title">植物手帖<span>Plant Journal</span></div>
     <div class="header-btns">
-      <button class="reset-btn" onclick="confirmReset()" title="データをリセット">🗑</button>
+      <div style="position:relative;">
+        <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
+        <div class="opt-menu" id="opt-menu">
+          <div class="opt-menu-section">エクスポート</div>
+          <button class="opt-menu-item" onclick="exportLogsCSV();closeOptMenu()">📋 記録をCSVで保存</button>
+          <button class="opt-menu-item" onclick="exportPlantsCSV();closeOptMenu()">🌿 植物情報をCSVで保存</button>
+          <div class="opt-menu-divider"></div>
+          <div class="opt-menu-section">インポート</div>
+          <button class="opt-menu-item" onclick="document.getElementById('import-logs-input').click();closeOptMenu()">📋 記録をCSVから読み込む</button>
+          <button class="opt-menu-item" onclick="document.getElementById('import-plants-input').click();closeOptMenu()">🌿 植物情報をCSVから読み込む</button>
+          <div class="opt-menu-divider"></div>
+          <div class="opt-menu-section">記録設定</div>
+          <div class="opt-menu-toggle">
+            <span class="opt-menu-toggle-label">時間まで記録する</span>
+            <button class="toggle-sw" id="time-toggle" onclick="toggleTimeSetting()"></button>
+          </div>
+          <div class="opt-menu-divider"></div>
+          <button class="opt-menu-item danger" onclick="confirmReset();closeOptMenu()">🗑 全データを削除</button>
+        </div>
+      </div>
       <button class="add-btn" onclick="handleAddBtn()">＋</button>
     </div>
   </div>
@@ -343,9 +405,43 @@
           <span class="date-select-sep">日</span>
         </div>
       </div>
-      <div class="field-group"><label class="field-label">日照・置き場所</label><input type="text" class="field-input" id="plant-location-input" placeholder="例：南向き窓際、半日陰"></div>
-      <div class="field-group"><label class="field-label">水やり間隔（日）</label><input type="number" class="field-input" id="plant-water-interval" placeholder="例：7" min="1" max="90"></div>
-      <div class="field-group"><label class="field-label">施肥間隔（日）</label><input type="number" class="field-input" id="plant-fertilize-interval" placeholder="例：30" min="1" max="365"></div>
+      <div class="field-group">
+        <label class="field-label">日当たり</label>
+        <div class="item-selector" id="location-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">水やり</label>
+        <div class="item-selector" id="water-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">休眠期</label>
+        <div class="item-selector" id="dormant-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">水やり（休眠期）</label>
+        <div class="item-selector" id="dormant-water-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">施肥</label>
+        <div class="item-selector" id="fertilize-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">温度（℃）</label>
+        <div class="temp-row">
+          <input type="number" class="temp-input" id="plant-temp-min" placeholder="最低" min="-20" max="60">
+          <span class="temp-sep">〜</span>
+          <input type="number" class="temp-input" id="plant-temp-max" placeholder="最高" min="-20" max="60">
+          <span class="temp-sep">℃</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">葉水</label>
+        <div class="bool-selector">
+          <button type="button" class="bool-chip" id="mist-yes" onclick="selectBool('mist','yes')">○</button>
+          <button type="button" class="bool-chip" id="mist-no"  onclick="selectBool('mist','no')">×</button>
+          <button type="button" class="bool-chip selected" id="mist-none" onclick="selectBool('mist','none')">未設定</button>
+        </div>
+      </div>
       <div class="field-group"><label class="field-label">メモ</label><textarea class="field-textarea" id="plant-memo-input" placeholder="特徴など"></textarea></div>
     </div>
     <div class="modal-footer">
@@ -372,7 +468,8 @@
           <div class="log-type-option" data-type="memo" onclick="toggleLogType(this)"><span class="type-icon">📝</span>メモ</div>
         </div>
       </div>
-      <div class="field-group"><label class="field-label">日時</label><input type="datetime-local" class="field-input" id="log-date-input"></div>
+      <div class="field-group" id="log-time-row"><label class="field-label">日時</label><input type="datetime-local" class="field-input" id="log-date-input"></div>
+      <div class="field-group" id="log-dateonly-row" style="display:none"><label class="field-label">日付</label><input type="date" class="field-input" id="log-date-only-input"></div>
       <div id="memo-fields-wrap">
         <div id="log-no-type-msg" style="font-size:13px;color:var(--earth-light);padding:4px 2px 12px;font-style:italic;">記録の種類を選択するとメモを入力できます</div>
       </div>
@@ -383,6 +480,23 @@
     </div>
   </div>
 </div>
+
+<!-- OPTIONS SHEET (add/delete items) -->
+<div class="options-sheet-overlay" id="options-sheet-overlay">
+  <div class="options-sheet">
+    <div class="options-sheet-handle"></div>
+    <div class="options-sheet-title" id="options-sheet-title"></div>
+    <div class="options-sheet-list" id="options-sheet-list"></div>
+    <div class="options-sheet-add-row">
+      <input type="text" class="options-sheet-add-input" id="options-sheet-input" placeholder="新しい選択肢">
+      <button class="options-sheet-add-btn" onclick="optionsSheetAdd()">追加</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN IMPORT INPUTS -->
+<input type="file" id="import-logs-input" accept=".csv" style="display:none" onchange="importLogsCSV(this)">
+<input type="file" id="import-plants-input" accept=".csv" style="display:none" onchange="importPlantsCSV(this)">
 
 <!-- CONFIRM DIALOG -->
 <div class="confirm-overlay" id="confirm-overlay">
@@ -558,9 +672,13 @@ function renderPlants() {
           ${lw ? `<div class="detail-item"><div class="detail-label">💧 最終水やり</div><div class="detail-value">${formatDateRel(lw.date)}</div></div>` : ''}
           ${lf ? `<div class="detail-item"><div class="detail-label">🌱 最終施肥</div><div class="detail-value">${formatDateRel(lf.date)}</div></div>` : ''}
           ${p.startDate ? `<div class="detail-item"><div class="detail-label">📅 栽培開始日</div><div class="detail-value">${formatStartDate(p.startDate)}</div></div>` : ''}
-          ${p.location ? `<div class="detail-item"><div class="detail-label">☀️ 置き場所</div><div class="detail-value">${p.location}</div></div>` : ''}
-          ${p.waterInterval ? `<div class="detail-item"><div class="detail-label">💧 水やり間隔</div><div class="detail-value">${p.waterInterval}日ごと</div></div>` : ''}
-          ${p.fertilizeInterval ? `<div class="detail-item"><div class="detail-label">🌱 施肥間隔</div><div class="detail-value">${p.fertilizeInterval}日ごと</div></div>` : ''}
+          ${p.location ? `<div class="detail-item"><div class="detail-label">☀️ 日当たり</div><div class="detail-value">${p.location}</div></div>` : ''}
+          ${p.water ? `<div class="detail-item"><div class="detail-label">💧 水やり</div><div class="detail-value">${p.water}</div></div>` : ''}
+          ${p.dormant ? `<div class="detail-item"><div class="detail-label">🌙 休眠期</div><div class="detail-value">${p.dormant}</div></div>` : ''}
+          ${p.dormantWater ? `<div class="detail-item"><div class="detail-label">💧 水やり(休眠期)</div><div class="detail-value">${p.dormantWater}</div></div>` : ''}
+          ${p.fertilize ? `<div class="detail-item"><div class="detail-label">🌱 施肥</div><div class="detail-value">${p.fertilize}</div></div>` : ''}
+          ${(p.tempMin != null || p.tempMax != null) ? `<div class="detail-item"><div class="detail-label">🌡️ 温度</div><div class="detail-value">${p.tempMin != null ? p.tempMin+'℃' : '?'} 〜 ${p.tempMax != null ? p.tempMax+'℃' : '?'}</div></div>` : ''}
+          ${p.mist && p.mist !== 'none' ? `<div class="detail-item"><div class="detail-label">🌫️ 葉水</div><div class="detail-value">${p.mist === 'yes' ? '○' : '×'}</div></div>` : ''}
         </div>
         ${p.memo ? `<div class="detail-item" style="margin-top:8px;"><div class="detail-label">📝 メモ</div><div class="detail-value">${p.memo}</div></div>` : ''}
         ${recent.length ? `
@@ -635,26 +753,138 @@ function formatStartDate(iso) {
   return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 }
 
+// ===== MASTER OPTIONS =====
+const DEFAULT_OPTIONS = {
+  location:      ['直射日光','明るい日陰','半日陰','日陰','窓際（南）','窓際（東西）'],
+  water:         ['毎日','2日に1回','週1','2週に1回','月1','土が乾いたら'],
+  dormantWater:  ['断水','月1','土が乾いたら','春まで待つ'],
+  fertilize:     ['月1','2週に1回','春〜秋のみ','不要'],
+  dormant:       ['冬（12〜2月）','夏（7〜8月）','なし']
+};
+let masterOptions = JSON.parse(localStorage.getItem('masterOptions') || 'null') || JSON.parse(JSON.stringify(DEFAULT_OPTIONS));
+// Migrate: add location if missing
+if (!masterOptions.location) { masterOptions.location = [...DEFAULT_OPTIONS.location]; saveMasterOptions(); }
+
+function saveMasterOptions() { localStorage.setItem('masterOptions', JSON.stringify(masterOptions)); }
+
+// current selections while modal is open
+let plantFormSelections = { location: null, water: null, dormantWater: null, fertilize: null, dormant: null, mist: 'none' };
+
+// ===== ITEM SELECTOR =====
+let _optSheetCategory = null;
+let _optSheetContainerId = null;
+
+const CATEGORY_LABELS = { location:'日当たり', water:'水やり', dormantWater:'水やり（休眠期）', fertilize:'施肥', dormant:'休眠期' };
+
+function renderItemSelector(containerId, category, currentVal) {
+  const container = document.getElementById(containerId);
+  const options = masterOptions[category];
+  container.innerHTML = options.map(opt => {
+    const safe = opt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<button type="button" class="item-chip${currentVal===opt?' selected':''}" onclick="selectItemChip('${category}','${safe}',this)">${opt}</button>`;
+  }).join('') + `<button type="button" class="item-chip-add" onclick="openOptionsSheet('${category}','${containerId}')">＋</button>`;
+}
+
+function selectItemChip(category, val, el) {
+  const container = el.closest('.item-selector');
+  if (plantFormSelections[category] === val) {
+    plantFormSelections[category] = null;
+    el.classList.remove('selected');
+  } else {
+    plantFormSelections[category] = val;
+    container.querySelectorAll('.item-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+}
+
+function openOptionsSheet(category, containerId) {
+  _optSheetCategory = category;
+  _optSheetContainerId = containerId;
+  document.getElementById('options-sheet-title').textContent = (CATEGORY_LABELS[category] || category) + ' の選択肢';
+  document.getElementById('options-sheet-input').value = '';
+  renderOptionsSheetList();
+  document.getElementById('options-sheet-overlay').classList.add('open');
+}
+
+function renderOptionsSheetList() {
+  const options = masterOptions[_optSheetCategory];
+  document.getElementById('options-sheet-list').innerHTML = options.length
+    ? options.map((opt, i) => `
+      <div class="options-sheet-item">
+        <span class="options-sheet-item-label">${opt}</span>
+        <button class="options-sheet-del-btn" onclick="optionsSheetDelete(${i})">🗑</button>
+      </div>`).join('')
+    : '<div style="font-size:13px;color:var(--earth-light);padding:8px 4px;">選択肢がまだありません</div>';
+}
+
+function optionsSheetDelete(idx) {
+  const opt = masterOptions[_optSheetCategory][idx];
+  masterOptions[_optSheetCategory].splice(idx, 1);
+  saveMasterOptions();
+  // 選択中だった場合は解除
+  if (plantFormSelections[_optSheetCategory] === opt) plantFormSelections[_optSheetCategory] = null;
+  renderOptionsSheetList();
+  renderItemSelector(_optSheetContainerId, _optSheetCategory, plantFormSelections[_optSheetCategory]);
+}
+
+function optionsSheetAdd() {
+  const val = document.getElementById('options-sheet-input').value.trim();
+  if (!val) return;
+  if (!masterOptions[_optSheetCategory].includes(val)) {
+    masterOptions[_optSheetCategory].push(val);
+    saveMasterOptions();
+  }
+  plantFormSelections[_optSheetCategory] = val;
+  document.getElementById('options-sheet-input').value = '';
+  renderOptionsSheetList();
+  renderItemSelector(_optSheetContainerId, _optSheetCategory, val);
+}
+
+function selectBool(field, val) {
+  plantFormSelections[field] = val;
+  ['yes','no','none'].forEach(v => {
+    document.getElementById(`${field}-${v}`)?.classList.toggle('selected', v===val);
+  });
+}
+
+function renderAllSelectors(p) {
+  renderItemSelector('location-selector',      'location',     p?.location     || null);
+  renderItemSelector('water-selector',         'water',        p?.water        || null);
+  renderItemSelector('dormant-selector',       'dormant',      p?.dormant      || null);
+  renderItemSelector('dormant-water-selector', 'dormantWater', p?.dormantWater || null);
+  renderItemSelector('fertilize-selector',     'fertilize',    p?.fertilize    || null);
+  plantFormSelections.location     = p?.location     || null;
+  plantFormSelections.water        = p?.water        || null;
+  plantFormSelections.dormantWater = p?.dormantWater || null;
+  plantFormSelections.fertilize    = p?.fertilize    || null;
+  plantFormSelections.dormant      = p?.dormant      || null;
+  plantFormSelections.mist         = p?.mist         || 'none';
+  selectBool('mist', plantFormSelections.mist);
+}
+
 function openAddPlantModal() {
   editingPlantId = null;
   document.getElementById('plant-modal-title').textContent = '植物を追加する';
-  ['plant-name-input','plant-species-input','plant-location-input','plant-water-interval','plant-fertilize-interval','plant-memo-input']
+  ['plant-name-input','plant-species-input','plant-memo-input']
     .forEach(id => document.getElementById(id).value = '');
+  document.getElementById('plant-temp-min').value = '';
+  document.getElementById('plant-temp-max').value = '';
   selectEmojiByValue('🌿');
   const today = new Date();
   initStartDateSelects(today.getFullYear(), today.getMonth()+1, today.getDate());
+  renderAllSelectors(null);
   document.getElementById('plant-modal').classList.add('open');
 }
+
 function openEditPlantModal(id) {
   const p = plants.find(x=>x.id===id); if (!p) return;
   editingPlantId = id;
   document.getElementById('plant-modal-title').textContent = '植物を編集する';
   document.getElementById('plant-name-input').value = p.name;
   document.getElementById('plant-species-input').value = p.species||'';
-  document.getElementById('plant-location-input').value = p.location||'';
-  document.getElementById('plant-water-interval').value = p.waterInterval||'';
-  document.getElementById('plant-fertilize-interval').value = p.fertilizeInterval||'';
   document.getElementById('plant-memo-input').value = p.memo||'';
+  document.getElementById('plant-temp-min').value = p.tempMin != null ? p.tempMin : '';
+  document.getElementById('plant-temp-max').value = p.tempMax != null ? p.tempMax : '';
   selectEmojiByValue(p.emoji);
   const today = new Date();
   if (p.startDate) {
@@ -663,8 +893,10 @@ function openEditPlantModal(id) {
   } else {
     initStartDateSelects(today.getFullYear(), today.getMonth()+1, today.getDate());
   }
+  renderAllSelectors(p);
   document.getElementById('plant-modal').classList.add('open');
 }
+
 function closePlantModal() { document.getElementById('plant-modal').classList.remove('open'); }
 function selectEmoji(el) {
   document.querySelectorAll('.emoji-option').forEach(e=>e.classList.remove('selected'));
@@ -674,18 +906,26 @@ function selectEmojiByValue(v) {
   document.querySelectorAll('.emoji-option').forEach(e=>e.classList.toggle('selected', e.dataset.emoji===v));
   selectedEmoji = v;
 }
+
 function savePlant() {
   const name = document.getElementById('plant-name-input').value.trim();
   if (!name) { showConfirm('ℹ️','名前を入力してください','','OK',false,()=>{},false); return; }
+  const tempMinVal = document.getElementById('plant-temp-min').value;
+  const tempMaxVal = document.getElementById('plant-temp-max').value;
   const data = {
     name,
-    species: document.getElementById('plant-species-input').value.trim(),
-    location: document.getElementById('plant-location-input').value.trim(),
-    waterInterval: parseInt(document.getElementById('plant-water-interval').value)||null,
-    fertilizeInterval: parseInt(document.getElementById('plant-fertilize-interval').value)||null,
-    memo: document.getElementById('plant-memo-input').value.trim(),
-    emoji: selectedEmoji,
-    startDate: getStartDateValue()
+    species:      document.getElementById('plant-species-input').value.trim(),
+    location:     plantFormSelections.location,
+    memo:         document.getElementById('plant-memo-input').value.trim(),
+    emoji:        selectedEmoji,
+    startDate:    getStartDateValue(),
+    water:        plantFormSelections.water,
+    dormant:      plantFormSelections.dormant,
+    dormantWater: plantFormSelections.dormantWater,
+    fertilize:    plantFormSelections.fertilize,
+    mist:         plantFormSelections.mist,
+    tempMin:      tempMinVal !== '' ? parseFloat(tempMinVal) : null,
+    tempMax:      tempMaxVal !== '' ? parseFloat(tempMaxVal) : null,
   };
   if (editingPlantId) {
     Object.assign(plants.find(x=>x.id===editingPlantId), data);
@@ -717,8 +957,17 @@ function openLogModal(plantId, evt) {
       <span>${p.emoji}</span> ${p.name}
     </div>`).join('');
   document.querySelectorAll('.log-type-option').forEach(o=>o.classList.remove('selected'));
-  const now = new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-  document.getElementById('log-date-input').value = now.toISOString().slice(0,16);
+  const now = new Date();
+  if (recordTime) {
+    now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+    document.getElementById('log-date-input').value = now.toISOString().slice(0,16);
+    document.getElementById('log-time-row').style.display = '';
+    document.getElementById('log-dateonly-row').style.display = 'none';
+  } else {
+    document.getElementById('log-date-only-input').value = now.toISOString().slice(0,10);
+    document.getElementById('log-time-row').style.display = 'none';
+    document.getElementById('log-dateonly-row').style.display = '';
+  }
   renderMemoFields();
   document.getElementById('log-modal').classList.add('open');
 }
@@ -775,8 +1024,14 @@ function saveLog() {
   if (!selectedLogPlantId) { showConfirm('ℹ️','植物を選択してください','','OK',false,()=>{},false); return; }
   if (selectedLogTypes.size === 0) { showConfirm('ℹ️','記録の種類を選択してください','','OK',false,()=>{},false); return; }
   syncMemos();
-  const dateVal = document.getElementById('log-date-input').value;
-  const logDate = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+  let logDate;
+  if (recordTime) {
+    const v = document.getElementById('log-date-input').value;
+    logDate = v ? new Date(v).toISOString() : new Date().toISOString();
+  } else {
+    const v = document.getElementById('log-date-only-input').value;
+    logDate = v ? new Date(v + 'T00:00:00').toISOString() : new Date().toISOString();
+  }
   typeOrder.filter(t=>selectedLogTypes.has(t)).forEach((type, i) => {
     logs.push({
       id: (Date.now() + i).toString(),
@@ -1088,17 +1343,208 @@ function renderStats() {
         <div>${plant.emoji}</div>
         <div class="activity-plant-name">${plant.name}</div>
         <div class="activity-count">${count}件</div>
-      </div>`).join('')}</div>` : ''}`;
+      </div>`).join('')}</div>` : ''}
+  `;
 }
 
-// ===== MODAL CLOSE ON OVERLAY =====
+// ===== OPTIONS MENU =====
+function toggleOptMenu(e) {
+  e.stopPropagation();
+  document.getElementById('opt-menu').classList.toggle('open');
+}
+function closeOptMenu() {
+  document.getElementById('opt-menu').classList.remove('open');
+}
+document.addEventListener('click', () => closeOptMenu());
+
+// ===== TIME SETTING =====
+let recordTime = JSON.parse(localStorage.getItem('recordTime') ?? 'true');
+function initTimeSetting() {
+  const sw = document.getElementById('time-toggle');
+  if (recordTime) sw.classList.add('on'); else sw.classList.remove('on');
+  // show/hide time input in log modal
+  const row = document.getElementById('log-time-row');
+  if (row) row.style.display = recordTime ? '' : 'none';
+}
+function toggleTimeSetting() {
+  recordTime = !recordTime;
+  localStorage.setItem('recordTime', JSON.stringify(recordTime));
+  initTimeSetting();
+}
+function escapeCSV(v) {
+  if (v == null) return '';
+  const s = String(v);
+  return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g,'""')}"` : s;
+}
+
+function downloadCSV(filename, rows) {
+  const csv = '\uFEFF' + rows.map(r => r.map(escapeCSV).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportLogsCSV() {
+  if (!logs.length) { showConfirm('ℹ️','記録がありません','','OK',false,()=>{},false); return; }
+  const header = ['日時','植物名','記録の種類','メモ'];
+  const rows = logs
+    .sort((a,b) => new Date(a.date)-new Date(b.date))
+    .map(l => {
+      const p = plants.find(x=>x.id===l.plantId);
+      const d = new Date(l.date);
+      const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+      return [dateStr, p ? p.name : '不明', logTypeLabel(l.type).replace(/^.+ /,''), l.memo||''];
+    });
+  downloadCSV('plant-logs.csv', [header, ...rows]);
+}
+
+function exportPlantsCSV() {
+  if (!plants.length) { showConfirm('ℹ️','植物が登録されていません','','OK',false,()=>{},false); return; }
+  const header = ['名前','品種','栽培開始日','置き場所','水やり間隔(日)','施肥間隔(日)','メモ'];
+  const rows = plants.map(p => [
+    p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
+    p.location||'', p.waterInterval||'', p.fertilizeInterval||'', p.memo||''
+  ]);
+  downloadCSV('plants.csv', [header, ...rows]);
+}
+
+// ===== CSV IMPORT =====
+const LOG_HEADERS   = ['日時','植物名','記録の種類','メモ'];
+const PLANT_HEADERS = ['名前','品種','栽培開始日','置き場所','水やり間隔(日)','施肥間隔(日)','メモ'];
+const TYPE_MAP = {'水やり':'water','施肥':'fertilize','植替え':'repot','病害虫':'pest','メモ':'memo'};
+
+function parseCSV(text) {
+  // Strip BOM
+  const clean = text.replace(/^\uFEFF/, '');
+  const lines = clean.split(/\r?\n/).filter(l => l.trim() !== '');
+  return lines.map(line => {
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (inQ) {
+        if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+        else if (c === '"') { inQ = false; }
+        else { cur += c; }
+      } else {
+        if (c === '"') { inQ = true; }
+        else if (c === ',') { cols.push(cur); cur = ''; }
+        else { cur += c; }
+      }
+    }
+    cols.push(cur);
+    return cols;
+  });
+}
+
+function importLogsCSV(input) {
+  const file = input.files[0];
+  input.value = '';
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const rows = parseCSV(e.target.result);
+      if (!rows.length) throw new Error('empty');
+      const header = rows[0];
+      // Validate header
+      if (!LOG_HEADERS.every((h, i) => header[i] === h)) throw new Error('header mismatch');
+      const dataRows = rows.slice(1);
+      if (!dataRows.length) { showConfirm('ℹ️','インポートするデータがありません','','OK',false,()=>{},false); return; }
+
+      let added = 0, skipped = 0;
+      const newLogs = [];
+      for (const row of dataRows) {
+        if (row.length < 4) { skipped++; continue; }
+        const [dateStr, plantName, typeName, memo] = row;
+        // Parse date: YYYY/M/D HH:mm or YYYY/M/D
+        const d = new Date(dateStr.replace(/\//g, '-'));
+        if (isNaN(d.getTime())) { skipped++; continue; }
+        const type = TYPE_MAP[typeName.trim()];
+        if (!type) { skipped++; continue; }
+        // Find matching plant by name
+        const plant = plants.find(p => p.name === plantName.trim());
+        if (!plant) { skipped++; continue; }
+        // Skip if exact duplicate (same plant, type, date)
+        const existing = logs.some(l => l.plantId===plant.id && l.type===type && l.date===d.toISOString());
+        if (existing) { skipped++; continue; }
+        newLogs.push({ id: (Date.now() + added).toString(), plantId: plant.id, type, date: d.toISOString(), memo: memo||'' });
+        added++;
+      }
+      if (added === 0 && skipped > 0) throw new Error('no valid rows');
+      logs.push(...newLogs);
+      save(); renderPlants();
+      if (currentTab==='logs') renderLogs();
+      if (currentTab==='calendar') renderCalendar();
+      showConfirm('✅', `${added}件の記録をインポートしました`, skipped ? `${skipped}件はスキップされました（植物名不一致・重複など）` : '', 'OK', false, ()=>{}, false);
+    } catch(err) {
+      showConfirm('⚠️','不正な形式のためインポートできませんでした','記録のCSVファイル（plant-logs.csv）を選択してください。','OK',false,()=>{},false);
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function importPlantsCSV(input) {
+  const file = input.files[0];
+  input.value = '';
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const rows = parseCSV(e.target.result);
+      if (!rows.length) throw new Error('empty');
+      const header = rows[0];
+      if (!PLANT_HEADERS.every((h, i) => header[i] === h)) throw new Error('header mismatch');
+      const dataRows = rows.slice(1);
+      if (!dataRows.length) { showConfirm('ℹ️','インポートするデータがありません','','OK',false,()=>{},false); return; }
+
+      let added = 0, updated = 0, skipped = 0;
+      for (const row of dataRows) {
+        if (row.length < 7) { skipped++; continue; }
+        const [name, species, startDateStr, location, waterInterval, fertilizeInterval, memo] = row;
+        if (!name.trim()) { skipped++; continue; }
+        // Parse startDate: YYYY年M月D日 → YYYY-MM-DD
+        let startDate = null;
+        if (startDateStr.trim()) {
+          const m = startDateStr.match(/(\d+)年(\d+)月(\d+)日/);
+          if (m) startDate = `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`;
+        }
+        const data = {
+          name: name.trim(), species: species.trim(), startDate,
+          location: location.trim(),
+          waterInterval: parseInt(waterInterval) || null,
+          fertilizeInterval: parseInt(fertilizeInterval) || null,
+          memo: memo.trim()
+        };
+        const existing = plants.find(p => p.name === name.trim());
+        if (existing) {
+          Object.assign(existing, data); updated++;
+        } else {
+          plants.push({ id: Date.now().toString() + added, createdAt: new Date().toISOString(), emoji: '🌿', ...data });
+          added++;
+        }
+      }
+      save(); renderPlants(); updateLogPlantFilter();
+      showConfirm('✅', `植物情報をインポートしました`, `追加：${added}件　更新：${updated}件${skipped ? `　スキップ：${skipped}件` : ''}`, 'OK', false, ()=>{}, false);
+    } catch(err) {
+      showConfirm('⚠️','不正な形式のためインポートできませんでした','植物情報のCSVファイル（plants.csv）を選択してください。','OK',false,()=>{},false);
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
 document.getElementById('plant-modal').addEventListener('click', function(e){ if(e.target===this) closePlantModal(); });
 document.getElementById('log-modal').addEventListener('click', function(e){ if(e.target===this) closeLogModal(); });
 document.getElementById('confirm-overlay').addEventListener('click', function(e){ if(e.target===this) closeConfirm(); });
+document.getElementById('options-sheet-overlay').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
 
 // ===== INIT =====
 updateLogPlantFilter();
 renderPlants();
+initTimeSetting();
 </script>
 </body>
 </html>
