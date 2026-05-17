@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>🌿 植物手帖</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #7a9e7e; --sage-light: #a8c5ab; --sage-dark: #4a6b4e;
+    --cream: #f5f0e8; --cream-dark: #ede5d5;
+    --earth: #8b6b4a; --earth-light: #c4a882;
+    --ink: #1e2a1f; --ink-light: #3d4f3e;
+    --mist: #e8ede9; --water: #6b9baf; --sun: #d4a843;
+    --danger: #c0614a; --card-bg: #fdfaf5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(ellipse at 20% 10%, rgba(122,158,126,0.12) 0%, transparent 50%), radial-gradient(ellipse at 80% 90%, rgba(107,155,175,0.08) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+
+  /* HEADER */
+  .header { position: sticky; top: 0; z-index: 100; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(122,158,126,0.2); padding: env(safe-area-inset-top, 44px) 20px 0; }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; }
+  .app-title { font-family: 'Shippori Mincho', serif; font-size: 22px; font-weight: 800; color: var(--sage-dark); letter-spacing: 0.05em; }
+  .app-title span { font-size: 11px; display: block; color: var(--earth-light); font-family: 'DM Sans', sans-serif; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; margin-top: -2px; }
+  .header-btns { display: flex; gap: 8px; }
+  .add-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--sage-dark); border: none; color: white; font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(74,107,78,0.35); transition: transform 0.15s; }
+  .add-btn:active { transform: scale(0.93); }
+  .reset-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(192,97,74,0.1); border: none; color: var(--danger); font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
+  .reset-btn:active { transform: scale(0.93); }
+
+  /* TABS */
+  .tabs { display: flex; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: 1; min-width: 64px; padding: 10px 4px; border: none; background: transparent; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; color: var(--earth-light); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .tab.active { color: var(--sage-dark); border-bottom-color: var(--sage-dark); font-weight: 600; }
+
+  /* MAIN */
+  .main { padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 20px); position: relative; z-index: 1; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* PLANT CARDS */
+  .plant-list { display: flex; flex-direction: column; gap: 12px; }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--earth-light); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-family: 'Shippori Mincho', serif; font-size: 15px; line-height: 1.8; }
+  .plant-card { background: var(--card-bg); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px rgba(30,42,31,0.08); border: 1px solid rgba(122,158,126,0.15); animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Card: always-visible header row */
+  .card-top { padding: 14px 14px 10px; display: flex; align-items: center; gap: 12px; }
+  .plant-avatar { width: 46px; height: 46px; border-radius: 12px; font-size: 23px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--mist); }
+  .plant-info { flex: 1; min-width: 0; }
+  .plant-name { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .plant-species { font-size: 11px; color: var(--earth-light); margin-top: 1px; font-style: italic; }
+  .status-badges { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+  .badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+  .badge-water { background: rgba(107,155,175,0.15); color: var(--water); }
+  .badge-fertilize { background: rgba(212,168,67,0.15); color: var(--sun); }
+  .badge-ok { background: rgba(122,158,126,0.15); color: var(--sage-dark); }
+  .badge-alert { background: rgba(192,97,74,0.12); color: var(--danger); }
+
+  /* Quick action buttons (always visible) */
+  .card-quick-btns { padding: 0 14px 10px; display: flex; gap: 7px; }
+  .quick-btn { flex: 1; padding: 8px 6px; border-radius: 10px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s, transform 0.1s; }
+  .quick-btn:active { opacity: 0.7; transform: scale(0.96); }
+  .qbtn-water { background: rgba(107,155,175,0.15); color: var(--water); }
+  .qbtn-fertilize { background: rgba(212,168,67,0.12); color: var(--sun); }
+  .qbtn-log { background: rgba(122,158,126,0.12); color: var(--sage-dark); }
+
+  /* Card expand toggle */
+  .card-expand-row { display: flex; justify-content: center; border-top: 1px solid var(--mist); }
+  .card-expand-btn { background: none; border: none; color: var(--sage-light); font-size: 12px; cursor: pointer; padding: 6px 24px; font-family: 'DM Sans', sans-serif; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+  .card-expand-btn:active { opacity: 0.7; }
+  .expand-arrow { transition: transform 0.2s; display: inline-block; }
+  .expand-arrow.open { transform: rotate(180deg); }
+
+  .card-detail { display: none; padding: 12px 14px 14px; border-top: 1px solid var(--mist); }
+  .card-detail.open { display: block; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .detail-item { background: var(--mist); border-radius: 10px; padding: 10px 12px; }
+  .detail-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--earth-light); font-weight: 600; margin-bottom: 4px; }
+  .detail-value { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .detail-value.none { color: var(--earth-light); font-style: italic; }
+  .recent-logs { margin-top: 12px; }
+  .recent-logs-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--earth-light); font-weight: 600; margin-bottom: 8px; }
+  .log-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(168,197,171,0.2); font-size: 12px; }
+  .log-item:last-child { border-bottom: none; }
+
+  .log-content { flex: 1; color: var(--ink-light); line-height: 1.4; }
+  .log-date { font-size: 10px; color: var(--earth-light); flex-shrink: 0; margin-top: 1px; }
+  .card-edit-actions { display: flex; gap: 7px; margin-top: 10px; }
+  .action-btn { flex: 1; padding: 9px 4px; border-radius: 10px; border: none; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+  .action-btn:active { opacity: 0.7; }
+  .btn-edit { background: var(--mist); color: var(--ink-light); }
+  .btn-delete { background: rgba(192,97,74,0.08); color: var(--danger); }
+
+  /* LOG VIEW */
+  .log-controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .log-filter { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+  .log-filter::-webkit-scrollbar { display: none; }
+  .filter-chip { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--cream-dark); background: transparent; font-size: 12px; font-weight: 500; color: var(--earth-light); cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .filter-chip.active { background: var(--sage-dark); border-color: var(--sage-dark); color: white; }
+  .sort-row { display: flex; align-items: center; gap: 8px; }
+  .sort-label { font-size: 11px; color: var(--earth-light); font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+  .sort-select { flex: 1; padding: 7px 10px; border-radius: 10px; border: 1.5px solid var(--cream-dark); background: var(--card-bg); font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; }
+  .timeline-date-group { margin-bottom: 16px; }
+  .timeline-date-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--earth-light); font-weight: 600; padding: 0 4px; margin-bottom: 8px; }
+  .timeline-entry { background: var(--card-bg); border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; border: 1px solid rgba(122,158,126,0.1); box-shadow: 0 1px 4px rgba(30,42,31,0.05); }
+  .timeline-body { flex: 1; min-width: 0; }
+  .timeline-plant-name { font-size: 11px; color: var(--earth-light); margin-bottom: 2px; }
+  .timeline-text { font-size: 13px; color: var(--ink); line-height: 1.5; }
+  .timeline-time { font-size: 10px; color: var(--earth-light); flex-shrink: 0; margin-top: 3px; }
+  .timeline-delete-btn { width: 28px; height: 28px; border-radius: 8px; border: none; background: rgba(192,97,74,0.08); color: var(--danger); font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; align-self: center; transition: background 0.15s; }
+  .timeline-delete-btn:active { background: rgba(192,97,74,0.2); }
+
+  /* CALENDAR */
+  .calendar-wrap { background: var(--card-bg); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px rgba(30,42,31,0.08); border: 1px solid rgba(122,158,126,0.15); margin-bottom: 14px; }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; gap: 8px; }
+  .cal-month-title { font-family: 'Shippori Mincho', serif; font-size: 17px; font-weight: 600; color: var(--ink); flex: 1; text-align: center; }
+  .cal-nav-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--mist); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-light); transition: background 0.15s; flex-shrink: 0; }
+  .cal-nav-btn:active { background: var(--cream-dark); }
+  .cal-view-toggle { display: flex; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--cream-dark); flex-shrink: 0; }
+  .cal-view-btn { padding: 5px 12px; border: none; background: transparent; font-size: 11px; font-weight: 600; color: var(--earth-light); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .cal-view-btn.active { background: var(--sage-dark); color: white; }
+
+  /* month grid */
+  .cal-weekdays { display: grid; grid-template-columns: repeat(7,1fr); padding: 0 10px; margin-bottom: 4px; }
+  .cal-weekday { text-align: center; font-size: 10px; font-weight: 600; color: var(--earth-light); padding: 4px 0; }
+  .cal-weekday:first-child { color: var(--danger); }
+  .cal-weekday:last-child { color: var(--water); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; padding: 0 10px 14px; }
+  .cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 5px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+  .cal-day:active { background: rgba(122,158,126,0.15); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.today .cal-num-wrap { background: var(--sage-dark); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .cal-day.today .cal-day-num { color: white; }
+  .cal-day-num { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1; }
+  .cal-day.sunday .cal-day-num { color: var(--danger); }
+  .cal-day.saturday .cal-day-num { color: var(--water); }
+  .cal-day.today.sunday .cal-day-num, .cal-day.today.saturday .cal-day-num { color: white; }
+  .cal-day.selected-day { background: rgba(122,158,126,0.12); }
+  .cal-has-log { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); margin-top: 3px; }
+
+  /* DATE SELECT PICKER */
+  .date-select-row { display: flex; gap: 6px; align-items: center; }
+  .date-select { flex: 1; padding: 12px 8px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
+  .date-select:focus { border-color: var(--sage); }
+  .date-select-sep { font-size: 14px; color: var(--earth-light); flex-shrink: 0; }
+  .cal-week-grid { display: flex; flex-direction: column; gap: 2px; padding: 0 10px 14px; }
+  .cal-week-row { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-radius: 10px; cursor: pointer; transition: background 0.15s; min-height: 36px; }
+  .cal-week-row:active { background: rgba(122,158,126,0.12); }
+  .cal-week-row.cal-week-selected { background: rgba(122,158,126,0.12); }
+  .cal-week-row.cal-week-today { background: rgba(74,107,78,0.07); }
+  .cal-week-date-cell { width: 44px; flex-shrink: 0; display: flex; align-items: center; gap: 5px; }
+  .cal-week-dow { font-size: 10px; font-weight: 600; color: var(--earth-light); width: 14px; }
+  .cal-week-dow.sun { color: var(--danger); } .cal-week-dow.sat { color: var(--water); }
+  .cal-week-num-wrap { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+  .cal-week-num { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1; }
+  .cal-week-row.cal-week-today .cal-week-num-wrap { background: var(--sage-dark); }
+  .cal-week-row.cal-week-today .cal-week-num { color: white; }
+  .cal-week-row.cal-week-today.sun .cal-week-num, .cal-week-row.cal-week-today.sat .cal-week-num { color: white; }
+  .cal-week-plants { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; align-items: center; }
+  .cal-week-plant-chip { display: flex; align-items: center; gap: 3px; background: var(--mist); border-radius: 8px; padding: 3px 7px; }
+  .cal-week-plant-emoji { font-size: 13px; line-height: 1; }
+  .cal-week-type-icons { font-size: 11px; line-height: 1; letter-spacing: 1px; }
+
+  .cal-detail-panel { background: var(--card-bg); border-radius: 18px; overflow: hidden; box-shadow: 0 2px 12px rgba(30,42,31,0.08); border: 1px solid rgba(122,158,126,0.15); }
+  .cal-detail-header { padding: 14px 18px 10px; border-bottom: 1px solid var(--mist); }
+  .cal-detail-date { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .cal-detail-body { padding: 8px 16px 16px; }
+  .cal-detail-empty { text-align: center; padding: 20px; color: var(--earth-light); font-size: 13px; }
+  .cal-log-entry { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(168,197,171,0.15); }
+  .cal-log-entry:last-child { border-bottom: none; }
+  .cal-log-plant { font-size: 11px; color: var(--earth-light); }
+  .cal-log-text { font-size: 13px; color: var(--ink); margin-top: 1px; }
+  .cal-log-time { font-size: 10px; color: var(--earth-light); flex-shrink: 0; margin-top: 3px; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid rgba(122,158,126,0.12); box-shadow: 0 1px 6px rgba(30,42,31,0.06); }
+  .stat-icon { font-size: 24px; margin-bottom: 8px; }
+  .stat-num { font-family: 'Shippori Mincho', serif; font-size: 28px; font-weight: 800; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--earth-light); margin-top: 4px; font-weight: 500; }
+  .section-title { font-family: 'Shippori Mincho', serif; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+  .plant-activity-list { display: flex; flex-direction: column; gap: 8px; }
+  .activity-row { background: var(--card-bg); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(122,158,126,0.1); }
+  .activity-plant-name { font-size: 14px; font-weight: 500; flex: 1; font-family: 'Shippori Mincho', serif; }
+  .activity-count { font-size: 13px; color: var(--sage-dark); font-weight: 600; }
+
+  /* MODALS */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--card-bg); border-radius: 24px 24px 0 0; width: 100%; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 32px; animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1); }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 36px; height: 4px; background: var(--cream-dark); border-radius: 2px; margin: 12px auto 8px; }
+  .modal-title { font-family: 'Shippori Mincho', serif; font-size: 18px; font-weight: 600; color: var(--ink); padding: 8px 20px 16px; border-bottom: 1px solid var(--mist); }
+  .modal-body { padding: 20px; }
+  .field-group { margin-bottom: 18px; }
+  .field-label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--earth-light); margin-bottom: 8px; }
+  .field-input, .field-textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.15s; -webkit-appearance: none; appearance: none; }
+  .field-input:focus, .field-textarea:focus { border-color: var(--sage); }
+  .field-textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+  .emoji-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+  .emoji-option { width: 44px; height: 44px; border-radius: 10px; border: 2px solid transparent; background: var(--mist); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
+  .emoji-option.selected { border-color: var(--sage-dark); background: rgba(122,158,126,0.1); }
+  .log-type-picker { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+  .log-type-option { padding: 8px 4px; border-radius: 10px; border: 2px solid transparent; background: var(--mist); font-size: 10px; font-weight: 600; text-align: center; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; color: var(--ink-light); }
+  .log-type-option .type-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+  .log-type-option.selected { border-color: var(--sage-dark); background: rgba(122,158,126,0.1); color: var(--sage-dark); }
+  .modal-footer { padding: 0 20px; display: flex; gap: 10px; }
+  .btn-cancel, .btn-save { flex: 1; padding: 14px; border-radius: 14px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+  .btn-cancel:active, .btn-save:active { opacity: 0.7; }
+  .btn-cancel { background: var(--mist); color: var(--ink-light); }
+  .btn-save { background: var(--sage-dark); color: white; }
+  .plant-selector { display: flex; flex-direction: column; gap: 8px; }
+  .plant-select-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 2px solid transparent; background: var(--mist); cursor: pointer; transition: all 0.15s; font-size: 14px; color: var(--ink); }
+  .plant-select-option.selected { border-color: var(--sage-dark); background: rgba(122,158,126,0.1); }
+
+  /* CONFIRM DIALOG */
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-box { background: var(--card-bg); border-radius: 20px; padding: 24px; width: 100%; max-width: 320px; text-align: center; animation: popIn 0.2s cubic-bezier(0.32,0.72,0,1); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+  .confirm-icon { font-size: 36px; margin-bottom: 12px; }
+  .confirm-title { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.5; }
+  .confirm-sub { font-size: 13px; color: var(--earth-light); margin-bottom: 20px; line-height: 1.6; }
+  .confirm-btns { display: flex; gap: 10px; }
+  .confirm-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .confirm-btn-cancel { background: var(--mist); color: var(--ink-light); }
+  .confirm-btn-ok { background: var(--sage-dark); color: white; }
+  .confirm-btn-danger { background: var(--danger); color: white; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="app-title">植物手帖<span>Plant Journal</span></div>
+    <div class="header-btns">
+      <button class="reset-btn" onclick="confirmReset()" title="データをリセット">🗑</button>
+      <button class="add-btn" onclick="handleAddBtn()">＋</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('plants',this)">植物一覧</button>
+    <button class="tab" onclick="switchTab('logs',this)">記録</button>
+    <button class="tab" onclick="switchTab('calendar',this)">カレンダー</button>
+    <button class="tab" onclick="switchTab('stats',this)">統計</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- PLANTS -->
+  <div id="view-plants" class="view active">
+    <div class="plant-list" id="plant-list"></div>
+  </div>
+
+  <!-- LOGS -->
+  <div id="view-logs" class="view">
+    <div class="log-controls">
+      <div class="log-filter" id="log-filter">
+        <button class="filter-chip active" data-type="all" onclick="filterLogs('all',this)">すべて</button>
+        <button class="filter-chip" data-type="water" onclick="filterLogs('water',this)">💧 水やり</button>
+        <button class="filter-chip" data-type="fertilize" onclick="filterLogs('fertilize',this)">🌱 施肥</button>
+        <button class="filter-chip" data-type="repot" onclick="filterLogs('repot',this)">🪴 植替え</button>
+        <button class="filter-chip" data-type="pest" onclick="filterLogs('pest',this)">🐛 病害虫</button>
+        <button class="filter-chip" data-type="memo" onclick="filterLogs('memo',this)">📝 メモ</button>
+      </div>
+      <div class="sort-row">
+        <span class="sort-label">植物で絞り込み：</span>
+        <select class="sort-select" id="log-plant-filter" onchange="renderLogs()">
+          <option value="all">すべての植物</option>
+        </select>
+      </div>
+    </div>
+    <div id="timeline-list"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="view-calendar" class="view">
+    <div class="calendar-wrap">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-month-title" id="cal-month-title"></div>
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn active" id="cal-btn-month" onclick="setCalView('month')">月</button>
+          <button class="cal-view-btn" id="cal-btn-week" onclick="setCalView('week')">週</button>
+        </div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+      </div>
+      <div class="cal-weekdays" id="cal-weekdays-row">
+        <div class="cal-weekday">日</div><div class="cal-weekday">月</div><div class="cal-weekday">火</div>
+        <div class="cal-weekday">水</div><div class="cal-weekday">木</div><div class="cal-weekday">金</div>
+        <div class="cal-weekday">土</div>
+      </div>
+      <div id="cal-body"></div>
+    </div>
+    <div id="cal-detail-panel"></div>
+  </div>
+
+  <!-- STATS -->
+  <div id="view-stats" class="view">
+    <div id="stats-content"></div>
+  </div>
+</div>
+
+<!-- PLANT MODAL -->
+<div class="modal-overlay" id="plant-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="plant-modal-title">植物を追加する</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">アイコン</label>
+        <div class="emoji-picker">
+          <div class="emoji-option selected" data-emoji="🌿" onclick="selectEmoji(this)">🌿</div>
+          <div class="emoji-option" data-emoji="🌵" onclick="selectEmoji(this)">🌵</div>
+          <div class="emoji-option" data-emoji="🌺" onclick="selectEmoji(this)">🌺</div>
+          <div class="emoji-option" data-emoji="🌸" onclick="selectEmoji(this)">🌸</div>
+          <div class="emoji-option" data-emoji="🌼" onclick="selectEmoji(this)">🌼</div>
+          <div class="emoji-option" data-emoji="🍃" onclick="selectEmoji(this)">🍃</div>
+          <div class="emoji-option" data-emoji="🌱" onclick="selectEmoji(this)">🌱</div>
+          <div class="emoji-option" data-emoji="🎋" onclick="selectEmoji(this)">🎋</div>
+          <div class="emoji-option" data-emoji="🌴" onclick="selectEmoji(this)">🌴</div>
+          <div class="emoji-option" data-emoji="🍀" onclick="selectEmoji(this)">🍀</div>
+        </div>
+      </div>
+      <div class="field-group"><label class="field-label">名前</label><input type="text" class="field-input" id="plant-name-input" placeholder="例：リビングのモンステラ"></div>
+      <div class="field-group"><label class="field-label">品種・学名</label><input type="text" class="field-input" id="plant-species-input" placeholder="例：Monstera deliciosa"></div>
+      <div class="field-group">
+        <label class="field-label">栽培開始日</label>
+        <div class="date-select-row">
+          <select class="date-select" id="start-year" onchange="updateDayOptions()"></select>
+          <span class="date-select-sep">年</span>
+          <select class="date-select" id="start-month" onchange="updateDayOptions()"></select>
+          <span class="date-select-sep">月</span>
+          <select class="date-select" id="start-day"></select>
+          <span class="date-select-sep">日</span>
+        </div>
+      </div>
+      <div class="field-group"><label class="field-label">日照・置き場所</label><input type="text" class="field-input" id="plant-location-input" placeholder="例：南向き窓際、半日陰"></div>
+      <div class="field-group"><label class="field-label">水やり間隔（日）</label><input type="number" class="field-input" id="plant-water-interval" placeholder="例：7" min="1" max="90"></div>
+      <div class="field-group"><label class="field-label">施肥間隔（日）</label><input type="number" class="field-input" id="plant-fertilize-interval" placeholder="例：30" min="1" max="365"></div>
+      <div class="field-group"><label class="field-label">メモ</label><textarea class="field-textarea" id="plant-memo-input" placeholder="特徴など"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closePlantModal()">キャンセル</button>
+      <button class="btn-save" onclick="savePlant()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">記録を追加する</div>
+    <div class="modal-body">
+      <div class="field-group"><label class="field-label">植物を選択</label><div class="plant-selector" id="log-plant-selector"></div></div>
+      <div class="field-group">
+        <label class="field-label">記録の種類（複数選択可）</label>
+        <div class="log-type-picker">
+          <div class="log-type-option" data-type="water" onclick="toggleLogType(this)"><span class="type-icon">💧</span>水やり</div>
+          <div class="log-type-option" data-type="fertilize" onclick="toggleLogType(this)"><span class="type-icon">🌱</span>施肥</div>
+          <div class="log-type-option" data-type="repot" onclick="toggleLogType(this)"><span class="type-icon">🪴</span>植替え</div>
+          <div class="log-type-option" data-type="pest" onclick="toggleLogType(this)"><span class="type-icon">🐛</span>病害虫</div>
+          <div class="log-type-option" data-type="memo" onclick="toggleLogType(this)"><span class="type-icon">📝</span>メモ</div>
+        </div>
+      </div>
+      <div class="field-group"><label class="field-label">日時</label><input type="datetime-local" class="field-input" id="log-date-input"></div>
+      <div id="memo-fields-wrap">
+        <div id="log-no-type-msg" style="font-size:13px;color:var(--earth-light);padding:4px 2px 12px;font-style:italic;">記録の種類を選択するとメモを入力できます</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeLogModal()">キャンセル</button>
+      <button class="btn-save" onclick="saveLog()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-sub" id="confirm-sub"></div>
+    <div class="confirm-btns">
+      <button class="confirm-btn confirm-btn-cancel" id="confirm-cancel-btn" onclick="closeConfirm()">キャンセル</button>
+      <button class="confirm-btn confirm-btn-ok" id="confirm-ok-btn" onclick="confirmOk()">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+let plants = JSON.parse(localStorage.getItem('plants') || '[]');
+let logs   = JSON.parse(localStorage.getItem('logs')   || '[]');
+
+let editingPlantId = null;
+let selectedEmoji = '🌿';
+let selectedLogTypes = new Set(); // multi-select
+let selectedLogPlantId = null;
+let currentLogFilter = 'all';
+let calYear, calMonth;
+let calWeekStart = null;
+let selectedCalDate = null;
+let confirmCallback = null;
+let currentTab = 'plants';
+
+function save() {
+  localStorage.setItem('plants', JSON.stringify(plants));
+  localStorage.setItem('logs',   JSON.stringify(logs));
+}
+
+// ===== HELPERS =====
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+function dateStr(iso) {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+function hasLogToday(plantId, type) {
+  const t = todayStr();
+  return logs.some(l => l.plantId === plantId && l.type === type && dateStr(l.date) === t);
+}
+function logTypeLabel(t) {
+  return {water:'💧 水やり',fertilize:'🌱 施肥',repot:'🪴 植替え',pest:'🐛 病害虫',memo:'📝 メモ'}[t] || t;
+}
+function formatDateRel(iso) {
+  const diff = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  if (diff === 0) return '今日';
+  if (diff === 1) return '昨日';
+  if (diff < 7) return diff + '日前';
+  const d = new Date(iso);
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+
+// ===== CONFIRM DIALOG =====
+function showConfirm(icon, title, sub, okLabel, danger, onOk, showCancel = true) {
+  document.getElementById('confirm-icon').textContent = icon;
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-sub').textContent = sub;
+  const okBtn = document.getElementById('confirm-ok-btn');
+  okBtn.textContent = okLabel;
+  okBtn.className = 'confirm-btn ' + (danger ? 'confirm-btn-danger' : 'confirm-btn-ok');
+  document.getElementById('confirm-cancel-btn').style.display = showCancel ? '' : 'none';
+  confirmCallback = onOk;
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  document.getElementById('confirm-cancel-btn').style.display = '';
+  confirmCallback = null;
+}
+function confirmOk() {
+  const cb = confirmCallback;
+  closeConfirm();
+  if (cb) cb();
+}
+
+// ===== TABS =====
+function switchTab(view, btn) {
+  currentTab = view;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  btn.classList.add('active');
+  if (view === 'logs') { updateLogPlantFilter(); renderLogs(); }
+  if (view === 'calendar') renderCalendar();
+  if (view === 'stats') renderStats();
+}
+
+function handleAddBtn() {
+  if (currentTab === 'logs') {
+    if (!plants.length) { showConfirm('ℹ️','先に植物を登録してください','','OK',false,()=>{},false); return; }
+    openLogModal(null);
+  } else {
+    openAddPlantModal();
+  }
+}
+
+// ===== RESET =====
+function confirmReset() {
+  showConfirm('🗑','すべてのデータを削除しますか？',
+    '植物と記録がすべて消去され、ローカルストレージも解放されます。この操作は取り消せません。',
+    '削除する', true, () => {
+      localStorage.removeItem('plants');
+      localStorage.removeItem('logs');
+      plants = []; logs = [];
+      renderPlants(); updateLogPlantFilter();
+      if (currentTab === 'logs') renderLogs();
+      if (currentTab === 'calendar') renderCalendar();
+      if (currentTab === 'stats') renderStats();
+    }
+  );
+}
+
+// ===== PLANT RENDER =====
+function getLastLog(plantId, type) {
+  return logs.filter(l => l.plantId===plantId && l.type===type)
+             .sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
+}
+function waterBadge(p) {
+  const l = getLastLog(p.id,'water');
+  if (!l) return '<span class="badge badge-alert">水やり未記録</span>';
+  const days = Math.floor((Date.now()-new Date(l.date))/86400000);
+  if (p.waterInterval && days >= p.waterInterval) return `<span class="badge badge-alert">💧 ${days}日前</span>`;
+  return `<span class="badge badge-water">💧 ${days}日前</span>`;
+}
+function fertBadge(p) {
+  const l = getLastLog(p.id,'fertilize');
+  if (!l || !p.fertilizeInterval) return '';
+  const days = Math.floor((Date.now()-new Date(l.date))/86400000);
+  if (days >= p.fertilizeInterval) return `<span class="badge badge-alert">🌱 施肥を</span>`;
+  return `<span class="badge badge-fertilize">🌱 ${days}日前</span>`;
+}
+
+function renderPlants() {
+  const list = document.getElementById('plant-list');
+  if (!plants.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🌱</div><p>植物がまだ登録されていません<br>右上の＋ボタンから<br>最初の植物を追加しましょう</p></div>`;
+    return;
+  }
+  list.innerHTML = plants.map(p => {
+    const recent = logs.filter(l => l.plantId===p.id)
+                       .sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,3);
+    const lw = getLastLog(p.id,'water'), lf = getLastLog(p.id,'fertilize');
+    return `
+    <div class="plant-card" id="card-${p.id}">
+      <div class="card-top">
+        <div class="plant-avatar">${p.emoji}</div>
+        <div class="plant-info">
+          <div class="plant-name">${p.name}</div>
+          ${p.species ? `<div class="plant-species">${p.species}</div>` : ''}
+          <div class="status-badges">${waterBadge(p)}${fertBadge(p)}</div>
+        </div>
+      </div>
+      <div class="card-quick-btns">
+        <button class="quick-btn qbtn-water"    onclick="quickLog('${p.id}','water',event)">💧 水やり</button>
+        <button class="quick-btn qbtn-fertilize" onclick="quickLog('${p.id}','fertilize',event)">🌱 施肥</button>
+        <button class="quick-btn qbtn-log"      onclick="openLogModalForPlant('${p.id}',event)">＋ 記録</button>
+      </div>
+      <div class="card-expand-row">
+        <button class="card-expand-btn" onclick="toggleCard('${p.id}')">
+          詳細 <span class="expand-arrow" id="arrow-${p.id}">▾</span>
+        </button>
+      </div>
+      <div class="card-detail" id="detail-${p.id}">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="detail-label">💧 最終水やり</div><div class="detail-value ${lw?'':'none'}">${lw?formatDateRel(lw.date):'未記録'}</div></div>
+          <div class="detail-item"><div class="detail-label">🌱 最終施肥</div><div class="detail-value ${lf?'':'none'}">${lf?formatDateRel(lf.date):'未記録'}</div></div>
+          <div class="detail-item"><div class="detail-label">☀️ 置き場所</div><div class="detail-value ${p.location?'':'none'}">${p.location||'未設定'}</div></div>
+          <div class="detail-item"><div class="detail-label">🌱 栽培開始日</div><div class="detail-value ${p.startDate?'':'none'}">${p.startDate ? formatStartDate(p.startDate) : '未設定'}</div></div>
+          <div class="detail-item"><div class="detail-label">💧 水やり間隔</div><div class="detail-value ${p.waterInterval?'':'none'}">${p.waterInterval?p.waterInterval+'日ごと':'未設定'}</div></div>
+        </div>
+        ${recent.length ? `
+        <div class="recent-logs">
+          <div class="recent-logs-title">最近の記録</div>
+          ${recent.map(l=>`
+            <div class="log-item">
+              <div class="log-content">${logTypeLabel(l.type)}${l.memo?'：'+l.memo:''}</div>
+              <div class="log-date">${formatDateRel(l.date)}</div>
+            </div>`).join('')}
+        </div>` : ''}
+        <div class="card-edit-actions">
+          <button class="action-btn btn-edit"   onclick="openEditPlantModal('${p.id}')">✏️ 編集</button>
+          <button class="action-btn btn-delete" onclick="deletePlant('${p.id}')">🗑 削除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id) {
+  document.getElementById('detail-'+id).classList.toggle('open');
+  document.getElementById('arrow-'+id).classList.toggle('open');
+}
+
+// ===== START DATE SELECT PICKER =====
+function initStartDateSelects(y, m, d) {
+  const currentYear = new Date().getFullYear();
+  const yearSel  = document.getElementById('start-year');
+  const monthSel = document.getElementById('start-month');
+  yearSel.innerHTML = '';
+  for (let yr = currentYear - 50; yr <= currentYear; yr++) {
+    const o = document.createElement('option');
+    o.value = yr; o.textContent = yr + '年';
+    if (yr === y) o.selected = true;
+    yearSel.appendChild(o);
+  }
+  monthSel.innerHTML = '';
+  for (let mo = 1; mo <= 12; mo++) {
+    const o = document.createElement('option');
+    o.value = mo; o.textContent = mo + '月';
+    if (mo === m) o.selected = true;
+    monthSel.appendChild(o);
+  }
+  updateDayOptions(d);
+}
+
+function updateDayOptions(forceDay) {
+  const y = parseInt(document.getElementById('start-year').value);
+  const m = parseInt(document.getElementById('start-month').value);
+  const daySel = document.getElementById('start-day');
+  const prevDay = forceDay != null ? forceDay : (parseInt(daySel.value) || 1);
+  const maxDay = new Date(y, m, 0).getDate();
+  daySel.innerHTML = '';
+  for (let day = 1; day <= maxDay; day++) {
+    const o = document.createElement('option');
+    o.value = day; o.textContent = day + '日';
+    if (day === Math.min(prevDay, maxDay)) o.selected = true;
+    daySel.appendChild(o);
+  }
+}
+
+function getStartDateValue() {
+  const y = document.getElementById('start-year').value;
+  const m = String(document.getElementById('start-month').value).padStart(2,'0');
+  const d = String(document.getElementById('start-day').value).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function formatStartDate(iso) {
+  const d = new Date(iso);
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
+
+function openAddPlantModal() {
+  editingPlantId = null;
+  document.getElementById('plant-modal-title').textContent = '植物を追加する';
+  ['plant-name-input','plant-species-input','plant-location-input','plant-water-interval','plant-fertilize-interval','plant-memo-input']
+    .forEach(id => document.getElementById(id).value = '');
+  selectEmojiByValue('🌿');
+  const today = new Date();
+  initStartDateSelects(today.getFullYear(), today.getMonth()+1, today.getDate());
+  document.getElementById('plant-modal').classList.add('open');
+}
+function openEditPlantModal(id) {
+  const p = plants.find(x=>x.id===id); if (!p) return;
+  editingPlantId = id;
+  document.getElementById('plant-modal-title').textContent = '植物を編集する';
+  document.getElementById('plant-name-input').value = p.name;
+  document.getElementById('plant-species-input').value = p.species||'';
+  document.getElementById('plant-location-input').value = p.location||'';
+  document.getElementById('plant-water-interval').value = p.waterInterval||'';
+  document.getElementById('plant-fertilize-interval').value = p.fertilizeInterval||'';
+  document.getElementById('plant-memo-input').value = p.memo||'';
+  selectEmojiByValue(p.emoji);
+  const today = new Date();
+  if (p.startDate) {
+    const d = new Date(p.startDate);
+    initStartDateSelects(d.getFullYear(), d.getMonth()+1, d.getDate());
+  } else {
+    initStartDateSelects(today.getFullYear(), today.getMonth()+1, today.getDate());
+  }
+  document.getElementById('plant-modal').classList.add('open');
+}
+function closePlantModal() { document.getElementById('plant-modal').classList.remove('open'); }
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected'); selectedEmoji = el.dataset.emoji;
+}
+function selectEmojiByValue(v) {
+  document.querySelectorAll('.emoji-option').forEach(e=>e.classList.toggle('selected', e.dataset.emoji===v));
+  selectedEmoji = v;
+}
+function savePlant() {
+  const name = document.getElementById('plant-name-input').value.trim();
+  if (!name) { showConfirm('ℹ️','名前を入力してください','','OK',false,()=>{},false); return; }
+  const data = {
+    name,
+    species: document.getElementById('plant-species-input').value.trim(),
+    location: document.getElementById('plant-location-input').value.trim(),
+    waterInterval: parseInt(document.getElementById('plant-water-interval').value)||null,
+    fertilizeInterval: parseInt(document.getElementById('plant-fertilize-interval').value)||null,
+    memo: document.getElementById('plant-memo-input').value.trim(),
+    emoji: selectedEmoji,
+    startDate: getStartDateValue()
+  };
+  if (editingPlantId) {
+    Object.assign(plants.find(x=>x.id===editingPlantId), data);
+  } else {
+    plants.push({ id: Date.now().toString(), createdAt: new Date().toISOString(), ...data });
+  }
+  save(); closePlantModal(); renderPlants(); updateLogPlantFilter();
+}
+function deletePlant(id) {
+  const p = plants.find(x=>x.id===id);
+  showConfirm('🗑',`「${p.name}」を削除しますか？`,'関連する記録もすべて削除されます。','削除する',true,()=>{
+    plants = plants.filter(x=>x.id!==id);
+    logs   = logs.filter(l=>l.plantId!==id);
+    save(); renderPlants(); updateLogPlantFilter();
+  });
+}
+
+// ===== LOG MODAL =====
+// typeMemos: { type -> memo string }
+let typeMemos = {};
+
+function openLogModal(plantId, evt) {
+  if (evt) evt.stopPropagation();
+  selectedLogPlantId = plantId || (plants[0]?.id || null);
+  selectedLogTypes = new Set();
+  typeMemos = {};
+  document.getElementById('log-plant-selector').innerHTML = plants.map(p=>`
+    <div class="plant-select-option ${p.id===selectedLogPlantId?'selected':''}" data-id="${p.id}" onclick="selectLogPlant(this)">
+      <span>${p.emoji}</span> ${p.name}
+    </div>`).join('');
+  document.querySelectorAll('.log-type-option').forEach(o=>o.classList.remove('selected'));
+  const now = new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  document.getElementById('log-date-input').value = now.toISOString().slice(0,16);
+  renderMemoFields();
+  document.getElementById('log-modal').classList.add('open');
+}
+function openLogModalForPlant(id, evt) { openLogModal(id, evt); }
+function closeLogModal() { document.getElementById('log-modal').classList.remove('open'); }
+function selectLogPlant(el) {
+  document.querySelectorAll('.plant-select-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected'); selectedLogPlantId = el.dataset.id;
+}
+
+const typeOrder = ['water','fertilize','repot','pest','memo'];
+function toggleLogType(el) {
+  const type = el.dataset.type;
+  // Save memo of any existing textarea before re-render
+  syncMemos();
+  if (selectedLogTypes.has(type)) {
+    selectedLogTypes.delete(type);
+    delete typeMemos[type];
+    el.classList.remove('selected');
+  } else {
+    selectedLogTypes.add(type);
+    typeMemos[type] = '';
+    el.classList.add('selected');
+  }
+  renderMemoFields();
+}
+
+function syncMemos() {
+  document.querySelectorAll('.per-type-memo').forEach(ta => {
+    typeMemos[ta.dataset.type] = ta.value;
+  });
+}
+
+function renderMemoFields() {
+  const wrap = document.getElementById('memo-fields-wrap');
+  const msg  = document.getElementById('log-no-type-msg');
+  // Order selected types by typeOrder
+  const ordered = typeOrder.filter(t => selectedLogTypes.has(t));
+  if (ordered.length === 0) {
+    wrap.innerHTML = `<div id="log-no-type-msg" style="font-size:13px;color:var(--earth-light);padding:4px 2px 12px;font-style:italic;">記録の種類を選択するとメモを入力できます</div>`;
+    return;
+  }
+  wrap.innerHTML = ordered.map(type => `
+    <div class="field-group" style="margin-bottom:12px;">
+      <label class="field-label" style="display:flex;align-items:center;gap:6px;">
+        <span class="per-type-dot dot-${type}" style="width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>
+        ${logTypeLabel(type).replace(/^.+ /,'')} のメモ
+      </label>
+      <textarea class="field-textarea per-type-memo" data-type="${type}" placeholder="任意" style="min-height:60px;">${typeMemos[type]||''}</textarea>
+    </div>`).join('');
+}
+
+function saveLog() {
+  if (!selectedLogPlantId) { showConfirm('ℹ️','植物を選択してください','','OK',false,()=>{},false); return; }
+  if (selectedLogTypes.size === 0) { showConfirm('ℹ️','記録の種類を選択してください','','OK',false,()=>{},false); return; }
+  syncMemos();
+  const dateVal = document.getElementById('log-date-input').value;
+  const logDate = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+  typeOrder.filter(t=>selectedLogTypes.has(t)).forEach((type, i) => {
+    logs.push({
+      id: (Date.now() + i).toString(),
+      plantId: selectedLogPlantId,
+      type,
+      date: logDate,
+      memo: typeMemos[type] || ''
+    });
+  });
+  save(); closeLogModal(); renderPlants();
+  if (currentTab==='logs') renderLogs();
+  if (currentTab==='calendar') renderCalendar();
+}
+
+// ===== QUICK LOG (with same-day duplicate check) =====
+function quickLog(plantId, type, evt) {
+  if (evt) evt.stopPropagation();
+  if (hasLogToday(plantId, type)) {
+    const p = plants.find(x=>x.id===plantId);
+    const label = type==='water' ? '水やり' : '施肥';
+    showConfirm('💬',`今日は${label}を記録済みです`,
+      `${p?.name||''}に今日すでに${label}の記録があります。再度記録しますか？`,
+      'もう一度記録する', false, ()=>doQuickLog(plantId, type));
+  } else {
+    doQuickLog(plantId, type);
+  }
+}
+function doQuickLog(plantId, type) {
+  logs.push({ id: Date.now().toString(), plantId, type, date: new Date().toISOString(), memo: '' });
+  save(); renderPlants();
+  if (currentTab==='logs') renderLogs();
+  if (currentTab==='calendar') renderCalendar();
+  const card = document.getElementById('card-'+plantId);
+  if (card) {
+    card.style.transition = 'box-shadow 0.3s';
+    card.style.boxShadow = '0 0 0 3px rgba(122,158,126,0.5)';
+    setTimeout(()=>{ card.style.boxShadow=''; }, 800);
+  }
+}
+
+// ===== LOG VIEW =====
+function updateLogPlantFilter() {
+  const sel = document.getElementById('log-plant-filter');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="all">すべての植物</option>' +
+    plants.map(p=>`<option value="${p.id}" ${p.id===cur?'selected':''}>${p.emoji} ${p.name}</option>`).join('');
+}
+function filterLogs(type, btn) {
+  currentLogFilter = type;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderLogs();
+}
+function renderLogs() {
+  const typeF  = currentLogFilter;
+  const plantF = document.getElementById('log-plant-filter').value;
+  let filtered = [...logs];
+  if (typeF!=='all') filtered = filtered.filter(l=>l.type===typeF);
+  if (plantF!=='all') filtered = filtered.filter(l=>l.plantId===plantF);
+  filtered.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  const container = document.getElementById('timeline-list');
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>記録がありません</p></div>';
+    return;
+  }
+  const groups = {};
+  filtered.forEach(l=>{
+    const d = new Date(l.date);
+    const k = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+    (groups[k]=groups[k]||[]).push(l);
+  });
+  container.innerHTML = Object.entries(groups).map(([date,items])=>`
+    <div class="timeline-date-group">
+      <div class="timeline-date-label">${date}</div>
+      ${items.map(l=>{
+        const p = plants.find(x=>x.id===l.plantId);
+        const t = new Date(l.date);
+        return `<div class="timeline-entry">
+          <div class="timeline-body">
+            <div class="timeline-plant-name">${p?p.emoji+' '+p.name:'不明'}</div>
+            <div class="timeline-text">${logTypeLabel(l.type)}${l.memo?'：'+l.memo:''}</div>
+          </div>
+          <div class="timeline-time">${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}</div>
+          <button class="timeline-delete-btn" onclick="deleteLog('${l.id}')">🗑</button>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function deleteLog(id) {
+  const l = logs.find(x=>x.id===id);
+  const p = plants.find(x=>x.id===l?.plantId);
+  const label = l ? logTypeLabel(l.type) : '記録';
+  showConfirm('🗑', `この記録を削除しますか？`, `${p?p.emoji+' '+p.name+' / ':''}${label}`, '削除する', true, ()=>{
+    logs = logs.filter(x=>x.id!==id);
+    save(); renderLogs(); renderPlants();
+    if (currentTab==='calendar') renderCalendar();
+  });
+}
+
+// ===== CALENDAR =====
+const _now = new Date();
+calYear = _now.getFullYear();
+calMonth = _now.getMonth();
+let calView = 'month';
+
+function getWeekStart(d) {
+  const dt = new Date(d); dt.setHours(0,0,0,0);
+  dt.setDate(dt.getDate() - dt.getDay()); // Sunday-anchored
+  return dt;
+}
+
+calWeekStart = getWeekStart(_now);
+
+function setCalView(v) {
+  calView = v;
+  document.getElementById('cal-btn-month').classList.toggle('active', v==='month');
+  document.getElementById('cal-btn-week').classList.toggle('active', v==='week');
+  document.getElementById('cal-weekdays-row').style.display = v==='month' ? '' : 'none';
+  selectedCalDate = null;
+  renderCalendar();
+}
+
+function calPrev() {
+  if (calView==='month') {
+    if (--calMonth<0){calMonth=11;calYear--;}
+  } else {
+    calWeekStart = new Date(calWeekStart); calWeekStart.setDate(calWeekStart.getDate()-7);
+  }
+  renderCalendar();
+}
+function calNext() {
+  if (calView==='month') {
+    if (++calMonth>11){calMonth=0;calYear++;}
+  } else {
+    calWeekStart = new Date(calWeekStart); calWeekStart.setDate(calWeekStart.getDate()+7);
+  }
+  renderCalendar();
+}
+
+const typeEmoji = {water:'💧',fertilize:'🌱',repot:'🪴',pest:'🐛',memo:'📝'};
+
+function renderCalendar() {
+  const mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  if (calView==='month') {
+    document.getElementById('cal-month-title').textContent = `${calYear}年 ${mNames[calMonth]}`;
+    renderMonthGrid(today);
+  } else {
+    // Week label: show range
+    const we = new Date(calWeekStart); we.setDate(we.getDate()+6);
+    const label = calWeekStart.getMonth()===we.getMonth()
+      ? `${calWeekStart.getFullYear()}年 ${mNames[calWeekStart.getMonth()]} ${calWeekStart.getDate()}〜${we.getDate()}日`
+      : `${mNames[calWeekStart.getMonth()]}${calWeekStart.getDate()}日〜${mNames[we.getMonth()]}${we.getDate()}日`;
+    document.getElementById('cal-month-title').textContent = label;
+    renderWeekGrid(today);
+  }
+  renderCalDetail();
+}
+
+function renderMonthGrid(today) {
+  const firstDow = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+
+  // Build per-day has-log map
+  const hasLog = {};
+  logs.forEach(l=>{
+    const d = new Date(l.date);
+    if (d.getFullYear()===calYear && d.getMonth()===calMonth) hasLog[d.getDate()] = true;
+  });
+
+  let html = '<div class="cal-grid">';
+  for (let i=0;i<firstDow;i++) html += '<div class="cal-day empty"></div>';
+  for (let d=1;d<=daysInMonth;d++) {
+    const dow = (firstDow+d-1)%7;
+    const dt = new Date(calYear,calMonth,d); dt.setHours(0,0,0,0);
+    const isToday = dt.getTime()===today.getTime();
+    const isSel = selectedCalDate?.year===calYear && selectedCalDate?.month===calMonth && selectedCalDate?.day===d;
+    html += `<div class="cal-day${isToday?' today':''}${dow===0?' sunday':dow===6?' saturday':''}${isSel?' selected-day':''}" onclick="selectCalDay(${calYear},${calMonth},${d})">
+      <div class="cal-num-wrap"><div class="cal-day-num">${d}</div></div>
+      ${hasLog[d] ? '<div class="cal-has-log"></div>' : ''}
+    </div>`;
+  }
+  html += '</div>';
+  document.getElementById('cal-body').innerHTML = html;
+}
+
+function renderWeekGrid(today) {
+  const dows = ['日','月','火','水','木','金','土'];
+  const byDay = {};
+  logs.forEach(l=>{
+    const d = new Date(l.date);
+    const k = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    (byDay[k]=byDay[k]||[]).push(l);
+  });
+
+  let html = '<div class="cal-week-grid">';
+  for (let i=0;i<7;i++) {
+    const dt = new Date(calWeekStart); dt.setDate(dt.getDate()+i);
+    const dow = dt.getDay();
+    const isToday = dt.getTime()===today.getTime();
+    const isSel = selectedCalDate?.year===dt.getFullYear() && selectedCalDate?.month===dt.getMonth() && selectedCalDate?.day===dt.getDate();
+    const k = `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
+    const dayLogs = byDay[k] || [];
+
+    // Group by plant, collect types in order
+    const byPlant = {};
+    dayLogs.forEach(l=>{
+      (byPlant[l.plantId]=byPlant[l.plantId]||new Set()).add(l.type);
+    });
+
+    const dowCls = dow===0?' sun':dow===6?' sat':'';
+    const rowCls = [
+      'cal-week-row',
+      isToday ? 'cal-week-today' : '',
+      isSel ? 'cal-week-selected' : '',
+      dow===0 ? 'sun' : dow===6 ? 'sat' : ''
+    ].filter(Boolean).join(' ');
+
+    const plantChips = Object.entries(byPlant).map(([pid, types])=>{
+      const p = plants.find(x=>x.id===pid);
+      const icons = typeOrder.filter(t=>types.has(t)).map(t=>typeEmoji[t]).join('');
+      return `<div class="cal-week-plant-chip">
+        <span class="cal-week-plant-emoji">${p?p.emoji:'🌿'}</span>
+        <span class="cal-week-type-icons">${icons}</span>
+      </div>`;
+    }).join('');
+
+    html += `<div class="${rowCls}" onclick="selectCalDay(${dt.getFullYear()},${dt.getMonth()},${dt.getDate()})">
+      <div class="cal-week-date-cell">
+        <span class="cal-week-dow${dowCls}">${dows[dow]}</span>
+        <div class="cal-week-num-wrap"><span class="cal-week-num">${dt.getDate()}</span></div>
+      </div>
+      <div class="cal-week-plants">${plantChips}</div>
+    </div>`;
+  }
+  html += '</div>';
+  document.getElementById('cal-body').innerHTML = html;
+}
+
+function selectCalDay(year, month, day) {
+  selectedCalDate = { year, month, day };
+  // Keep calYear/calMonth in sync for month view
+  calYear = year; calMonth = month;
+  renderCalendar();
+}
+
+function renderCalDetail() {
+  const panel = document.getElementById('cal-detail-panel');
+  if (!selectedCalDate) { panel.innerHTML=''; return; }
+  const {year,month,day} = selectedCalDate;
+  const mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const dayLogs = logs.filter(l=>{
+    const d=new Date(l.date);
+    return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
+  }).sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  panel.innerHTML = `
+    <div class="cal-detail-panel">
+      <div class="cal-detail-header"><div class="cal-detail-date">${year}年 ${mNames[month]} ${day}日</div></div>
+      <div class="cal-detail-body">
+        ${!dayLogs.length ? '<div class="cal-detail-empty">この日の記録はありません</div>' :
+          dayLogs.map(l=>{
+            const p = plants.find(x=>x.id===l.plantId);
+            const t = new Date(l.date);
+            return `<div class="cal-log-entry">
+              <div style="flex:1">
+                <div class="cal-log-plant">${p?p.emoji+' '+p.name:'不明'}</div>
+                <div class="cal-log-text">${logTypeLabel(l.type)}${l.memo?'：'+l.memo:''}</div>
+              </div>
+              <div class="cal-log-time">${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}</div>
+            </div>`;
+          }).join('')}
+      </div>
+    </div>`;
+}
+
+// ===== STATS =====
+function renderStats() {
+  const now2 = new Date();
+  const monthLogs = logs.filter(l=>{ const d=new Date(l.date); return d.getMonth()===now2.getMonth()&&d.getFullYear()===now2.getFullYear(); }).length;
+  const byPlant = plants.map(p=>({plant:p,count:logs.filter(l=>l.plantId===p.id).length})).sort((a,b)=>b.count-a.count);
+  document.getElementById('stats-content').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">🌿</div><div class="stat-num">${plants.length}</div><div class="stat-label">管理中の植物</div></div>
+      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-num">${logs.length}</div><div class="stat-label">総記録数</div></div>
+      <div class="stat-card"><div class="stat-icon">💧</div><div class="stat-num">${logs.filter(l=>l.type==='water').length}</div><div class="stat-label">水やり回数</div></div>
+      <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-num">${monthLogs}</div><div class="stat-label">今月の記録数</div></div>
+    </div>
+    ${byPlant.length ? `<div class="section-title">植物ごとの記録数</div><div class="plant-activity-list">${byPlant.map(({plant,count})=>`
+      <div class="activity-row">
+        <div>${plant.emoji}</div>
+        <div class="activity-plant-name">${plant.name}</div>
+        <div class="activity-count">${count}件</div>
+      </div>`).join('')}</div>` : ''}`;
+}
+
+// ===== MODAL CLOSE ON OVERLAY =====
+document.getElementById('plant-modal').addEventListener('click', function(e){ if(e.target===this) closePlantModal(); });
+document.getElementById('log-modal').addEventListener('click', function(e){ if(e.target===this) closeLogModal(); });
+document.getElementById('confirm-overlay').addEventListener('click', function(e){ if(e.target===this) closeConfirm(); });
+
+// ===== INIT =====
+updateLogPlantFilter();
+renderPlants();
+</script>
+</body>
+</html>
