@@ -296,7 +296,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.7</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.8</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -635,7 +635,7 @@ let currentTab = 'plants';
 function save() {
   localStorage.setItem('plants', JSON.stringify(plants));
   localStorage.setItem('logs',   JSON.stringify(logs));
-  // trigger backups
+  localStorage.setItem('masterOptions', JSON.stringify(masterOptions));
   if (localBackupEnabled) localBackupSave();
   if (driveBackupEnabled) driveBackupSave();
 }
@@ -662,6 +662,43 @@ function showBackupHelp() {
 let localBackupEnabled = JSON.parse(localStorage.getItem('localBackupEnabled') || 'false');
 let _localFileHandle = null;
 
+// IndexedDBにファイルハンドルを保存・復元
+function openHandleDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('plant-tracker-handles', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('handles');
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = reject;
+  });
+}
+async function saveHandleToDB(handle) {
+  const db = await openHandleDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, 'localBackup');
+    tx.oncomplete = resolve;
+    tx.onerror = reject;
+  });
+}
+async function loadHandleFromDB() {
+  const db = await openHandleDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('handles', 'readonly');
+    const req = tx.objectStore('handles').get('localBackup');
+    req.onsuccess = e => resolve(e.target.result || null);
+    req.onerror = reject;
+  });
+}
+async function clearHandleFromDB() {
+  const db = await openHandleDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').delete('localBackup');
+    tx.oncomplete = resolve;
+    tx.onerror = reject;
+  });
+}
+
 function initLocalBackupUI() {
   const sw = document.getElementById('local-backup-toggle');
   const note = document.getElementById('local-backup-note');
@@ -682,6 +719,7 @@ async function toggleLocalBackup() {
         suggestedName: 'plant-tracker-backup.json',
         types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
       });
+      await saveHandleToDB(_localFileHandle);
       showToast('💾 保存先を設定しました');
       await localBackupSave();
     } catch(e) {
@@ -690,6 +728,7 @@ async function toggleLocalBackup() {
     }
   } else {
     _localFileHandle = null;
+    await clearHandleFromDB();
   }
   initLocalBackupUI();
 }
@@ -697,6 +736,12 @@ async function toggleLocalBackup() {
 async function localBackupSave() {
   if (!_localFileHandle) return;
   try {
+    // 書き込み権限を確認（セッションをまたいだ場合に許可ダイアログが出る）
+    const perm = await _localFileHandle.requestPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      showToast('⚠️ ファイルへのアクセスが許可されませんでした');
+      return;
+    }
     const data = JSON.stringify({ plants, logs, masterOptions, recordTime });
     const writable = await _localFileHandle.createWritable();
     await writable.write(data);
@@ -704,6 +749,25 @@ async function localBackupSave() {
     showToast('💾 ローカルに保存しました');
   } catch(e) {
     showToast('⚠️ ローカル保存に失敗しました');
+  }
+}
+
+// 起動時：IndexedDBからハンドルを復元して許可を求める
+async function initLocalBackup() {
+  if (!localBackupEnabled) return;
+  if (!('showSaveFilePicker' in window)) return;
+  try {
+    const handle = await loadHandleFromDB();
+    if (!handle) return;
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    if (perm === 'granted') {
+      _localFileHandle = handle;
+      showToast('💾 ローカルバックアップを再開しました');
+    } else {
+      showToast('⚠️ ローカルバックアップの許可がありません。オプションから再設定してください');
+    }
+  } catch(e) {
+    // silent fail
   }
 }
 
@@ -817,7 +881,7 @@ async function driveLoadWithChoice() {
 }
 
 async function driveLoad() {
-  // 通常の起動時読み込み（すでにオンの状態）→差分なければ何もしない
+  // 起動時読み込み：ローカルが空のときだけDriveから全データ復元
   if (!driveBackupEnabled || !driveClientId) return;
   if (!driveAccessToken) {
     try { await driveAuth(); } catch(e) { return; }
@@ -834,8 +898,9 @@ async function driveLoad() {
     if (!data.plants || !data.logs) return;
     const localEmpty = !plants.length && !logs.length;
     if (localEmpty) {
-      plants = data.plants; logs = data.logs;
-      if (data.masterOptions) masterOptions = data.masterOptions;
+      plants = data.plants;
+      logs = data.logs;
+      if (data.masterOptions) { masterOptions = data.masterOptions; saveMasterOptions(); }
       if (data.recordTime != null) { recordTime = data.recordTime; localStorage.setItem('recordTime', JSON.stringify(recordTime)); initTimeSetting(); }
       save(); renderPlants(); updateLogPlantFilter();
       showToast('☁️ Driveからデータを読み込みました');
@@ -1963,6 +2028,7 @@ updateLogPlantFilter();
 renderPlants();
 initTimeSetting();
 initLocalBackupUI();
+initLocalBackup();
 initDriveBackupUI();
 // Drive自動読み込み
 if (driveBackupEnabled && driveClientId) driveLoad();
