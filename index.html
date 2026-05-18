@@ -539,7 +539,12 @@
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
           <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">④ OAuth同意画面の設定</div>
-          <div>「APIとサービス」→「OAuth同意画面」→「外部」を選択→アプリ名を入力→保存</div>
+          <div>「APIとサービス」→「OAuth同意画面」を開く<br>
+          ・User Typeは「外部」を選択して「作成」<br>
+          ・アプリ名に好きな名前を入力（例：植物手帖）<br>
+          ・ユーザーサポートメールに自分のメールアドレスを選択<br>
+          ・デベロッパーの連絡先にも自分のメールアドレスを入力<br>
+          ・「保存して次へ」を3回押してそのまま完了</div>
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
           <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑤ 認証情報の作成</div>
@@ -706,7 +711,7 @@ function driveAuth() {
     if (!driveClientId) { showToast('⚠️ Client IDを入力してください'); reject(); return; }
     const params = new URLSearchParams({
       client_id: driveClientId,
-      redirect_uri: location.origin + location.pathname,
+      redirect_uri: location.origin + '/',
       response_type: 'token',
       scope: DRIVE_SCOPE,
       prompt: 'consent'
