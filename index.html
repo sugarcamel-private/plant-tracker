@@ -283,7 +283,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.2</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.3</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -302,7 +302,26 @@
             <button class="toggle-sw" id="time-toggle" onclick="toggleTimeSetting()"></button>
           </div>
           <div class="opt-menu-divider"></div>
-          <button class="opt-menu-item" onclick="location.reload()">🔄 最新に更新</button>
+          <div class="opt-menu-section">バックアップ</div>
+          <div class="opt-menu-toggle">
+            <span class="opt-menu-toggle-label" style="display:flex;align-items:center;gap:6px;">
+              💾 ローカル自動保存
+              <span style="font-size:9px;background:rgba(107,155,175,0.15);color:var(--water);padding:2px 6px;border-radius:8px;font-weight:600;">Android</span>
+            </span>
+            <button class="toggle-sw" id="local-backup-toggle" onclick="toggleLocalBackup()"></button>
+          </div>
+          <div id="local-backup-note" style="font-size:11px;color:var(--earth-light);padding:0 18px 8px;line-height:1.5;display:none;">iOSでは動作しません</div>
+          <div class="opt-menu-toggle">
+            <span class="opt-menu-toggle-label" style="display:flex;align-items:center;gap:6px;">
+              ☁️ Google Drive同期
+              <button onclick="showBackupHelp();closeOptMenu()" style="background:var(--mist);border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;color:var(--ink-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">?</button>
+            </span>
+            <button class="toggle-sw" id="drive-backup-toggle" onclick="toggleDriveBackup()"></button>
+          </div>
+          <div id="drive-client-id-row" style="padding:0 18px 10px;display:none;">
+            <input type="text" class="field-input" id="drive-client-id-input" placeholder="Client ID を入力" style="font-size:12px;padding:8px 12px;" oninput="saveDriveClientId()">
+          </div>
+          <div class="opt-menu-divider"></div>
           <div class="opt-menu-divider"></div>
           <button class="opt-menu-item danger" onclick="confirmReset();closeOptMenu()">🗑 全データを削除</button>
         </div>
@@ -496,6 +515,53 @@
   </div>
 </div>
 
+<!-- BACKUP HELP MODAL -->
+<div class="modal-overlay" id="backup-help-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">☁️ Google Drive同期の設定</div>
+    <div class="modal-body" style="font-size:13px;color:var(--ink-light);line-height:1.8;">
+      <p style="margin-bottom:12px;">Google Drive APIのClient IDが必要です。以下の手順で無料で取得できます。</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">① Google Cloud Consoleへ</div>
+          <div><a href="https://console.cloud.google.com" target="_blank" style="color:var(--water);">console.cloud.google.com</a> にアクセスしてGoogleアカウントでログイン</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">② プロジェクト作成</div>
+          <div>「新しいプロジェクト」を作成（名前は何でもOK）</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">③ Drive APIを有効化</div>
+          <div>「APIとサービス」→「ライブラリ」→「Google Drive API」→「有効にする」</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">④ OAuth同意画面の設定</div>
+          <div>「APIとサービス」→「OAuth同意画面」→「外部」を選択→アプリ名を入力→保存</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑤ 認証情報の作成</div>
+          <div>「APIとサービス」→「認証情報」→「認証情報を作成」→「OAuthクライアントID」→「ウェブアプリケーション」を選択</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑥ 承認済みオリジンを追加</div>
+          <div>「承認済みのJavaScriptオリジン」にこのアプリのURL（例：https://yourname.github.io）を追加→「作成」</div>
+        </div>
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑦ Client IDをコピー</div>
+          <div>表示された「クライアントID」をコピーして、設定画面のClient ID欄に貼り付け</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-save" onclick="document.getElementById('backup-help-modal').classList.remove('open')">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-family:'DM Sans',sans-serif;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;z-index:500;white-space:nowrap;"></div>
+
 <!-- HIDDEN IMPORT INPUTS -->
 <input type="file" id="import-logs-input" accept=".csv" style="display:none" onchange="importLogsCSV(this)">
 <input type="file" id="import-plants-input" accept=".csv" style="display:none" onchange="importPlantsCSV(this)">
@@ -532,6 +598,216 @@ let currentTab = 'plants';
 function save() {
   localStorage.setItem('plants', JSON.stringify(plants));
   localStorage.setItem('logs',   JSON.stringify(logs));
+  // trigger backups
+  if (localBackupEnabled) localBackupSave();
+  if (driveBackupEnabled) driveBackupSave();
+}
+
+// ===== TOAST =====
+function showToast(msg, duration = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, duration);
+}
+
+// ===== BACKUP HELP =====
+function showBackupHelp() {
+  document.getElementById('backup-help-modal').classList.add('open');
+}
+
+// ===== ② LOCAL FILE BACKUP (Android / File System Access API) =====
+let localBackupEnabled = JSON.parse(localStorage.getItem('localBackupEnabled') || 'false');
+let _localFileHandle = null;
+
+function initLocalBackupUI() {
+  const sw = document.getElementById('local-backup-toggle');
+  const note = document.getElementById('local-backup-note');
+  sw.classList.toggle('on', localBackupEnabled);
+  note.style.display = localBackupEnabled ? 'block' : 'none';
+}
+
+async function toggleLocalBackup() {
+  if (!('showSaveFilePicker' in window)) {
+    showToast('⚠️ このブラウザでは非対応です（Android Chrome推奨）');
+    return;
+  }
+  localBackupEnabled = !localBackupEnabled;
+  localStorage.setItem('localBackupEnabled', JSON.stringify(localBackupEnabled));
+  if (localBackupEnabled) {
+    try {
+      _localFileHandle = await window.showSaveFilePicker({
+        suggestedName: 'plant-tracker-backup.json',
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+      });
+      showToast('💾 保存先を設定しました');
+      await localBackupSave();
+    } catch(e) {
+      localBackupEnabled = false;
+      localStorage.setItem('localBackupEnabled', 'false');
+    }
+  } else {
+    _localFileHandle = null;
+  }
+  initLocalBackupUI();
+}
+
+async function localBackupSave() {
+  if (!_localFileHandle) return;
+  try {
+    const data = JSON.stringify({ plants, logs, masterOptions });
+    const writable = await _localFileHandle.createWritable();
+    await writable.write(data);
+    await writable.close();
+    showToast('💾 ローカルに保存しました');
+  } catch(e) {
+    showToast('⚠️ ローカル保存に失敗しました');
+  }
+}
+
+// ===== ③ GOOGLE DRIVE BACKUP =====
+let driveBackupEnabled = JSON.parse(localStorage.getItem('driveBackupEnabled') || 'false');
+let driveClientId = localStorage.getItem('driveClientId') || '';
+let driveAccessToken = null;
+let driveFileId = null;
+const DRIVE_FILE_NAME = 'plant-tracker-backup.json';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+
+function initDriveBackupUI() {
+  const sw = document.getElementById('drive-backup-toggle');
+  const row = document.getElementById('drive-client-id-row');
+  const input = document.getElementById('drive-client-id-input');
+  sw.classList.toggle('on', driveBackupEnabled);
+  row.style.display = driveBackupEnabled ? 'block' : 'none';
+  input.value = driveClientId;
+}
+
+function saveDriveClientId() {
+  driveClientId = document.getElementById('drive-client-id-input').value.trim();
+  localStorage.setItem('driveClientId', driveClientId);
+}
+
+function toggleDriveBackup() {
+  driveBackupEnabled = !driveBackupEnabled;
+  localStorage.setItem('driveBackupEnabled', JSON.stringify(driveBackupEnabled));
+  initDriveBackupUI();
+  if (driveBackupEnabled && driveClientId) driveAuth().then(() => driveLoad());
+}
+
+function driveAuth() {
+  return new Promise((resolve, reject) => {
+    if (!driveClientId) { showToast('⚠️ Client IDを入力してください'); reject(); return; }
+    const params = new URLSearchParams({
+      client_id: driveClientId,
+      redirect_uri: location.origin + location.pathname,
+      response_type: 'token',
+      scope: DRIVE_SCOPE,
+      prompt: 'consent'
+    });
+    const w = window.open('https://accounts.google.com/o/oauth2/v2/auth?' + params, '_blank', 'width=500,height=600');
+    const poll = setInterval(() => {
+      try {
+        const url = new URL(w.location.href);
+        const hash = new URLSearchParams(url.hash.slice(1));
+        const token = hash.get('access_token');
+        if (token) {
+          clearInterval(poll);
+          driveAccessToken = token;
+          w.close();
+          resolve(token);
+        }
+      } catch(e) {}
+      if (w.closed) { clearInterval(poll); reject(); }
+    }, 500);
+  });
+}
+
+async function driveGetOrCreateFile() {
+  // Search for existing file
+  const search = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FILE_NAME}'+and+trashed=false&fields=files(id,name,modifiedTime)`,
+    { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+  );
+  const result = await search.json();
+  if (result.files && result.files.length > 0) {
+    driveFileId = result.files[0].id;
+  } else {
+    driveFileId = null;
+  }
+  return driveFileId;
+}
+
+async function driveBackupSave() {
+  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveAccessToken) {
+    try { await driveAuth(); } catch(e) { return; }
+  }
+  try {
+    await driveGetOrCreateFile();
+    const data = JSON.stringify({ plants, logs, masterOptions, savedAt: new Date().toISOString() });
+    const blob = new Blob([data], { type: 'application/json' });
+    const meta = { name: DRIVE_FILE_NAME, mimeType: 'application/json' };
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
+    form.append('file', blob);
+    const url = driveFileId
+      ? `https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=multipart`
+      : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+    const method = driveFileId ? 'PATCH' : 'POST';
+    const res = await fetch(url, { method, headers: { Authorization: 'Bearer ' + driveAccessToken }, body: form });
+    if (res.ok) {
+      const f = await res.json();
+      driveFileId = f.id;
+      showToast('☁️ Driveに保存しました');
+    } else {
+      // token expired
+      driveAccessToken = null;
+      showToast('⚠️ Drive保存失敗。再認証してください');
+    }
+  } catch(e) {
+    showToast('⚠️ Drive保存に失敗しました');
+  }
+}
+
+async function driveLoad() {
+  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveAccessToken) {
+    try { await driveAuth(); } catch(e) { return; }
+  }
+  try {
+    await driveGetOrCreateFile();
+    if (!driveFileId) return;
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
+      { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+    );
+    if (!res.ok) { driveAccessToken = null; return; }
+    const data = await res.json();
+    if (!data.plants || !data.logs) return;
+    // 競合チェック
+    const localEmpty = !plants.length && !logs.length;
+    if (localEmpty) {
+      plants = data.plants; logs = data.logs;
+      if (data.masterOptions) masterOptions = data.masterOptions;
+      save();
+      renderPlants(); updateLogPlantFilter();
+      showToast('☁️ Driveからデータを読み込みました');
+    } else {
+      showConfirm('☁️', 'Driveにデータがあります', 'Driveのデータで上書きしますか？（現在のデータは失われます）', '上書きする', true, () => {
+        plants = data.plants; logs = data.logs;
+        if (data.masterOptions) masterOptions = data.masterOptions;
+        save(); renderPlants(); updateLogPlantFilter();
+        showToast('☁️ Driveのデータで上書きしました');
+      });
+    }
+  } catch(e) {
+    showToast('⚠️ Drive読み込みに失敗しました');
+  }
 }
 
 // ===== HELPERS =====
@@ -1408,17 +1684,20 @@ function exportLogsCSV() {
 
 function exportPlantsCSV() {
   if (!plants.length) { showConfirm('ℹ️','植物が登録されていません','','OK',false,()=>{},false); return; }
-  const header = ['名前','品種','栽培開始日','置き場所','水やり間隔(日)','施肥間隔(日)','メモ'];
+  const header = ['名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
   const rows = plants.map(p => [
     p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
-    p.location||'', p.waterInterval||'', p.fertilizeInterval||'', p.memo||''
+    p.location||'', p.water||'', p.dormant||'', p.dormantWater||'', p.fertilize||'',
+    p.tempMin != null ? p.tempMin : '', p.tempMax != null ? p.tempMax : '',
+    p.mist === 'yes' ? '○' : p.mist === 'no' ? '×' : '',
+    p.memo||''
   ]);
   downloadCSV('plants.csv', [header, ...rows]);
 }
 
 // ===== CSV IMPORT =====
 const LOG_HEADERS   = ['日時','植物名','記録の種類','メモ'];
-const PLANT_HEADERS = ['名前','品種','栽培開始日','置き場所','水やり間隔(日)','施肥間隔(日)','メモ'];
+const PLANT_HEADERS = ['名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
 const TYPE_MAP = {'水やり':'water','施肥':'fertilize','植替え':'repot','病害虫':'pest','メモ':'memo'};
 
 function parseCSV(text) {
@@ -1508,20 +1787,25 @@ function importPlantsCSV(input) {
 
       let added = 0, updated = 0, skipped = 0;
       for (const row of dataRows) {
-        if (row.length < 7) { skipped++; continue; }
-        const [name, species, startDateStr, location, waterInterval, fertilizeInterval, memo] = row;
+        if (row.length < 12) { skipped++; continue; }
+        const [name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
         if (!name.trim()) { skipped++; continue; }
-        // Parse startDate: YYYY年M月D日 → YYYY-MM-DD
         let startDate = null;
         if (startDateStr.trim()) {
           const m = startDateStr.match(/(\d+)年(\d+)月(\d+)日/);
           if (m) startDate = `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`;
         }
+        const mist = mistStr === '○' ? 'yes' : mistStr === '×' ? 'no' : 'none';
         const data = {
           name: name.trim(), species: species.trim(), startDate,
-          location: location.trim(),
-          waterInterval: parseInt(waterInterval) || null,
-          fertilizeInterval: parseInt(fertilizeInterval) || null,
+          location: location.trim() || null,
+          water: water.trim() || null,
+          dormant: dormant.trim() || null,
+          dormantWater: dormantWater.trim() || null,
+          fertilize: fertilize.trim() || null,
+          tempMin: tempMinStr.trim() !== '' ? parseFloat(tempMinStr) : null,
+          tempMax: tempMaxStr.trim() !== '' ? parseFloat(tempMaxStr) : null,
+          mist,
           memo: memo.trim()
         };
         const existing = plants.find(p => p.name === name.trim());
@@ -1549,6 +1833,12 @@ document.getElementById('options-sheet-overlay').addEventListener('click', funct
 updateLogPlantFilter();
 renderPlants();
 initTimeSetting();
+initLocalBackupUI();
+initDriveBackupUI();
+// Drive自動読み込み
+if (driveBackupEnabled && driveClientId) driveLoad();
+// backup-help modal close on overlay
+document.getElementById('backup-help-modal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
 </script>
 </body>
 </html>
