@@ -276,6 +276,19 @@
   .confirm-btn-cancel { background: var(--mist); color: var(--ink-light); }
   .confirm-btn-ok { background: var(--sage-dark); color: white; }
   .confirm-btn-danger { background: var(--danger); color: white; }
+  /* 3択ダイアログ */
+  .tri-confirm-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .tri-confirm-overlay.open { display: flex; }
+  .tri-confirm-box { background: var(--card-bg); border-radius: 20px; padding: 24px; width: 100%; max-width: 320px; text-align: center; animation: popIn 0.2s cubic-bezier(0.32,0.72,0,1); }
+  .tri-confirm-icon { font-size: 36px; margin-bottom: 12px; }
+  .tri-confirm-title { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.5; }
+  .tri-confirm-sub { font-size: 13px; color: var(--earth-light); margin-bottom: 20px; line-height: 1.6; }
+  .tri-confirm-btns { display: flex; flex-direction: column; gap: 8px; }
+  .tri-btn { width: 100%; padding: 13px; border-radius: 12px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+  .tri-btn:active { opacity: 0.7; }
+  .tri-btn-primary { background: var(--sage-dark); color: white; }
+  .tri-btn-secondary { background: rgba(192,97,74,0.1); color: var(--danger); }
+  .tri-btn-cancel { background: var(--mist); color: var(--ink-light); }
 </style>
 </head>
 <body>
@@ -283,7 +296,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.3</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.4</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -573,6 +586,20 @@
 <input type="file" id="import-logs-input" accept=".csv" style="display:none" onchange="importLogsCSV(this)">
 <input type="file" id="import-plants-input" accept=".csv" style="display:none" onchange="importPlantsCSV(this)">
 
+<!-- TRI CHOICE DIALOG -->
+<div class="tri-confirm-overlay" id="tri-confirm-overlay">
+  <div class="tri-confirm-box">
+    <div class="tri-confirm-icon" id="tri-confirm-icon">☁️</div>
+    <div class="tri-confirm-title" id="tri-confirm-title"></div>
+    <div class="tri-confirm-sub" id="tri-confirm-sub"></div>
+    <div class="tri-confirm-btns">
+      <button class="tri-btn tri-btn-primary" id="tri-btn-a" onclick="triConfirmA()"></button>
+      <button class="tri-btn tri-btn-secondary" id="tri-btn-b" onclick="triConfirmB()"></button>
+      <button class="tri-btn tri-btn-cancel" onclick="triConfirmCancel()">キャンセル</button>
+    </div>
+  </div>
+</div>
+
 <!-- CONFIRM DIALOG -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
@@ -699,11 +726,111 @@ function saveDriveClientId() {
   localStorage.setItem('driveClientId', driveClientId);
 }
 
+// ===== TRI CHOICE DIALOG =====
+let triCallbackA = null, triCallbackB = null;
+function showTriConfirm(icon, title, sub, labelA, labelB, cbA, cbB) {
+  document.getElementById('tri-confirm-icon').textContent = icon;
+  document.getElementById('tri-confirm-title').textContent = title;
+  document.getElementById('tri-confirm-sub').textContent = sub;
+  document.getElementById('tri-btn-a').textContent = labelA;
+  document.getElementById('tri-btn-b').textContent = labelB;
+  triCallbackA = cbA; triCallbackB = cbB;
+  document.getElementById('tri-confirm-overlay').classList.add('open');
+}
+function triConfirmA() { document.getElementById('tri-confirm-overlay').classList.remove('open'); if (triCallbackA) triCallbackA(); }
+function triConfirmB() { document.getElementById('tri-confirm-overlay').classList.remove('open'); if (triCallbackB) triCallbackB(); }
+function triConfirmCancel() {
+  document.getElementById('tri-confirm-overlay').classList.remove('open');
+  // トグルをオフに戻す
+  driveBackupEnabled = false;
+  localStorage.setItem('driveBackupEnabled', 'false');
+  initDriveBackupUI();
+}
+
 function toggleDriveBackup() {
   driveBackupEnabled = !driveBackupEnabled;
   localStorage.setItem('driveBackupEnabled', JSON.stringify(driveBackupEnabled));
   initDriveBackupUI();
-  if (driveBackupEnabled && driveClientId) driveAuth().then(() => driveLoad());
+  if (driveBackupEnabled && driveClientId) {
+    driveAuth().then(() => driveLoadWithChoice());
+  }
+}
+
+async function driveLoadWithChoice() {
+  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveAccessToken) {
+    try { await driveAuth(); } catch(e) { return; }
+  }
+  try {
+    await driveGetOrCreateFile();
+    if (!driveFileId) {
+      // Driveにデータなし→そのまま保存
+      showToast('☁️ Driveにデータがありません。現在のデータを同期します');
+      await driveBackupSave();
+      return;
+    }
+    // Driveにデータあり→3択
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
+      { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+    );
+    if (!res.ok) { driveAccessToken = null; showToast('⚠️ Drive読み込みに失敗しました'); return; }
+    const data = await res.json();
+    if (!data.plants || !data.logs) { await driveBackupSave(); return; }
+    const savedAt = data.savedAt ? new Date(data.savedAt).toLocaleDateString('ja-JP') : '不明';
+
+    showTriConfirm(
+      '☁️',
+      'Driveにデータがあります',
+      `Drive上の保存日：${savedAt}\nどちらのデータを使いますか？`,
+      '📥 Driveから読み込む（端末を上書き）',
+      '📤 端末データをDriveに上書き保存',
+      () => {
+        // A: Driveから読み込む
+        plants = data.plants; logs = data.logs;
+        if (data.masterOptions) masterOptions = data.masterOptions;
+        save(); renderPlants(); updateLogPlantFilter();
+        if (currentTab==='logs') renderLogs();
+        if (currentTab==='calendar') renderCalendar();
+        if (currentTab==='stats') renderStats();
+        showToast('☁️ Driveから読み込みました');
+      },
+      () => {
+        // B: 端末データをDriveに上書き
+        driveBackupSave();
+      }
+    );
+  } catch(e) {
+    showToast('⚠️ Drive接続に失敗しました');
+  }
+}
+
+async function driveLoad() {
+  // 通常の起動時読み込み（すでにオンの状態）→差分なければ何もしない
+  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveAccessToken) {
+    try { await driveAuth(); } catch(e) { return; }
+  }
+  try {
+    await driveGetOrCreateFile();
+    if (!driveFileId) return;
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
+      { headers: { Authorization: 'Bearer ' + driveAccessToken } }
+    );
+    if (!res.ok) { driveAccessToken = null; return; }
+    const data = await res.json();
+    if (!data.plants || !data.logs) return;
+    const localEmpty = !plants.length && !logs.length;
+    if (localEmpty) {
+      plants = data.plants; logs = data.logs;
+      if (data.masterOptions) masterOptions = data.masterOptions;
+      save(); renderPlants(); updateLogPlantFilter();
+      showToast('☁️ Driveからデータを読み込みました');
+    }
+  } catch(e) {
+    // silent fail on startup
+  }
 }
 
 function driveAuth() {
@@ -778,42 +905,6 @@ async function driveBackupSave() {
     }
   } catch(e) {
     showToast('⚠️ Drive保存に失敗しました');
-  }
-}
-
-async function driveLoad() {
-  if (!driveBackupEnabled || !driveClientId) return;
-  if (!driveAccessToken) {
-    try { await driveAuth(); } catch(e) { return; }
-  }
-  try {
-    await driveGetOrCreateFile();
-    if (!driveFileId) return;
-    const res = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
-      { headers: { Authorization: 'Bearer ' + driveAccessToken } }
-    );
-    if (!res.ok) { driveAccessToken = null; return; }
-    const data = await res.json();
-    if (!data.plants || !data.logs) return;
-    // 競合チェック
-    const localEmpty = !plants.length && !logs.length;
-    if (localEmpty) {
-      plants = data.plants; logs = data.logs;
-      if (data.masterOptions) masterOptions = data.masterOptions;
-      save();
-      renderPlants(); updateLogPlantFilter();
-      showToast('☁️ Driveからデータを読み込みました');
-    } else {
-      showConfirm('☁️', 'Driveにデータがあります', 'Driveのデータで上書きしますか？（現在のデータは失われます）', '上書きする', true, () => {
-        plants = data.plants; logs = data.logs;
-        if (data.masterOptions) masterOptions = data.masterOptions;
-        save(); renderPlants(); updateLogPlantFilter();
-        showToast('☁️ Driveのデータで上書きしました');
-      });
-    }
-  } catch(e) {
-    showToast('⚠️ Drive読み込みに失敗しました');
   }
 }
 
@@ -1839,6 +1930,7 @@ document.getElementById('plant-modal').addEventListener('click', function(e){ if
 document.getElementById('log-modal').addEventListener('click', function(e){ if(e.target===this) closeLogModal(); });
 document.getElementById('confirm-overlay').addEventListener('click', function(e){ if(e.target===this) closeConfirm(); });
 document.getElementById('options-sheet-overlay').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+document.getElementById('tri-confirm-overlay').addEventListener('click', function(e){ if(e.target===this) triConfirmCancel(); });
 
 // ===== INIT =====
 updateLogPlantFilter();
