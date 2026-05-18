@@ -296,7 +296,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.4</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.5</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -384,7 +384,10 @@
     <div class="calendar-wrap">
       <div class="cal-header">
         <button class="cal-nav-btn" onclick="calPrev()">‹</button>
-        <div class="cal-month-title" id="cal-month-title"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div class="cal-month-title" id="cal-month-title"></div>
+          <button onclick="event.stopPropagation();calToday()" style="font-size:10px;font-weight:600;color:var(--sage-dark);background:rgba(122,158,126,0.12);border:none;border-radius:10px;padding:3px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">今日</button>
+        </div>
         <div class="cal-view-toggle">
           <button class="cal-view-btn active" id="cal-btn-month" onclick="setCalView('month')">月</button>
           <button class="cal-view-btn" id="cal-btn-week" onclick="setCalView('week')">週</button>
@@ -1143,7 +1146,11 @@ let masterOptions = JSON.parse(localStorage.getItem('masterOptions') || 'null') 
 // Migrate: add location if missing
 if (!masterOptions.location) { masterOptions.location = [...DEFAULT_OPTIONS.location]; saveMasterOptions(); }
 
-function saveMasterOptions() { localStorage.setItem('masterOptions', JSON.stringify(masterOptions)); }
+function saveMasterOptions() {
+  localStorage.setItem('masterOptions', JSON.stringify(masterOptions));
+  if (localBackupEnabled) localBackupSave();
+  if (driveBackupEnabled) driveBackupSave();
+}
 
 // current selections while modal is open
 let plantFormSelections = { location: null, water: null, dormantWater: null, fertilize: null, dormant: null, mist: 'none' };
@@ -1385,7 +1392,7 @@ function renderMemoFields() {
   // Order selected types by typeOrder
   const ordered = typeOrder.filter(t => selectedLogTypes.has(t));
   if (ordered.length === 0) {
-    wrap.innerHTML = `<div id="log-no-type-msg" style="font-size:13px;color:var(--earth-light);padding:4px 2px 12px;font-style:italic;">記録の種類を選択するとメモを入力できます</div>`;
+    wrap.innerHTML = `<div style="font-size:13px;color:var(--earth-light);padding:4px 2px 12px;font-style:italic;">記録の種類を選択するとメモを入力できます</div>`;
     return;
   }
   wrap.innerHTML = ordered.map(type => `
@@ -1565,6 +1572,14 @@ function calNext() {
   }
   renderCalendar();
 }
+function calToday() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  calWeekStart = getWeekStart(now);
+  selectedCalDate = { year: now.getFullYear(), month: now.getMonth(), day: now.getDate() };
+  renderCalendar();
+}
 
 const typeEmoji = {water:'💧',fertilize:'🌱',repot:'🪴',pest:'🐛',memo:'📝'};
 
@@ -1676,6 +1691,7 @@ function selectCalDay(year, month, day) {
 
 function renderCalDetail() {
   const panel = document.getElementById('cal-detail-panel');
+  if (!panel) return;
   if (!selectedCalDate) { panel.innerHTML=''; return; }
   const {year,month,day} = selectedCalDate;
   const mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
