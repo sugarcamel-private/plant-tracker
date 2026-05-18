@@ -296,7 +296,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.5</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.6</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -697,7 +697,7 @@ async function toggleLocalBackup() {
 async function localBackupSave() {
   if (!_localFileHandle) return;
   try {
-    const data = JSON.stringify({ plants, logs, masterOptions });
+    const data = JSON.stringify({ plants, logs, masterOptions, recordTime });
     const writable = await _localFileHandle.createWritable();
     await writable.write(data);
     await writable.close();
@@ -792,6 +792,7 @@ async function driveLoadWithChoice() {
         // A: Driveから読み込む
         plants = data.plants; logs = data.logs;
         if (data.masterOptions) masterOptions = data.masterOptions;
+        if (data.recordTime != null) { recordTime = data.recordTime; localStorage.setItem('recordTime', JSON.stringify(recordTime)); initTimeSetting(); }
         save(); renderPlants(); updateLogPlantFilter();
         if (currentTab==='logs') renderLogs();
         if (currentTab==='calendar') renderCalendar();
@@ -828,6 +829,7 @@ async function driveLoad() {
     if (localEmpty) {
       plants = data.plants; logs = data.logs;
       if (data.masterOptions) masterOptions = data.masterOptions;
+      if (data.recordTime != null) { recordTime = data.recordTime; localStorage.setItem('recordTime', JSON.stringify(recordTime)); initTimeSetting(); }
       save(); renderPlants(); updateLogPlantFilter();
       showToast('☁️ Driveからデータを読み込みました');
     }
@@ -886,7 +888,7 @@ async function driveBackupSave() {
   }
   try {
     await driveGetOrCreateFile();
-    const data = JSON.stringify({ plants, logs, masterOptions, savedAt: new Date().toISOString() });
+    const data = JSON.stringify({ plants, logs, masterOptions, recordTime, savedAt: new Date().toISOString() });
     const blob = new Blob([data], { type: 'application/json' });
     const meta = { name: DRIVE_FILE_NAME, mimeType: 'application/json' };
     const form = new FormData();
@@ -1802,9 +1804,9 @@ function exportLogsCSV() {
 
 function exportPlantsCSV() {
   if (!plants.length) { showConfirm('ℹ️','植物が登録されていません','','OK',false,()=>{},false); return; }
-  const header = ['名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
+  const header = ['アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
   const rows = plants.map(p => [
-    p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
+    p.emoji||'🌿', p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
     p.location||'', p.water||'', p.dormant||'', p.dormantWater||'', p.fertilize||'',
     p.tempMin != null ? p.tempMin : '', p.tempMax != null ? p.tempMax : '',
     p.mist === 'yes' ? '○' : p.mist === 'no' ? '×' : '',
@@ -1815,7 +1817,7 @@ function exportPlantsCSV() {
 
 // ===== CSV IMPORT =====
 const LOG_HEADERS   = ['日時','植物名','記録の種類','メモ'];
-const PLANT_HEADERS = ['名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
+const PLANT_HEADERS = ['アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
 const TYPE_MAP = {'水やり':'water','施肥':'fertilize','植替え':'repot','病害虫':'pest','メモ':'memo'};
 
 function parseCSV(text) {
@@ -1905,8 +1907,8 @@ function importPlantsCSV(input) {
 
       let added = 0, updated = 0, skipped = 0;
       for (const row of dataRows) {
-        if (row.length < 12) { skipped++; continue; }
-        const [name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
+        if (row.length < 13) { skipped++; continue; }
+        const [emoji, name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
         if (!name.trim()) { skipped++; continue; }
         let startDate = null;
         if (startDateStr.trim()) {
@@ -1916,6 +1918,7 @@ function importPlantsCSV(input) {
         const mist = mistStr === '○' ? 'yes' : mistStr === '×' ? 'no' : 'none';
         const data = {
           name: name.trim(), species: species.trim(), startDate,
+          emoji: emoji.trim() || '🌿',
           location: location.trim() || null,
           water: water.trim() || null,
           dormant: dormant.trim() || null,
@@ -1930,7 +1933,7 @@ function importPlantsCSV(input) {
         if (existing) {
           Object.assign(existing, data); updated++;
         } else {
-          plants.push({ id: Date.now().toString() + added, createdAt: new Date().toISOString(), emoji: '🌿', ...data });
+          plants.push({ id: Date.now().toString() + added, createdAt: new Date().toISOString(), ...data });
           added++;
         }
       }
