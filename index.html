@@ -263,7 +263,107 @@
   .plant-select-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 2px solid transparent; background: var(--mist); cursor: pointer; transition: all 0.15s; font-size: 14px; color: var(--ink); }
   .plant-select-option.selected { border-color: var(--sage-dark); background: rgba(122,158,126,0.1); }
 
-  /* CONFIRM DIALOG */
+  /* GARDEN */
+  #garden-scene {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 160px);
+    min-height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #c8e6f5 0%, #d4eef8 35%, #8bc4a0 35.1%, #6aaa82 55%, #5a9470 100%);
+    box-shadow: 0 4px 20px rgba(30,42,31,0.15);
+  }
+  /* Sky elements */
+  .garden-sun {
+    position: absolute;
+    top: 18px; right: 24px;
+    width: 44px; height: 44px;
+    background: radial-gradient(circle, #ffe066 60%, #ffd700 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px 6px rgba(255,220,50,0.35);
+  }
+  .garden-cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50px;
+  }
+  /* Plant slot */
+  .garden-plant {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+  }
+  .garden-plant:active { transform: scale(0.92); }
+  /* Plant body SVG wrapper */
+  .garden-plant-body {
+    position: relative;
+    cursor: pointer;
+  }
+  .garden-plant-body svg {
+    position: absolute;
+    bottom: calc(0px - var(--svg-offset-y, 0px));
+    left: 50%;
+    transform: translateX(calc(-50% + var(--svg-offset-x, 0px)));
+    pointer-events: none;
+    overflow: visible;
+  }
+  /* Effects */
+  .effect-water {
+    position: absolute;
+    top: 20%; right: 0;
+    font-size: 14px;
+    animation: drip 1.8s ease-in-out infinite;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .effect-sparkle {
+    position: absolute;
+    top: 5%; left: 0;
+    font-size: 13px;
+    animation: sparkle 1.2s ease-in-out infinite;
+    z-index: 3;
+    pointer-events: none;
+  }
+  @keyframes drip {
+    0%,100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(4px); opacity: 0.6; }
+  }
+  @keyframes sparkle {
+    0%,100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.3) rotate(20deg); opacity: 0.7; }
+  }
+  /* Tooltip */
+  .garden-tooltip {
+    position: absolute;
+    background: rgba(30,42,31,0.88);
+    color: white;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    pointer-events: none;
+    z-index: 50;
+    min-width: 130px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    white-space: nowrap;
+  }
+  .garden-empty {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    color: rgba(255,255,255,0.8);
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    line-height: 2;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
   .confirm-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 24px; }
   .confirm-overlay.open { display: flex; }
   .confirm-box { background: var(--card-bg); border-radius: 20px; padding: 24px; width: 100%; max-width: 320px; text-align: center; animation: popIn 0.2s cubic-bezier(0.32,0.72,0,1); }
@@ -296,7 +396,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.9</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.0</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -348,6 +448,7 @@
     <button class="tab active" onclick="switchTab('plants',this)">植物一覧</button>
     <button class="tab" onclick="switchTab('logs',this)">記録</button>
     <button class="tab" onclick="switchTab('calendar',this)">カレンダー</button>
+    <button class="tab" onclick="switchTab('garden',this)">庭</button>
     <button class="tab" onclick="switchTab('stats',this)">統計</button>
   </div>
 </div>
@@ -402,6 +503,11 @@
       <div id="cal-body"></div>
     </div>
     <div id="cal-detail-panel"></div>
+  </div>
+
+  <!-- GARDEN -->
+  <div id="view-garden" class="view">
+    <div id="garden-scene"></div>
   </div>
 
   <!-- STATS -->
@@ -1042,6 +1148,7 @@ function switchTab(view, btn) {
   btn.classList.add('active');
   if (view === 'logs') { updateLogPlantFilter(); renderLogs(); }
   if (view === 'calendar') renderCalendar();
+  if (view === 'garden') renderGarden();
   if (view === 'stats') renderStats();
 }
 
@@ -1792,7 +1899,307 @@ function renderCalDetail() {
     </div>`;
 }
 
-// ===== STATS =====
+// ===== GARDEN =====
+let _gardenTooltipTimer = null;
+
+function getGrowthStage(p) {
+  if (!p.startDate) return 0;
+  const days = Math.floor((Date.now() - new Date(p.startDate)) / 86400000);
+  if (days < 90)  return 0;
+  if (days < 180) return 1;
+  if (days < 365) return 2;
+  if (days < 730) return 3;
+  return 4;
+}
+const STAGE_LABELS = ['芽','苗','若木','中木','成木'];
+
+function getPlantType(p) {
+  const typeMap = {
+    '🌿':0,'🍀':0,       // もしゃもしゃツタ・笹系
+    '🎋':1,'🌴':1,       // 細長い葉・竹・ヤシ系
+    '🌵':2,              // サボテン・多肉系
+    '🌺':3,'🌸':3,'🌼':3, // 花系
+    '🍃':4,'🌱':4        // 丸っこい葉の木系（元type0）
+  };
+  return typeMap[p.emoji] ?? 0;
+}
+
+function hasRecentLog(plantId, type, withinDays) {
+  const last = logs.filter(l => l.plantId===plantId && l.type===type)
+    .sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+  if (!last) return false;
+  return Math.floor((Date.now()-new Date(last.date))/86400000) <= withinDays;
+}
+
+// 植物の見えるサイズ（viewBox単位、type×stage）
+const plantH = [
+  [32, 46, 56, 72, 80], // type0
+  [30, 42, 56, 74, 80], // type1
+  [24, 30, 47, 56, 66], // type2
+  [24, 32, 48, 56, 70], // type3
+  [30, 36, 50, 58, 66], // type4
+];
+const plantW = [
+  [26, 36, 50, 60, 70], // type0
+  [22, 36, 52, 64, 70], // type1
+  [16, 24, 32, 40, 48], // type2
+  [22, 32, 40, 50, 58], // type3
+  [24, 30, 40, 50, 60], // type4
+];
+
+// ソイル中心X定義（viewBox座標）：植物の左右中心
+const soilCX = [
+  [24, 26, 28, 30, 34], // type0
+  [22, 24, 26, 28, 32], // type1
+  [22, 24, 26, 28, 32], // type2
+  [22, 24, 26, 28, 34], // type3
+  [24, 26, 28, 30, 34], // type4
+];
+
+// ソイルCY定義（viewBox座標）：type×stage
+const soilCY = [
+  [74, 76, 78, 82, 84], // type0 (ツタ系)
+  [72, 74, 78, 82, 86], // type1 (ヤシ系)
+  [68, 70, 74, 78, 84], // type2 (多肉系)
+  [68, 72, 76, 78, 86], // type3 (花系)
+  [74, 76, 78, 80, 84], // type4 (丸木系)
+];
+
+function plantSVG(type, stage, hue) {
+  const c1=`hsl(${hue},58%,34%)`, c2=`hsl(${hue},52%,50%)`, c3=`hsl(${hue},46%,66%)`;
+  const trunk=`hsl(28,45%,38%)`, soil=`hsl(28,42%,44%)`, soilL=`hsl(28,36%,58%)`;
+
+  // type0: もしゃもしゃツタ・笹系（🌿🍀）
+  if (type===0) {
+    const gc=`hsl(${hue},62%,36%)`, gl=`hsl(${hue},54%,56%)`, gb=`hsl(${hue},48%,70%)`;
+    // 笹葉を描くヘルパー：茎+先が尖った葉
+    function leaf(x1,y1,x2,y2,lx,ly,col){
+      return `<path d="M${x1} ${y1} Q${lx} ${ly} ${x2} ${y2}" stroke="${col}" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <path d="M${x1} ${y1} Q${lx-3} ${ly-2} ${x2} ${y2} Q${lx+3} ${ly+2} ${x1} ${y1}Z" fill="${col}" opacity="0.85"/>`;
+    }
+    const s=[
+      // stage0: 小さな双葉の芽
+      `<ellipse cx="22" cy="74" rx="10" ry="3.5" fill="${soil}"/><ellipse cx="22" cy="72" rx="10" ry="3" fill="${soilL}"/>
+       <line x1="22" y1="72" x2="22" y2="62" stroke="${gc}" stroke-width="2" stroke-linecap="round"/>
+       ${leaf(22,65,16,56,14,60,gc)}${leaf(22,65,28,56,30,60,gl)}
+       <path d="M22 62 Q20 55 22 50 Q24 55 22 62Z" fill="${gc}"/>`,
+      // stage1: 茎から笹葉が数枚
+      `<ellipse cx="24" cy="76" rx="12" ry="4" fill="${soil}"/><ellipse cx="24" cy="74" rx="12" ry="3.5" fill="${soilL}"/>
+       <line x1="24" y1="74" x2="24" y2="54" stroke="${gc}" stroke-width="2.2" stroke-linecap="round"/>
+       ${leaf(24,70,14,60,10,64,gc)}${leaf(24,70,34,60,38,64,gl)}
+       ${leaf(24,64,12,52,8,56,gl)}${leaf(24,64,36,52,40,56,gc)}
+       ${leaf(24,57,18,46,15,50,gc)}${leaf(24,57,30,46,33,50,gb)}
+       <path d="M24 54 Q22 46 24 40 Q26 46 24 54Z" fill="${gl}"/>`,
+      // stage2: もしゃもしゃ感が出てくる
+      `<ellipse cx="26" cy="78" rx="14" ry="5" fill="${soil}"/><ellipse cx="26" cy="76" rx="14" ry="4" fill="${soilL}"/>
+       <line x1="26" y1="76" x2="26" y2="48" stroke="${gc}" stroke-width="2.5" stroke-linecap="round"/>
+       <line x1="22" y1="66" x2="12" y2="58" stroke="${gc}" stroke-width="1.8" stroke-linecap="round"/>
+       <line x1="30" y1="66" x2="40" y2="58" stroke="${gc}" stroke-width="1.8" stroke-linecap="round"/>
+       ${leaf(26,72,12,62,8,66,gc)}${leaf(26,72,40,62,44,66,gl)}
+       ${leaf(22,66,6,54,2,58,gl)}${leaf(30,66,46,54,50,58,gc)}
+       ${leaf(26,62,10,50,6,54,gc)}${leaf(26,62,42,50,46,54,gb)}
+       ${leaf(22,58,8,44,4,48,gl)}${leaf(30,58,44,44,48,48,gc)}
+       ${leaf(26,54,14,40,10,44,gc)}${leaf(26,54,38,40,42,44,gl)}
+       <path d="M26 48 Q23 38 26 30 Q29 38 26 48Z" fill="${gl}"/>
+       <path d="M22 52 Q18 42 20 34 Q24 40 22 52Z" fill="${gc}"/>
+       <path d="M30 52 Q34 42 32 34 Q28 40 30 52Z" fill="${gb}"/>`,
+      // stage3: 横にも広がり密になる
+      `<ellipse cx="28" cy="80" rx="16" ry="5" fill="${soil}"/><ellipse cx="28" cy="78" rx="16" ry="4.5" fill="${soilL}"/>
+       <line x1="28" y1="78" x2="28" y2="44" stroke="${gc}" stroke-width="3" stroke-linecap="round"/>
+       <line x1="24" y1="68" x2="10" y2="56" stroke="${gc}" stroke-width="2" stroke-linecap="round"/>
+       <line x1="32" y1="68" x2="46" y2="56" stroke="${gc}" stroke-width="2" stroke-linecap="round"/>
+       <line x1="20" y1="58" x2="6" y2="50" stroke="${gl}" stroke-width="1.8" stroke-linecap="round"/>
+       <line x1="36" y1="58" x2="50" y2="50" stroke="${gl}" stroke-width="1.8" stroke-linecap="round"/>
+       ${leaf(28,74,10,62,4,66,gc)}${leaf(28,74,46,62,52,66,gl)}
+       ${leaf(24,68,4,56,0,60,gl)}${leaf(32,68,52,56,56,60,gc)}
+       ${leaf(20,62,2,50,-2,54,gc)}${leaf(36,62,54,50,58,54,gb)}
+       ${leaf(28,60,8,46,4,50,gl)}${leaf(28,60,48,46,52,50,gc)}
+       ${leaf(28,55,10,40,6,44,gc)}${leaf(28,55,46,40,50,44,gl)}
+       ${leaf(24,50,8,36,4,40,gl)}${leaf(32,50,48,36,52,40,gc)}
+       ${leaf(28,46,14,30,10,34,gc)}${leaf(28,46,42,30,46,34,gb)}
+       <path d="M28 44 Q25 32 28 22 Q31 32 28 44Z" fill="${gc}"/>
+       <path d="M22 50 Q14 38 16 26 Q22 34 22 50Z" fill="${gl}"/>
+       <path d="M34 50 Q42 38 40 26 Q34 34 34 50Z" fill="${gb}"/>`,
+      // stage4: 大きく茂った茂み
+      `<ellipse cx="32" cy="84" rx="20" ry="6" fill="${soil}"/><ellipse cx="32" cy="81" rx="20" ry="5" fill="${soilL}"/>
+       <line x1="32" y1="81" x2="32" y2="40" stroke="${gc}" stroke-width="3.5" stroke-linecap="round"/>
+       <line x1="26" y1="70" x2="8" y2="54" stroke="${gc}" stroke-width="2.2" stroke-linecap="round"/>
+       <line x1="38" y1="70" x2="56" y2="54" stroke="${gc}" stroke-width="2.2" stroke-linecap="round"/>
+       <line x1="20" y1="60" x2="2" y2="48" stroke="${gl}" stroke-width="2" stroke-linecap="round"/>
+       <line x1="44" y1="60" x2="62" y2="48" stroke="${gl}" stroke-width="2" stroke-linecap="round"/>
+       <line x1="26" y1="52" x2="8" y2="40" stroke="${gc}" stroke-width="1.8" stroke-linecap="round"/>
+       <line x1="38" y1="52" x2="56" y2="40" stroke="${gc}" stroke-width="1.8" stroke-linecap="round"/>
+       ${leaf(32,76,8,64,2,68,gc)}${leaf(32,76,56,64,62,68,gl)}
+       ${leaf(26,70,2,56,-4,60,gl)}${leaf(38,70,62,56,68,60,gc)}
+       ${leaf(20,64,-2,50,-8,54,gc)}${leaf(44,64,66,50,72,54,gb)}
+       ${leaf(32,65,6,52,0,56,gl)}${leaf(32,65,58,52,64,56,gc)}
+       ${leaf(32,58,4,44,-2,48,gc)}${leaf(32,58,60,44,66,48,gl)}
+       ${leaf(26,52,4,38,-2,42,gl)}${leaf(38,52,60,38,66,42,gc)}
+       ${leaf(32,50,8,34,2,38,gc)}${leaf(32,50,56,34,62,38,gb)}
+       ${leaf(32,44,10,28,4,32,gl)}${leaf(32,44,54,28,60,32,gc)}
+       ${leaf(28,40,10,22,4,26,gc)}${leaf(36,40,54,22,60,26,gl)}
+       <path d="M32 40 Q28 26 32 14 Q36 26 32 40Z" fill="${gl}"/>
+       <path d="M24 46 Q12 32 14 16 Q22 26 24 46Z" fill="${gc}"/>
+       <path d="M40 46 Q52 32 50 16 Q42 26 40 46Z" fill="${gb}"/>`
+    ];
+    return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg">${s[stage]}</svg>`;
+  }
+
+  // type4: 丸っこい葉の木（🍃🌱）
+  if (type===4) {
+    const s=[
+      `<ellipse cx="24" cy="76" rx="14" ry="5" fill="${soil}"/><ellipse cx="24" cy="74" rx="14" ry="4" fill="${soilL}"/><line x1="24" y1="74" x2="24" y2="60" stroke="${trunk}" stroke-width="2.5" stroke-linecap="round"/><path d="M24 66 Q14 60 12 52 Q18 54 24 64Z" fill="${c2}"/><path d="M24 66 Q34 60 36 52 Q30 54 24 64Z" fill="${c3}"/><path d="M24 60 Q21 52 23 46 Q27 52 24 60Z" fill="${c2}"/>`,
+      `<ellipse cx="26" cy="78" rx="16" ry="5" fill="${soil}"/><ellipse cx="26" cy="76" rx="16" ry="4" fill="${soilL}"/><line x1="26" y1="76" x2="26" y2="56" stroke="${trunk}" stroke-width="3" stroke-linecap="round"/><ellipse cx="26" cy="52" rx="14" ry="12" fill="${c2}"/><ellipse cx="18" cy="60" rx="10" ry="8" fill="${c3}"/><ellipse cx="34" cy="60" rx="10" ry="8" fill="${c2}"/><ellipse cx="26" cy="52" rx="11" ry="10" fill="${c3}"/>`,
+      `<ellipse cx="28" cy="80" rx="18" ry="6" fill="${soil}"/><ellipse cx="28" cy="78" rx="18" ry="5" fill="${soilL}"/><path d="M25 78 Q23 64 25 52 Q28 58 31 52 Q33 64 31 78Z" fill="${trunk}"/><ellipse cx="28" cy="46" rx="18" ry="16" fill="${c1}"/><ellipse cx="18" cy="56" rx="13" ry="10" fill="${c2}"/><ellipse cx="38" cy="56" rx="13" ry="10" fill="${c3}"/><ellipse cx="28" cy="44" rx="16" ry="14" fill="${c2}"/><ellipse cx="28" cy="44" rx="8" ry="8" fill="${c3}"/>`,
+      `<ellipse cx="30" cy="82" rx="20" ry="6" fill="${soil}"/><ellipse cx="30" cy="80" rx="20" ry="5" fill="${soilL}"/><path d="M26 80 Q23 62 26 48 Q30 56 34 48 Q37 62 34 80Z" fill="${trunk}"/><ellipse cx="30" cy="40" rx="22" ry="19" fill="${c1}"/><ellipse cx="16" cy="54" rx="14" ry="11" fill="${c2}"/><ellipse cx="44" cy="54" rx="14" ry="11" fill="${c3}"/><ellipse cx="30" cy="36" rx="19" ry="16" fill="${c2}"/><ellipse cx="22" cy="44" rx="12" ry="10" fill="${c3}"/><ellipse cx="38" cy="44" rx="12" ry="10" fill="${c2}"/><ellipse cx="30" cy="36" rx="10" ry="9" fill="${c3}"/>`,
+      `<ellipse cx="34" cy="86" rx="24" ry="7" fill="${soil}"/><ellipse cx="34" cy="83" rx="24" ry="6" fill="${soilL}"/><path d="M29 83 Q26 62 29 46 Q34 56 39 46 Q42 62 39 83Z" fill="${trunk}"/><path d="M24 82 Q29 74 34 82Z" fill="${trunk}" opacity="0.5"/><path d="M44 82 Q39 74 34 82Z" fill="${trunk}" opacity="0.5"/><ellipse cx="20" cy="60" rx="15" ry="12" fill="${c2}" transform="rotate(-15 20 60)"/><ellipse cx="48" cy="60" rx="15" ry="12" fill="${c3}" transform="rotate(15 48 60)"/><ellipse cx="34" cy="62" rx="16" ry="14" fill="${c1}"/><ellipse cx="20" cy="46" rx="14" ry="11" fill="${c3}"/><ellipse cx="48" cy="46" rx="14" ry="11" fill="${c2}"/><ellipse cx="34" cy="44" rx="16" ry="13" fill="${c2}"/><ellipse cx="28" cy="34" rx="12" ry="10" fill="${c3}"/><ellipse cx="40" cy="34" rx="12" ry="10" fill="${c2}"/><ellipse cx="34" cy="28" rx="12" ry="11" fill="${c3}"/><ellipse cx="34" cy="28" rx="6" ry="6" fill="${c2}" opacity="0.7"/>`
+    ];
+    return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg">${s[stage]}</svg>`;
+  }
+
+  // type1: 細長い葉の木
+  if (type===1) {
+    const lc=`hsl(${hue},60%,40%)`, ll=`hsl(${hue},50%,60%)`;
+    const s=[
+      `<ellipse cx="22" cy="72" rx="12" ry="4" fill="${soil}"/><ellipse cx="22" cy="70" rx="12" ry="3.5" fill="${soilL}"/><line x1="22" y1="70" x2="22" y2="56" stroke="${trunk}" stroke-width="2" stroke-linecap="round"/><path d="M22 60 Q12 54 10 46" stroke="${lc}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M22 60 Q32 54 34 46" stroke="${ll}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M22 58 Q18 48 20 42" stroke="${lc}" stroke-width="2.5" stroke-linecap="round" fill="none"/>`,
+      `<ellipse cx="24" cy="76" rx="14" ry="5" fill="${soil}"/><ellipse cx="24" cy="74" rx="14" ry="4" fill="${soilL}"/><line x1="24" y1="74" x2="24" y2="52" stroke="${trunk}" stroke-width="2.5" stroke-linecap="round"/><path d="M24 58 Q8 50 4 38" stroke="${lc}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M24 58 Q40 50 44 38" stroke="${ll}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M24 55 Q14 43 14 33" stroke="${lc}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M24 55 Q34 43 34 33" stroke="${ll}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M24 52 Q20 40 22 32" stroke="${lc}" stroke-width="2.5" stroke-linecap="round" fill="none"/>`,
+      `<ellipse cx="26" cy="80" rx="16" ry="5" fill="${soil}"/><ellipse cx="26" cy="78" rx="16" ry="4.5" fill="${soilL}"/><line x1="26" y1="78" x2="26" y2="48" stroke="${trunk}" stroke-width="3" stroke-linecap="round"/><path d="M26 56 Q6 46 2 30" stroke="${lc}" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M26 56 Q46 46 50 30" stroke="${ll}" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M26 53 Q10 41 8 27" stroke="${lc}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M26 53 Q42 41 44 27" stroke="${ll}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M26 50 Q16 36 16 22" stroke="${lc}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M26 50 Q36 36 36 22" stroke="${ll}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M26 48 Q22 32 24 20" stroke="${c2}" stroke-width="2.5" stroke-linecap="round" fill="none"/>`,
+      `<ellipse cx="28" cy="84" rx="18" ry="6" fill="${soil}"/><ellipse cx="28" cy="82" rx="18" ry="5" fill="${soilL}"/><line x1="28" y1="82" x2="28" y2="42" stroke="${trunk}" stroke-width="3.5" stroke-linecap="round"/><line x1="28" y1="60" x2="20" y2="72" stroke="${trunk}" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="60" x2="36" y2="72" stroke="${trunk}" stroke-width="2.5" stroke-linecap="round"/><path d="M28 50 Q4 38 0 18" stroke="${lc}" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M28 50 Q52 38 56 18" stroke="${ll}" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M28 47 Q8 33 6 15" stroke="${lc}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M28 47 Q48 33 50 15" stroke="${ll}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M28 44 Q12 28 12 12" stroke="${c2}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M28 44 Q44 28 44 12" stroke="${c3}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M28 42 Q24 24 26 10" stroke="${lc}" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M28 42 Q32 24 30 10" stroke="${ll}" stroke-width="2.5" stroke-linecap="round" fill="none"/>`,
+      `<ellipse cx="32" cy="88" rx="22" ry="7" fill="${soil}"/><ellipse cx="32" cy="85" rx="22" ry="6" fill="${soilL}"/><path d="M28 85 Q26 66 28 44 Q32 54 36 44 Q38 66 36 85Z" fill="${trunk}"/><line x1="32" y1="62" x2="20" y2="76" stroke="${trunk}" stroke-width="3"/><line x1="32" y1="62" x2="44" y2="76" stroke="${trunk}" stroke-width="3"/><path d="M32 50 Q4 36 0 12" stroke="${lc}" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M32 50 Q60 36 64 12" stroke="${ll}" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M32 47 Q6 30 4 8" stroke="${lc}" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M32 47 Q58 30 60 8" stroke="${ll}" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M32 44 Q12 26 10 8" stroke="${c2}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M32 44 Q52 26 54 8" stroke="${c3}" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M32 42 Q16 22 16 6" stroke="${lc}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M32 42 Q48 22 48 6" stroke="${ll}" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M32 40 Q26 20 28 4" stroke="${c2}" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M32 40 Q38 20 36 4" stroke="${c3}" stroke-width="2.5" stroke-linecap="round" fill="none"/>`
+    ];
+    return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg">${s[stage]}</svg>`;
+  }
+
+  // type2: 多肉植物
+  if (type===2) {
+    const sc2=`hsl(${hue},50%,44%)`, sc3=`hsl(${hue},44%,60%)`;
+    const s=[
+      `<ellipse cx="22" cy="68" rx="12" ry="4" fill="${soil}"/><ellipse cx="22" cy="66" rx="12" ry="3.5" fill="${soilL}"/><ellipse cx="22" cy="58" rx="8" ry="10" fill="${sc2}"/><ellipse cx="22" cy="55" rx="5" ry="6" fill="${sc3}"/><line x1="18" y1="56" x2="15" y2="54" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="26" y1="56" x2="29" y2="54" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/>`,
+      `<ellipse cx="24" cy="72" rx="14" ry="5" fill="${soil}"/><ellipse cx="24" cy="70" rx="14" ry="4" fill="${soilL}"/><ellipse cx="24" cy="58" rx="10" ry="13" fill="${sc2}"/><ellipse cx="24" cy="54" rx="7" ry="9" fill="${sc3}"/><ellipse cx="14" cy="62" rx="6" ry="9" fill="${sc2}" transform="rotate(-20 14 62)"/><ellipse cx="34" cy="62" rx="6" ry="9" fill="${sc2}" transform="rotate(20 34 62)"/><line x1="20" y1="54" x2="16" y2="51" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="28" y1="54" x2="32" y2="51" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="46" x2="24" y2="42" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/>`,
+      `<ellipse cx="26" cy="76" rx="16" ry="5" fill="${soil}"/><ellipse cx="26" cy="74" rx="16" ry="4.5" fill="${soilL}"/><ellipse cx="26" cy="58" rx="12" ry="17" fill="${sc2}"/><ellipse cx="26" cy="52" rx="9" ry="12" fill="${sc3}"/><ellipse cx="12" cy="62" rx="7" ry="11" fill="${sc2}" transform="rotate(-25 12 62)"/><ellipse cx="40" cy="62" rx="7" ry="11" fill="${sc2}" transform="rotate(25 40 62)"/><ellipse cx="12" cy="62" rx="4" ry="7" fill="${sc3}" transform="rotate(-25 12 62)"/><ellipse cx="40" cy="62" rx="4" ry="7" fill="${sc3}" transform="rotate(25 40 62)"/><line x1="20" y1="50" x2="15" y2="46" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="32" y1="50" x2="37" y2="46" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="26" y1="42" x2="26" y2="36" stroke="${sc3}" stroke-width="2" stroke-linecap="round"/><circle cx="26" cy="34" r="4" fill="hsl(340,70%,70%)"/>`,
+      `<ellipse cx="28" cy="80" rx="18" ry="6" fill="${soil}"/><ellipse cx="28" cy="78" rx="18" ry="5" fill="${soilL}"/><ellipse cx="28" cy="58" rx="14" ry="21" fill="${sc2}"/><ellipse cx="28" cy="50" rx="10" ry="14" fill="${sc3}"/><ellipse cx="10" cy="62" rx="8" ry="13" fill="${sc2}" transform="rotate(-25 10 62)"/><ellipse cx="46" cy="62" rx="8" ry="13" fill="${sc2}" transform="rotate(25 46 62)"/><ellipse cx="10" cy="62" rx="5" ry="8" fill="${sc3}" transform="rotate(-25 10 62)"/><ellipse cx="46" cy="62" rx="5" ry="8" fill="${sc3}" transform="rotate(25 46 62)"/><ellipse cx="16" cy="44" rx="5" ry="8" fill="${sc2}" transform="rotate(-15 16 44)"/><ellipse cx="40" cy="44" rx="5" ry="8" fill="${sc2}" transform="rotate(15 40 44)"/><line x1="22" y1="44" x2="16" y2="38" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="34" y1="44" x2="40" y2="38" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="28" y1="37" x2="28" y2="29" stroke="${sc3}" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="27" r="5" fill="hsl(340,70%,68%)"/><circle cx="20" cy="34" r="3" fill="hsl(50,80%,66%)"/><circle cx="36" cy="34" r="3" fill="hsl(50,80%,66%)"/>`,
+      `<ellipse cx="32" cy="86" rx="22" ry="7" fill="${soil}"/><ellipse cx="32" cy="83" rx="22" ry="6" fill="${soilL}"/><ellipse cx="32" cy="60" rx="16" ry="24" fill="${sc2}"/><ellipse cx="32" cy="50" rx="12" ry="16" fill="${sc3}"/><ellipse cx="10" cy="64" rx="9" ry="15" fill="${sc2}" transform="rotate(-22 10 64)"/><ellipse cx="54" cy="64" rx="9" ry="15" fill="${sc2}" transform="rotate(22 54 64)"/><ellipse cx="10" cy="64" rx="5.5" ry="9" fill="${sc3}" transform="rotate(-22 10 64)"/><ellipse cx="54" cy="64" rx="5.5" ry="9" fill="${sc3}" transform="rotate(22 54 64)"/><ellipse cx="14" cy="46" rx="6" ry="10" fill="${sc2}" transform="rotate(-15 14 46)"/><ellipse cx="50" cy="46" rx="6" ry="10" fill="${sc2}" transform="rotate(15 50 46)"/><ellipse cx="14" cy="46" rx="3.5" ry="6" fill="${sc3}" transform="rotate(-15 14 46)"/><ellipse cx="50" cy="46" rx="3.5" ry="6" fill="${sc3}" transform="rotate(15 50 46)"/><line x1="24" y1="42" x2="16" y2="34" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="40" y1="42" x2="48" y2="34" stroke="${sc3}" stroke-width="1.5" stroke-linecap="round"/><line x1="32" y1="35" x2="32" y2="24" stroke="${sc3}" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="22" r="6" fill="hsl(340,72%,66%)"/><circle cx="32" cy="22" r="3" fill="hsl(340,60%,82%)"/><circle cx="22" cy="30" r="4" fill="hsl(50,80%,64%)"/><circle cx="42" cy="30" r="4" fill="hsl(50,80%,64%)"/><circle cx="18" cy="38" r="3" fill="hsl(280,60%,72%)"/><circle cx="46" cy="38" r="3" fill="hsl(280,60%,72%)"/>`
+    ];
+    return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg">${s[stage]}</svg>`;
+  }
+
+  // type3: 花の木
+  if (type===3) {
+  const pc=`hsl(${(hue+200)%360},70%,72%)`, pd=`hsl(${(hue+200)%360},65%,58%)`, cc=`hsl(50,90%,68%)`;
+  const fl=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy-r}" r="${r*0.7}" fill="${pc}"/><circle cx="${cx}" cy="${cy+r}" r="${r*0.7}" fill="${pc}"/><circle cx="${cx-r}" cy="${cy}" r="${r*0.7}" fill="${pd}"/><circle cx="${cx+r}" cy="${cy}" r="${r*0.7}" fill="${pd}"/><circle cx="${cx}" cy="${cy}" r="${r*0.55}" fill="${cc}"/>`;
+  const s3=[
+    `<ellipse cx="22" cy="70" rx="12" ry="4" fill="${soil}"/><ellipse cx="22" cy="68" rx="12" ry="3.5" fill="${soilL}"/><line x1="22" y1="68" x2="22" y2="54" stroke="${c1}" stroke-width="2.5" stroke-linecap="round"/><path d="M22 62 Q14 58 12 50 Q18 52 22 60Z" fill="${c2}"/><path d="M22 62 Q30 58 32 50 Q26 52 22 60Z" fill="${c3}"/>${fl(22,50,5)}`,
+    `<ellipse cx="24" cy="74" rx="14" ry="5" fill="${soil}"/><ellipse cx="24" cy="72" rx="14" ry="4" fill="${soilL}"/><line x1="24" y1="72" x2="24" y2="50" stroke="${c1}" stroke-width="3" stroke-linecap="round"/><path d="M24 64 Q12 58 10 46 Q18 48 24 62Z" fill="${c2}"/><path d="M24 64 Q36 58 38 46 Q30 48 24 62Z" fill="${c3}"/><path d="M24 56 Q16 50 14 42 Q20 44 24 54Z" fill="${c2}"/>${fl(24,46,6)}${fl(14,54,4)}${fl(34,54,4)}`,
+    `<ellipse cx="26" cy="78" rx="16" ry="5" fill="${soil}"/><ellipse cx="26" cy="76" rx="16" ry="4.5" fill="${soilL}"/><path d="M23 76 Q21 62 23 50 Q26 56 29 50 Q31 62 29 76Z" fill="${c1}"/><ellipse cx="26" cy="44" rx="16" ry="13" fill="${c2}"/><ellipse cx="16" cy="54" rx="10" ry="8" fill="${c3}"/><ellipse cx="36" cy="54" rx="10" ry="8" fill="${c2}"/><ellipse cx="26" cy="44" rx="12" ry="10" fill="${c3}"/>${fl(26,36,6)}${fl(16,46,5)}${fl(36,46,5)}${fl(12,58,4)}${fl(40,58,4)}`,
+    `<ellipse cx="28" cy="82" rx="18" ry="6" fill="${soil}"/><ellipse cx="28" cy="80" rx="18" ry="5" fill="${soilL}"/><path d="M24 80 Q22 62 24 46 Q28 54 32 46 Q34 62 32 80Z" fill="${c1}"/><ellipse cx="28" cy="38" rx="20" ry="16" fill="${c1}"/><ellipse cx="14" cy="52" rx="12" ry="10" fill="${c2}"/><ellipse cx="42" cy="52" rx="12" ry="10" fill="${c3}"/><ellipse cx="28" cy="36" rx="18" ry="14" fill="${c2}"/><ellipse cx="20" cy="44" rx="10" ry="8" fill="${c3}"/><ellipse cx="36" cy="44" rx="10" ry="8" fill="${c2}"/>${fl(28,28,7)}${fl(16,38,5)}${fl(40,38,5)}${fl(10,50,4)}${fl(46,50,4)}${fl(24,46,4)}${fl(32,46,4)}`,
+    `<ellipse cx="34" cy="88" rx="24" ry="7" fill="${soil}"/><ellipse cx="34" cy="85" rx="24" ry="6" fill="${soilL}"/><path d="M29 85 Q26 64 29 46 Q34 56 39 46 Q42 64 39 85Z" fill="${c1}"/><path d="M24 84 Q29 76 34 84Z" fill="${c1}" opacity="0.5"/><path d="M44 84 Q39 76 34 84Z" fill="${c1}" opacity="0.5"/><ellipse cx="18" cy="60" rx="14" ry="12" fill="${c2}" transform="rotate(-15 18 60)"/><ellipse cx="50" cy="60" rx="14" ry="12" fill="${c3}" transform="rotate(15 50 60)"/><ellipse cx="34" cy="62" rx="16" ry="14" fill="${c1}"/><ellipse cx="18" cy="46" rx="14" ry="11" fill="${c3}"/><ellipse cx="50" cy="46" rx="14" ry="11" fill="${c2}"/><ellipse cx="34" cy="42" rx="18" ry="14" fill="${c2}"/><ellipse cx="26" cy="32" rx="12" ry="10" fill="${c3}"/><ellipse cx="42" cy="32" rx="12" ry="10" fill="${c2}"/><ellipse cx="34" cy="26" rx="13" ry="11" fill="${c3}"/>${fl(34,18,7)}${fl(22,28,5)}${fl(46,28,5)}${fl(14,44,4)}${fl(54,44,4)}${fl(26,54,4)}${fl(42,54,4)}${fl(10,58,3)}${fl(58,58,3)}`
+  ];
+  return `<svg width="102" height="141" viewBox="0 0 68 94" fill="none" xmlns="http://www.w3.org/2000/svg">${s3[stage]}</svg>`;
+  } // end type3
+
+  // fallback
+  return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>`;
+}
+
+function renderGarden() {
+  const scene = document.getElementById('garden-scene');
+  if (!plants.length) {
+    scene.innerHTML = `<div class="garden-sun"></div><div class="garden-cloud" style="width:70px;height:24px;top:28px;left:30px;"></div><div class="garden-cloud" style="width:50px;height:18px;top:20px;left:80px;opacity:0.7;"></div><div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
+    return;
+  }
+  const groups=[0,1,2,3,4].map(s=>plants.filter(p=>getGrowthStage(p)===s));
+  const yBands=[[55,62],[60,67],[65,72],[70,77],[75,82]];
+
+  function seededRand(seed, min, max) {
+    const x = Math.sin(seed * 9301 + 49297) * 233280;
+    return min + (x - Math.floor(x)) * (max - min);
+  }
+
+  function layoutNatural(group, yMin, yMax) {
+    const n = group.length;
+    const positions = [];
+    group.forEach((p, i) => {
+      const seed1 = parseInt(p.id.slice(-4), 10) || (i * 137);
+      const seed2 = seed1 + 1000;
+      const seed3 = seed1 + 2000;
+      // x: 中央寄りに配置（15〜85%の範囲）
+      const zoneW = 70 / Math.max(n, 1);
+      const zoneStart = 15 + zoneW * i;
+      let x = seededRand(seed1, zoneStart + zoneW * 0.1, zoneStart + zoneW * 0.9);
+      x = Math.min(88, Math.max(12, x));
+      let y = seededRand(seed2, yMin, yMax);
+      positions.forEach(prev => {
+        const dx = Math.abs(x - prev.x);
+        const dy = Math.abs(y - prev.y);
+        if (dx < 10 && dy < 5) {
+          x += seededRand(seed3, -6, 6);
+          x = Math.min(88, Math.max(12, x));
+        }
+      });
+      const hue = 100 + (seed1 % 50);
+      positions.push({p, x, y, hue});
+    });
+    return positions;
+  }
+
+  const positions = groups.flatMap((g, s) => layoutNatural(g, yBands[4-s][0], yBands[4-s][1]));
+  const sorted = [...positions].sort((a,b) => a.y - b.y);
+  const plants_html=sorted.map(({p,x,y,hue},idx)=>{
+    const stage=getGrowthStage(p), type=getPlantType(p);
+    const hasWater=hasRecentLog(p.id,'water',2), hasFert=hasRecentLog(p.id,'fertilize',3);
+    const svg=plantSVG(type,stage,hue);
+    const depthScale = 0.6 + (y - 55) / (82 - 55) * 0.4;
+    const depthOpacity = 0.7 + (y - 55) / (82 - 55) * 0.3;
+    // 植物の実サイズ（×1.5でピクセル換算）
+    const tapW = Math.round((plantW[type]?.[stage] ?? 40) * 1.5);
+    const tapH = Math.round((plantH[type]?.[stage] ?? 50) * 1.5);
+    // SVGオフセット：viewBox中心(34)→植物中心(scx)の補正
+    const scx = soilCX[type]?.[stage] ?? 34;
+    const offsetX = (34 - scx) * 1.5;
+    // SVGのY：soilCYがbody底面に来るようオフセット
+    const scy = soilCY[type]?.[stage] ?? 78;
+    const offsetY = (92 - scy) * 1.5;
+    const ey = Math.max(2, scy * 1.5 - 56);
+    const waterEl = hasWater ? '<div class="effect-water">💧</div>' : '';
+    const fertEl  = hasFert  ? '<div class="effect-sparkle">✨</div>' : '';
+    return `<div class="garden-plant" style="left:${x}%;top:${y}%;transform:translateX(-50%) translateY(-100%) scale(${depthScale.toFixed(2)});transform-origin:bottom center;z-index:${idx+1};opacity:${depthOpacity.toFixed(2)};"><div class="garden-plant-body" style="width:${tapW}px;height:${tapH}px;--svg-offset-x:${offsetX}px;--svg-offset-y:${offsetY}px" onclick="showGardenTooltip(event,'${p.id}')">${fertEl}${waterEl}${svg}</div></div>`;
+  }).join('');
+  scene.innerHTML=`<div class="garden-sun"></div><div class="garden-cloud" style="width:72px;height:26px;top:22px;left:18px;"></div><div class="garden-cloud" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div><div class="garden-cloud" style="width:56px;height:20px;top:36px;left:44px;opacity:0.45;"></div>${plants_html}`;
+}
+
+function showGardenTooltip(e, plantId) {
+  e.stopPropagation();
+  const p = plants.find(x => x.id === plantId);
+  if (!p) return;
+  document.querySelectorAll('.garden-tooltip').forEach(t => t.remove());
+  const stage = getGrowthStage(p);
+  const days = p.startDate ? Math.floor((Date.now()-new Date(p.startDate))/86400000) : null;
+  const lw = getLastLog(p.id,'water');
+  const lf = getLastLog(p.id,'fertilize');
+  const tooltip = document.createElement('div');
+  tooltip.className = 'garden-tooltip';
+  tooltip.innerHTML = `
+    <div style="font-weight:600;font-size:13px;margin-bottom:4px;">${p.emoji} ${p.name}</div>
+    ${p.species ? `<div style="font-style:italic;opacity:0.7;font-size:11px;margin-bottom:4px;">${p.species}</div>` : ''}
+    <div>${STAGE_LABELS[stage]}${days!=null ? '・'+days+'日目' : ''}</div>
+    ${lw ? `<div>💧 ${formatDateRel(lw.date)}に水やり</div>` : '<div style="opacity:0.6;">💧 水やり未記録</div>'}
+    ${lf ? `<div>✨ ${formatDateRel(lf.date)}に施肥</div>` : ''}
+  `;
+  const scene = document.getElementById('garden-scene');
+  const rect = scene.getBoundingClientRect();
+  const ex = e.clientX - rect.left;
+  const ey = e.clientY - rect.top;
+  tooltip.style.left = Math.min(ex + 8, rect.width - 160) + 'px';
+  tooltip.style.top  = Math.max(ey - 90, 4) + 'px';
+  scene.appendChild(tooltip);
+  clearTimeout(_gardenTooltipTimer);
+  _gardenTooltipTimer = setTimeout(() => tooltip.remove(), 2500);
+}
+
+// scene外タップでtooltip消す
+document.addEventListener('click', () => {
+  document.querySelectorAll('.garden-tooltip').forEach(t => t.remove());
+});
 function renderStats() {
   const now2 = new Date();
   const monthLogs = logs.filter(l=>{ const d=new Date(l.date); return d.getMonth()===now2.getMonth()&&d.getFullYear()===now2.getFullYear(); }).length;
@@ -1882,7 +2289,17 @@ function exportPlantsCSV() {
     p.mist === 'yes' ? '○' : p.mist === 'no' ? '×' : '',
     p.memo||''
   ]);
-  downloadCSV('plants.csv', [header, ...rows]);
+  // masterOptionsを末尾にセクションとして追加
+  const optRows = [
+    [],
+    ['## 選択肢データ（編集しないでください）'],
+    ['日当たり選択肢', ...(masterOptions.location||[])],
+    ['水やり選択肢',   ...(masterOptions.water||[])],
+    ['休眠期選択肢',   ...(masterOptions.dormant||[])],
+    ['水やり(休眠期)選択肢', ...(masterOptions.dormantWater||[])],
+    ['施肥選択肢',     ...(masterOptions.fertilize||[])],
+  ];
+  downloadCSV('plants.csv', [header, ...rows, ...optRows]);
 }
 
 // ===== CSV IMPORT =====
@@ -1976,7 +2393,26 @@ function importPlantsCSV(input) {
       if (!dataRows.length) { showConfirm('ℹ️','インポートするデータがありません','','OK',false,()=>{},false); return; }
 
       let added = 0, updated = 0, skipped = 0;
+      // 植物データ行と選択肢セクションを分離
+      const plantRows = [];
+      const optSection = {};
       for (const row of dataRows) {
+        if (!row[0]) continue;
+        const key = row[0].trim();
+        if (key === '## 選択肢データ（編集しないでください）') continue;
+        if (key.endsWith('選択肢')) {
+          const catMap = {
+            '日当たり選択肢':'location','水やり選択肢':'water','休眠期選択肢':'dormant',
+            '水やり(休眠期)選択肢':'dormantWater','施肥選択肢':'fertilize'
+          };
+          const cat = catMap[key];
+          if (cat) optSection[cat] = row.slice(1).filter(v=>v.trim());
+        } else {
+          plantRows.push(row);
+        }
+      }
+
+      for (const row of plantRows) {
         if (row.length < 13) { skipped++; continue; }
         const [emoji, name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
         if (!name.trim()) { skipped++; continue; }
@@ -2007,8 +2443,17 @@ function importPlantsCSV(input) {
           added++;
         }
       }
+      // 選択肢データをマージ（既存に追加、重複除去）
+      let optImported = 0;
+      Object.entries(optSection).forEach(([cat, vals]) => {
+        if (!masterOptions[cat]) masterOptions[cat] = [];
+        vals.forEach(v => {
+          if (!masterOptions[cat].includes(v)) { masterOptions[cat].push(v); optImported++; }
+        });
+      });
+      if (optImported > 0) saveMasterOptions();
       save(); renderPlants(); updateLogPlantFilter();
-      showConfirm('✅', `植物情報をインポートしました`, `追加：${added}件　更新：${updated}件${skipped ? `　スキップ：${skipped}件` : ''}`, 'OK', false, ()=>{}, false);
+      showConfirm('✅', `植物情報をインポートしました`, `追加：${added}件　更新：${updated}件${skipped ? `　スキップ：${skipped}件` : ''}${optImported ? `　選択肢：${optImported}件追加` : ''}`, 'OK', false, ()=>{}, false);
     } catch(err) {
       showConfirm('⚠️','不正な形式のためインポートできませんでした','植物情報のCSVファイル（plants.csv）を選択してください。','OK',false,()=>{},false);
     }
