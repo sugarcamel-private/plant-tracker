@@ -296,7 +296,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.8</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v1.9</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -364,7 +364,7 @@
       <div class="log-filter" id="log-filter">
         <button class="filter-chip active" data-type="all" onclick="filterLogs('all',this)">すべて</button>
         <button class="filter-chip" data-type="water" onclick="filterLogs('water',this)">💧 水やり</button>
-        <button class="filter-chip" data-type="fertilize" onclick="filterLogs('fertilize',this)">🌱 施肥</button>
+        <button class="filter-chip" data-type="fertilize" onclick="filterLogs('fertilize',this)">✨ 施肥</button>
         <button class="filter-chip" data-type="repot" onclick="filterLogs('repot',this)">🪴 植替え</button>
         <button class="filter-chip" data-type="pest" onclick="filterLogs('pest',this)">🐛 病害虫</button>
         <button class="filter-chip" data-type="memo" onclick="filterLogs('memo',this)">📝 メモ</button>
@@ -501,7 +501,7 @@
         <label class="field-label">記録の種類（複数選択可）</label>
         <div class="log-type-picker">
           <div class="log-type-option" data-type="water" onclick="toggleLogType(this)"><span class="type-icon">💧</span>水やり</div>
-          <div class="log-type-option" data-type="fertilize" onclick="toggleLogType(this)"><span class="type-icon">🌱</span>施肥</div>
+          <div class="log-type-option" data-type="fertilize" onclick="toggleLogType(this)"><span class="type-icon">✨</span>施肥</div>
           <div class="log-type-option" data-type="repot" onclick="toggleLogType(this)"><span class="type-icon">🪴</span>植替え</div>
           <div class="log-type-option" data-type="pest" onclick="toggleLogType(this)"><span class="type-icon">🐛</span>病害虫</div>
           <div class="log-type-option" data-type="memo" onclick="toggleLogType(this)"><span class="type-icon">📝</span>メモ</div>
@@ -999,7 +999,7 @@ function hasLogToday(plantId, type) {
   return logs.some(l => l.plantId === plantId && l.type === type && dateStr(l.date) === t);
 }
 function logTypeLabel(t) {
-  return {water:'💧 水やり',fertilize:'🌱 施肥',repot:'🪴 植替え',pest:'🐛 病害虫',memo:'📝 メモ'}[t] || t;
+  return {water:'💧 水やり',fertilize:'✨ 施肥',repot:'🪴 植替え',pest:'🐛 病害虫',memo:'📝 メモ'}[t] || t;
 }
 function formatDateRel(iso) {
   const diff = Math.floor((Date.now() - new Date(iso)) / 86400000);
@@ -1081,15 +1081,13 @@ function waterBadge(p) {
   const l = getLastLog(p.id,'water');
   if (!l) return '<span class="badge badge-alert">水やり未記録</span>';
   const days = Math.floor((Date.now()-new Date(l.date))/86400000);
-  if (p.waterInterval && days >= p.waterInterval) return `<span class="badge badge-alert">💧 ${days}日前</span>`;
   return `<span class="badge badge-water">💧 ${days}日前</span>`;
 }
 function fertBadge(p) {
   const l = getLastLog(p.id,'fertilize');
-  if (!l || !p.fertilizeInterval) return '';
+  if (!l) return '';
   const days = Math.floor((Date.now()-new Date(l.date))/86400000);
-  if (days >= p.fertilizeInterval) return `<span class="badge badge-alert">🌱 施肥を</span>`;
-  return `<span class="badge badge-fertilize">🌱 ${days}日前</span>`;
+  return `<span class="badge badge-fertilize">✨ ${days}日前</span>`;
 }
 
 function renderPlants() {
@@ -1114,7 +1112,7 @@ function renderPlants() {
       </div>
       <div class="card-quick-btns">
         <button class="quick-btn qbtn-water"    onclick="quickLog('${p.id}','water',event)">💧 水やり</button>
-        <button class="quick-btn qbtn-fertilize" onclick="quickLog('${p.id}','fertilize',event)">🌱 施肥</button>
+        <button class="quick-btn qbtn-fertilize" onclick="quickLog('${p.id}','fertilize',event)">✨ 施肥</button>
         <button class="quick-btn qbtn-log"      onclick="openLogModalForPlant('${p.id}',event)">＋ 記録</button>
       </div>
       <div class="card-expand-row">
@@ -1125,15 +1123,15 @@ function renderPlants() {
       <div class="card-detail" id="detail-${p.id}">
         <div class="detail-grid">
           ${lw ? `<div class="detail-item"><div class="detail-label">💧 最終水やり</div><div class="detail-value">${formatDateRel(lw.date)}</div></div>` : ''}
-          ${lf ? `<div class="detail-item"><div class="detail-label">🌱 最終施肥</div><div class="detail-value">${formatDateRel(lf.date)}</div></div>` : ''}
+          ${lf ? `<div class="detail-item"><div class="detail-label">✨ 最終施肥</div><div class="detail-value">${formatDateRel(lf.date)}</div></div>` : ''}
           ${p.startDate ? `<div class="detail-item"><div class="detail-label">📅 栽培開始日</div><div class="detail-value">${formatStartDate(p.startDate)}</div></div>` : ''}
           ${p.location ? `<div class="detail-item"><div class="detail-label">☀️ 日当たり</div><div class="detail-value">${p.location}</div></div>` : ''}
           ${p.water ? `<div class="detail-item"><div class="detail-label">💧 水やり</div><div class="detail-value">${p.water}</div></div>` : ''}
           ${p.dormant ? `<div class="detail-item"><div class="detail-label">🌙 休眠期</div><div class="detail-value">${p.dormant}</div></div>` : ''}
           ${p.dormantWater ? `<div class="detail-item"><div class="detail-label">💧 水やり(休眠期)</div><div class="detail-value">${p.dormantWater}</div></div>` : ''}
-          ${p.fertilize ? `<div class="detail-item"><div class="detail-label">🌱 施肥</div><div class="detail-value">${p.fertilize}</div></div>` : ''}
+          ${p.fertilize ? `<div class="detail-item"><div class="detail-label">✨ 施肥</div><div class="detail-value">${p.fertilize}</div></div>` : ''}
           ${(p.tempMin != null || p.tempMax != null) ? `<div class="detail-item"><div class="detail-label">🌡️ 温度</div><div class="detail-value">${p.tempMin != null ? p.tempMin+'℃' : '?'} 〜 ${p.tempMax != null ? p.tempMax+'℃' : '?'}</div></div>` : ''}
-          ${p.mist && p.mist !== 'none' ? `<div class="detail-item"><div class="detail-label">🌫️ 葉水</div><div class="detail-value">${p.mist === 'yes' ? '○' : '×'}</div></div>` : ''}
+          ${p.mist && p.mist !== 'none' ? `<div class="detail-item"><div class="detail-label">💦 葉水</div><div class="detail-value">${p.mist === 'yes' ? '○' : '×'}</div></div>` : ''}
         </div>
         ${p.memo ? `<div class="detail-item" style="margin-top:8px;"><div class="detail-label">📝 メモ</div><div class="detail-value">${p.memo}</div></div>` : ''}
         ${recent.length ? `
@@ -1655,7 +1653,7 @@ function calToday() {
   renderCalendar();
 }
 
-const typeEmoji = {water:'💧',fertilize:'🌱',repot:'🪴',pest:'🐛',memo:'📝'};
+const typeEmoji = {water:'💧',fertilize:'✨',repot:'🪴',pest:'🐛',memo:'📝'};
 
 function renderCalendar() {
   const mNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
