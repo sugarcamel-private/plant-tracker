@@ -552,7 +552,7 @@
       </div>
       <div class="field-group"><label class="field-label">名前</label><input type="text" class="field-input" id="plant-name-input" placeholder="例：リビングのモンステラ"></div>
       <div class="field-group" style="margin-top:-4px;">
-        <button type="button" class="db-load-btn" onclick="alert('ボタン反応OK'); openDbLoadModal();">📚 名前を入力してデータを読み込む</button>
+        <button type="button" class="db-load-btn" onclick="openDbLoadModal()">📚 名前を入力してデータを読み込む</button>
       </div>
       <div class="field-group"><label class="field-label">品種・学名</label><input type="text" class="field-input" id="plant-species-input" placeholder="例：Monstera deliciosa"></div>
       <div class="field-group">
@@ -2026,12 +2026,12 @@ function openDbLoadModal() {
   }
   const nameInput = document.getElementById('plant-name-input');
   document.getElementById('db-search-input').value = nameInput.value || '';
-  document.getElementById('db-load-modal').classList.add('show');
+  document.getElementById('db-load-modal').classList.add('open');
   searchPlantDb();
 }
 
 function closeDbLoadModal() {
-  document.getElementById('db-load-modal').classList.remove('show');
+  document.getElementById('db-load-modal').classList.remove('open');
 }
 
 function searchPlantDb() {
@@ -2089,11 +2089,11 @@ function showDbPreview(idx) {
       <span class="db-preview-value">${v}</span>
     </div>
   `).join('');
-  document.getElementById('db-preview-modal').classList.add('show');
+  document.getElementById('db-preview-modal').classList.add('open');
 }
 
 function closeDbPreviewModal() {
-  document.getElementById('db-preview-modal').classList.remove('show');
+  document.getElementById('db-preview-modal').classList.remove('open');
   pendingDbCandidate = null;
 }
 
