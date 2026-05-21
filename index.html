@@ -2105,13 +2105,12 @@ function applyDbCandidate() {
   if (!nameEl.value.trim()) nameEl.value = p.name;
   document.getElementById('plant-species-input').value = p.species||'';
   document.getElementById('plant-memo-input').value = p.memo||'';
-  // 温度・葉水
-  if (p.tempMin != null) document.getElementById('plant-temp-min-input').value = p.tempMin;
-  if (p.tempMax != null) document.getElementById('plant-temp-max-input').value = p.tempMax;
+  // 温度
+  if (p.tempMin != null) document.getElementById('plant-temp-min').value = p.tempMin;
+  if (p.tempMax != null) document.getElementById('plant-temp-max').value = p.tempMax;
+  // 葉水：bool-chip方式で yes/no/none を選択
   if (p.mist) {
-    document.querySelectorAll('.mist-option').forEach(el => el.classList.remove('selected'));
-    const mistEl = document.querySelector(`.mist-option[data-mist="${p.mist}"]`);
-    if (mistEl) mistEl.classList.add('selected');
+    selectBool('mist', p.mist);
   }
   // 選択肢系：location, water, dormant, dormantWater, fertilize
   const optMap = {
@@ -2122,11 +2121,9 @@ function applyDbCandidate() {
     if (!val) return;
     if (!masterOptions[cat]) masterOptions[cat] = [];
     if (!masterOptions[cat].includes(val)) masterOptions[cat].push(val);
-    // 選択状態を反映
     plantFormSelections[cat] = val;
   });
   saveMasterOptions();
-  // セレクタを再描画して選択状態を反映
   renderItemSelector('location-selector',      'location',     plantFormSelections.location);
   renderItemSelector('water-selector',         'water',        plantFormSelections.water);
   renderItemSelector('dormant-selector',       'dormant',      plantFormSelections.dormant);
