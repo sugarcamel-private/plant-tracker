@@ -246,6 +246,19 @@
   .field-label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--earth-light); margin-bottom: 8px; }
   .field-input, .field-textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.15s; -webkit-appearance: none; appearance: none; }
   .field-input:focus, .field-textarea:focus { border-color: var(--sage); }
+  .db-load-btn { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px dashed var(--sage); background: rgba(126,142,108,0.08); color: var(--sage-dark); font-size: 13px; font-family: 'Shippori Mincho', serif; cursor: pointer; }
+  .db-load-btn:active { background: rgba(126,142,108,0.18); }
+  .db-search-note { font-size: 11px; color: var(--earth-light); margin-top: 8px; padding: 8px 10px; background: rgba(200,150,80,0.08); border-radius: 8px; line-height: 1.5; }
+  .db-candidate-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; max-height: 50vh; overflow-y: auto; }
+  .db-candidate { padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--cream-dark); background: var(--cream); cursor: pointer; transition: border-color 0.15s; }
+  .db-candidate:active { border-color: var(--sage); }
+  .db-candidate-name { font-size: 14px; font-weight: 600; color: var(--ink); font-family: 'Shippori Mincho', serif; }
+  .db-candidate-species { font-size: 11px; color: var(--earth-light); font-style: italic; margin-top: 2px; }
+  .db-candidate-match { font-size: 10px; color: var(--sage-dark); margin-top: 3px; }
+  .db-preview-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--cream-dark); font-size: 13px; }
+  .db-preview-row:last-child { border-bottom: none; }
+  .db-preview-label { color: var(--earth-light); }
+  .db-preview-value { color: var(--ink); text-align: right; max-width: 60%; }
   .field-textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
   .emoji-picker { display: flex; gap: 8px; flex-wrap: wrap; }
   .emoji-option { width: 44px; height: 44px; border-radius: 10px; border: 2px solid transparent; background: var(--mist); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
@@ -396,7 +409,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.0</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.2</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -538,6 +551,9 @@
         </div>
       </div>
       <div class="field-group"><label class="field-label">名前</label><input type="text" class="field-input" id="plant-name-input" placeholder="例：リビングのモンステラ"></div>
+      <div class="field-group" style="margin-top:-4px;">
+        <button type="button" class="db-load-btn" onclick="openDbLoadModal()">📚 名前を入力してデータを読み込む</button>
+      </div>
       <div class="field-group"><label class="field-label">品種・学名</label><input type="text" class="field-input" id="plant-species-input" placeholder="例：Monstera deliciosa"></div>
       <div class="field-group">
         <label class="field-label">栽培開始日</label>
@@ -597,6 +613,41 @@
 </div>
 
 <!-- LOG MODAL -->
+<!-- DB検索モーダル -->
+<div class="modal-overlay" id="db-load-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">名前からデータを読み込む</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">植物の名前</label>
+        <input type="text" class="field-input" id="db-search-input" placeholder="例：モンステラ、しぇふれら" oninput="searchPlantDb()">
+        <div class="db-search-note">※この機能はテスト運用中です。データは正しいとは限りません。</div>
+      </div>
+      <div id="db-search-status" style="font-size:12px;color:var(--earth-light);margin-top:8px;"></div>
+      <div class="db-candidate-list" id="db-candidate-list"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal btn-modal-secondary" onclick="closeDbLoadModal()">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- DB適用確認モーダル -->
+<div class="modal-overlay" id="db-preview-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">この内容を適用しますか？</div>
+    <div class="modal-body">
+      <div id="db-preview-body"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal btn-modal-secondary" onclick="closeDbPreviewModal()">キャンセル</button>
+      <button class="btn-modal btn-modal-primary" onclick="applyDbCandidate()">適用</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="log-modal">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -1899,6 +1950,193 @@ function renderCalDetail() {
     </div>`;
 }
 
+// ===== PLANT DATABASE =====
+let plantDb = null;
+let plantDbCandidates = [];
+let pendingDbCandidate = null;
+
+async function loadPlantDb() {
+  try {
+    const cached = localStorage.getItem('plantDb');
+    if (cached) plantDb = JSON.parse(cached);
+    // バックグラウンドで最新版をチェック
+    const res = await fetch('plants-db.json?t=' + Date.now());
+    if (!res.ok) return;
+    const fresh = await res.json();
+    if (!plantDb || plantDb.version !== fresh.version) {
+      plantDb = fresh;
+      localStorage.setItem('plantDb', JSON.stringify(fresh));
+    }
+  } catch (e) {
+    // オフライン等：キャッシュがあればそれを使う
+  }
+}
+loadPlantDb();
+
+// カタカナ↔ひらがな正規化
+function normalizeKana(s) {
+  return s.toLowerCase().replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+}
+
+// レーベンシュタイン距離
+function editDistance(a, b) {
+  const m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
+  for (let i=0;i<=m;i++) dp[i][0]=i;
+  for (let j=0;j<=n;j++) dp[0][j]=j;
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++) {
+    if (a[i-1]===b[j-1]) dp[i][j]=dp[i-1][j-1];
+    else dp[i][j]=1+Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  }
+  return dp[m][n];
+}
+
+// 1つの植物に対する一致度スコアを計算
+function scorePlant(plant, query) {
+  const qn = normalizeKana(query);
+  const candidates = [plant.name, ...(plant.aliases||[])];
+  let best = { score: 0, label: '' };
+  for (const cand of candidates) {
+    const cn = normalizeKana(cand);
+    let s = 0;
+    let label = '';
+    if (cn === qn) { s = 100; label = '完全一致'; }
+    else if (cn.startsWith(qn)) { s = 90 - (cn.length - qn.length); label = '前方一致'; }
+    else if (cn.includes(qn)) { s = 70 - (cn.length - qn.length); label = '部分一致'; }
+    else if (qn.includes(cn)) { s = 65 - (qn.length - cn.length); label = '部分一致'; }
+    else {
+      const dist = editDistance(cn, qn);
+      const maxLen = Math.max(cn.length, qn.length);
+      if (maxLen > 0 && dist / maxLen < 0.4) {
+        s = Math.max(0, 60 - dist * 10);
+        label = '類似';
+      }
+    }
+    if (s > best.score) best = { score: s, label, via: cand !== plant.name ? cand : null };
+  }
+  return best;
+}
+
+function openDbLoadModal() {
+  if (!plantDb) {
+    showConfirm('⚠️', 'データベース読み込み中', 'もう一度お試しください', 'OK', false, ()=>{}, false);
+    loadPlantDb();
+    return;
+  }
+  const nameInput = document.getElementById('plant-name-input');
+  document.getElementById('db-search-input').value = nameInput.value || '';
+  document.getElementById('db-load-modal').classList.add('show');
+  searchPlantDb();
+}
+
+function closeDbLoadModal() {
+  document.getElementById('db-load-modal').classList.remove('show');
+}
+
+function searchPlantDb() {
+  const q = document.getElementById('db-search-input').value.trim();
+  const listEl = document.getElementById('db-candidate-list');
+  const statusEl = document.getElementById('db-search-status');
+  if (!q) {
+    listEl.innerHTML = '';
+    statusEl.textContent = '名前を入力してください';
+    plantDbCandidates = [];
+    return;
+  }
+  if (!plantDb) { statusEl.textContent = 'データベース未読み込み'; return; }
+  const scored = plantDb.plants.map(p => ({ plant: p, ...scorePlant(p, q) }))
+    .filter(x => x.score > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 8);
+  plantDbCandidates = scored;
+  if (!scored.length) {
+    listEl.innerHTML = '';
+    statusEl.textContent = '候補が見つかりませんでした';
+    return;
+  }
+  statusEl.textContent = `${scored.length}件の候補`;
+  listEl.innerHTML = scored.map((x, i) => `
+    <div class="db-candidate" onclick="showDbPreview(${i})">
+      <div class="db-candidate-name">${x.plant.name}</div>
+      ${x.plant.species ? `<div class="db-candidate-species">${x.plant.species}</div>` : ''}
+      <div class="db-candidate-match">${x.label}${x.via ? `（${x.via}）` : ''}</div>
+    </div>
+  `).join('');
+}
+
+function showDbPreview(idx) {
+  const cand = plantDbCandidates[idx];
+  if (!cand) return;
+  pendingDbCandidate = cand.plant;
+  const p = cand.plant;
+  const rows = [
+    ['名前', p.name],
+    ['品種・学名', p.species||''],
+    ['日当たり', p.location||''],
+    ['水やり', p.water||''],
+    ['休眠期', p.dormant||''],
+    ['水やり(休眠期)', p.dormantWater||''],
+    ['施肥', p.fertilize||''],
+    ['温度(最低)', p.tempMin!=null ? p.tempMin+'℃' : ''],
+    ['温度(最高)', p.tempMax!=null ? p.tempMax+'℃' : ''],
+    ['葉水', p.mist==='yes' ? '必要' : p.mist==='no' ? '不要' : ''],
+    ['メモ', p.memo||''],
+  ].filter(r => r[1] !== '');
+  document.getElementById('db-preview-body').innerHTML = rows.map(([k,v]) => `
+    <div class="db-preview-row">
+      <span class="db-preview-label">${k}</span>
+      <span class="db-preview-value">${v}</span>
+    </div>
+  `).join('');
+  document.getElementById('db-preview-modal').classList.add('show');
+}
+
+function closeDbPreviewModal() {
+  document.getElementById('db-preview-modal').classList.remove('show');
+  pendingDbCandidate = null;
+}
+
+function applyDbCandidate() {
+  const p = pendingDbCandidate;
+  if (!p) return;
+  // 名前は上書きしない（ユーザーが付けた愛称を保持）。ただし空ならDB名を入れる
+  const nameEl = document.getElementById('plant-name-input');
+  if (!nameEl.value.trim()) nameEl.value = p.name;
+  document.getElementById('plant-species-input').value = p.species||'';
+  document.getElementById('plant-memo-input').value = p.memo||'';
+  // 温度・葉水
+  if (p.tempMin != null) document.getElementById('plant-temp-min-input').value = p.tempMin;
+  if (p.tempMax != null) document.getElementById('plant-temp-max-input').value = p.tempMax;
+  if (p.mist) {
+    document.querySelectorAll('.mist-option').forEach(el => el.classList.remove('selected'));
+    const mistEl = document.querySelector(`.mist-option[data-mist="${p.mist}"]`);
+    if (mistEl) mistEl.classList.add('selected');
+  }
+  // 選択肢系：location, water, dormant, dormantWater, fertilize
+  const optMap = {
+    location: p.location, water: p.water, dormant: p.dormant,
+    dormantWater: p.dormantWater, fertilize: p.fertilize
+  };
+  Object.entries(optMap).forEach(([cat, val]) => {
+    if (!val) return;
+    if (!masterOptions[cat]) masterOptions[cat] = [];
+    if (!masterOptions[cat].includes(val)) masterOptions[cat].push(val);
+    // 選択状態を反映
+    plantFormSelections[cat] = val;
+  });
+  saveMasterOptions();
+  // セレクタを再描画して選択状態を反映
+  renderItemSelector('location-selector',      'location',     plantFormSelections.location);
+  renderItemSelector('water-selector',         'water',        plantFormSelections.water);
+  renderItemSelector('dormant-selector',       'dormant',      plantFormSelections.dormant);
+  renderItemSelector('dormantWater-selector',  'dormantWater', plantFormSelections.dormantWater);
+  renderItemSelector('fertilize-selector',     'fertilize',    plantFormSelections.fertilize);
+  closeDbPreviewModal();
+  closeDbLoadModal();
+  showToast(`「${p.name}」のデータを読み込みました`);
+}
+
 // ===== GARDEN =====
 let _gardenTooltipTimer = null;
 
@@ -2267,23 +2505,23 @@ function downloadCSV(filename, rows) {
 
 function exportLogsCSV() {
   if (!logs.length) { showConfirm('ℹ️','記録がありません','','OK',false,()=>{},false); return; }
-  const header = ['日時','植物名','記録の種類','メモ'];
+  const header = ['日時','植物ID','植物名','記録の種類','メモ'];
   const rows = logs
     .sort((a,b) => new Date(a.date)-new Date(b.date))
     .map(l => {
       const p = plants.find(x=>x.id===l.plantId);
       const d = new Date(l.date);
       const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-      return [dateStr, p ? p.name : '不明', logTypeLabel(l.type).replace(/^.+ /,''), l.memo||''];
+      return [dateStr, l.plantId, p ? p.name : '不明', logTypeLabel(l.type).replace(/^.+ /,''), l.memo||''];
     });
   downloadCSV('plant-logs.csv', [header, ...rows]);
 }
 
 function exportPlantsCSV() {
   if (!plants.length) { showConfirm('ℹ️','植物が登録されていません','','OK',false,()=>{},false); return; }
-  const header = ['アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
+  const header = ['ID','アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
   const rows = plants.map(p => [
-    p.emoji||'🌿', p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
+    p.id, p.emoji||'🌿', p.name, p.species||'', p.startDate ? formatStartDate(p.startDate) : '',
     p.location||'', p.water||'', p.dormant||'', p.dormantWater||'', p.fertilize||'',
     p.tempMin != null ? p.tempMin : '', p.tempMax != null ? p.tempMax : '',
     p.mist === 'yes' ? '○' : p.mist === 'no' ? '×' : '',
@@ -2303,8 +2541,8 @@ function exportPlantsCSV() {
 }
 
 // ===== CSV IMPORT =====
-const LOG_HEADERS   = ['日時','植物名','記録の種類','メモ'];
-const PLANT_HEADERS = ['アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
+const LOG_HEADERS   = ['日時','植物ID','植物名','記録の種類','メモ'];
+const PLANT_HEADERS = ['ID','アイコン','名前','品種','栽培開始日','日当たり','水やり','休眠期','水やり(休眠期)','施肥','温度(最低)','温度(最高)','葉水','メモ'];
 const TYPE_MAP = {'水やり':'water','施肥':'fertilize','植替え':'repot','病害虫':'pest','メモ':'memo'};
 
 function parseCSV(text) {
@@ -2349,17 +2587,18 @@ function importLogsCSV(input) {
       let added = 0, skipped = 0;
       const newLogs = [];
       for (const row of dataRows) {
-        if (row.length < 4) { skipped++; continue; }
-        const [dateStr, plantName, typeName, memo] = row;
+        if (row.length < 5) { skipped++; continue; }
+        const [dateStr, plantId, plantName, typeName, memo] = row;
         // Parse date: YYYY/M/D HH:mm or YYYY/M/D
         const d = new Date(dateStr.replace(/\//g, '-'));
         if (isNaN(d.getTime())) { skipped++; continue; }
         const type = TYPE_MAP[typeName.trim()];
         if (!type) { skipped++; continue; }
-        // Find matching plant by name
-        const plant = plants.find(p => p.name === plantName.trim());
+        // ID優先でマッチング、なければ名前でフォールバック
+        let plant = plants.find(p => p.id === plantId.trim());
+        if (!plant) plant = plants.find(p => p.name === plantName.trim());
         if (!plant) { skipped++; continue; }
-        // Skip if exact duplicate (same plant, type, date)
+        // 完全重複（同じ植物・種類・日時）はスキップ
         const existing = logs.some(l => l.plantId===plant.id && l.type===type && l.date===d.toISOString());
         if (existing) { skipped++; continue; }
         newLogs.push({ id: (Date.now() + added).toString(), plantId: plant.id, type, date: d.toISOString(), memo: memo||'' });
@@ -2370,7 +2609,7 @@ function importLogsCSV(input) {
       save(); renderPlants();
       if (currentTab==='logs') renderLogs();
       if (currentTab==='calendar') renderCalendar();
-      showConfirm('✅', `${added}件の記録をインポートしました`, skipped ? `${skipped}件はスキップされました（植物名不一致・重複など）` : '', 'OK', false, ()=>{}, false);
+      showConfirm('✅', `${added}件の記録をインポートしました`, skipped ? `${skipped}件はスキップされました（植物が見つからない・重複など）` : '', 'OK', false, ()=>{}, false);
     } catch(err) {
       showConfirm('⚠️','不正な形式のためインポートできませんでした','記録のCSVファイル（plant-logs.csv）を選択してください。','OK',false,()=>{},false);
     }
@@ -2413,8 +2652,8 @@ function importPlantsCSV(input) {
       }
 
       for (const row of plantRows) {
-        if (row.length < 13) { skipped++; continue; }
-        const [emoji, name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
+        if (row.length < 14) { skipped++; continue; }
+        const [idVal, emoji, name, species, startDateStr, location, water, dormant, dormantWater, fertilize, tempMinStr, tempMaxStr, mistStr, memo] = row;
         if (!name.trim()) { skipped++; continue; }
         let startDate = null;
         if (startDateStr.trim()) {
@@ -2435,11 +2674,13 @@ function importPlantsCSV(input) {
           mist,
           memo: memo.trim()
         };
-        const existing = plants.find(p => p.name === name.trim());
+        // ID優先でマッチング、なければ新規追加（IDも引き継ぐ）
+        const id = idVal.trim();
+        const existing = id ? plants.find(p => p.id === id) : null;
         if (existing) {
           Object.assign(existing, data); updated++;
         } else {
-          plants.push({ id: Date.now().toString() + added, createdAt: new Date().toISOString(), ...data });
+          plants.push({ id: id || (Date.now().toString() + added), createdAt: new Date().toISOString(), ...data });
           added++;
         }
       }
