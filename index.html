@@ -246,7 +246,7 @@
   .field-label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--earth-light); margin-bottom: 8px; }
   .field-input, .field-textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.15s; -webkit-appearance: none; appearance: none; }
   .field-input:focus, .field-textarea:focus { border-color: var(--sage); }
-  .db-load-btn { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px dashed var(--sage); background: rgba(126,142,108,0.08); color: var(--sage-dark); font-size: 13px; font-family: 'Shippori Mincho', serif; cursor: pointer; }
+  .db-load-btn { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px dashed var(--sage); background: rgba(126,142,108,0.08); color: var(--sage-dark); font-size: 13px; font-family: 'Shippori Mincho', serif; cursor: pointer; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; }
   .db-load-btn:active { background: rgba(126,142,108,0.18); }
   .db-search-note { font-size: 11px; color: var(--earth-light); margin-top: 8px; padding: 8px 10px; background: rgba(200,150,80,0.08); border-radius: 8px; line-height: 1.5; }
   .db-candidate-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; max-height: 50vh; overflow-y: auto; }
@@ -552,7 +552,7 @@
       </div>
       <div class="field-group"><label class="field-label">名前</label><input type="text" class="field-input" id="plant-name-input" placeholder="例：リビングのモンステラ"></div>
       <div class="field-group" style="margin-top:-4px;">
-        <button type="button" class="db-load-btn" onclick="openDbLoadModal()">📚 名前を入力してデータを読み込む</button>
+        <button type="button" class="db-load-btn" onclick="alert('ボタン反応OK'); openDbLoadModal();">📚 名前を入力してデータを読み込む</button>
       </div>
       <div class="field-group"><label class="field-label">品種・学名</label><input type="text" class="field-input" id="plant-species-input" placeholder="例：Monstera deliciosa"></div>
       <div class="field-group">
