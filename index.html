@@ -2098,40 +2098,34 @@ function closeDbPreviewModal() {
 }
 
 function applyDbCandidate() {
-  try {
-    const p = pendingDbCandidate;
-    if (!p) { alert('pendingDbCandidate is null'); return; }
-    const nameEl = document.getElementById('plant-name-input');
-    if (!nameEl.value.trim()) nameEl.value = p.name;
-    document.getElementById('plant-species-input').value = p.species||'';
-    document.getElementById('plant-memo-input').value = p.memo||'';
-    if (p.tempMin != null) document.getElementById('plant-temp-min').value = p.tempMin;
-    if (p.tempMax != null) document.getElementById('plant-temp-max').value = p.tempMax;
-    if (p.mist) {
-      selectBool('mist', p.mist);
-    }
-    const optMap = {
-      location: p.location, water: p.water, dormant: p.dormant,
-      dormantWater: p.dormantWater, fertilize: p.fertilize
-    };
-    Object.entries(optMap).forEach(([cat, val]) => {
-      if (!val) return;
-      if (!masterOptions[cat]) masterOptions[cat] = [];
-      if (!masterOptions[cat].includes(val)) masterOptions[cat].push(val);
-      plantFormSelections[cat] = val;
-    });
-    saveMasterOptions();
-    renderItemSelector('location-selector',      'location',     plantFormSelections.location);
-    renderItemSelector('water-selector',         'water',        plantFormSelections.water);
-    renderItemSelector('dormant-selector',       'dormant',      plantFormSelections.dormant);
-    renderItemSelector('dormantWater-selector',  'dormantWater', plantFormSelections.dormantWater);
-    renderItemSelector('fertilize-selector',     'fertilize',    plantFormSelections.fertilize);
-    closeDbPreviewModal();
-    closeDbLoadModal();
-    showToast(`「${p.name}」のデータを読み込みました`);
-  } catch (e) {
-    alert('適用エラー: ' + e.message);
-  }
+  const p = pendingDbCandidate;
+  if (!p) return;
+  const nameEl = document.getElementById('plant-name-input');
+  if (!nameEl.value.trim()) nameEl.value = p.name;
+  document.getElementById('plant-species-input').value = p.species||'';
+  document.getElementById('plant-memo-input').value = p.memo||'';
+  if (p.tempMin != null) document.getElementById('plant-temp-min').value = p.tempMin;
+  if (p.tempMax != null) document.getElementById('plant-temp-max').value = p.tempMax;
+  if (p.mist) selectBool('mist', p.mist);
+  const optMap = {
+    location: p.location, water: p.water, dormant: p.dormant,
+    dormantWater: p.dormantWater, fertilize: p.fertilize
+  };
+  Object.entries(optMap).forEach(([cat, val]) => {
+    if (!val) return;
+    if (!masterOptions[cat]) masterOptions[cat] = [];
+    if (!masterOptions[cat].includes(val)) masterOptions[cat].push(val);
+    plantFormSelections[cat] = val;
+  });
+  saveMasterOptions();
+  renderItemSelector('location-selector',      'location',     plantFormSelections.location);
+  renderItemSelector('water-selector',         'water',        plantFormSelections.water);
+  renderItemSelector('dormant-selector',       'dormant',      plantFormSelections.dormant);
+  renderItemSelector('dormant-water-selector', 'dormantWater', plantFormSelections.dormantWater);
+  renderItemSelector('fertilize-selector',     'fertilize',    plantFormSelections.fertilize);
+  closeDbPreviewModal();
+  closeDbLoadModal();
+  showToast(`「${p.name}」のデータを読み込みました`);
 }
 
 // ===== GARDEN =====
