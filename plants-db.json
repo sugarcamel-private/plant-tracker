@@ -1,752 +1,1991 @@
 {
-  "version": "2.0",
-  "updated": "2026-05-21",
+  "version": "3.1",
+  "updated": "2026-05-22",
   "plants": [
     {
       "name": "モンステラ・デリシオサ",
-      "aliases": ["モンステラ", "ホウライショウ", "鳳莱蕉"],
+      "aliases": [
+        "モンステラ",
+        "ホウライショウ",
+        "鳳莱蕉",
+        "ほうらいしょう"
+      ],
       "species": "Monstera deliciosa",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "葉に大きな切れ込みが入る代表種。寒さに弱いので冬は10℃以上をキープ。"
     },
     {
       "name": "ヒメモンステラ",
-      "aliases": ["モンステラ・アダンソニー", "アダンソニー"],
+      "aliases": [
+        "モンステラ・アダンソニー",
+        "アダンソニー"
+      ],
       "species": "Monstera adansonii",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 8, "tempMax": 30, "mist": "yes",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "デリシオサより小型で穴開き葉。つる性で吊り鉢にも向く。"
     },
     {
       "name": "パキラ",
-      "aliases": ["カイエンナッツ", "パキラ・アクアティカ", "発財樹"],
+      "aliases": [
+        "カイエンナッツ",
+        "パキラ・アクアティカ",
+        "発財樹",
+        "ハツザイジュ",
+        "はつざいじゅ"
+      ],
       "species": "Pachira aquatica",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "編み込み樹形で人気。乾燥に強く育てやすい初心者向け。"
     },
     {
       "name": "ポトス",
-      "aliases": ["オウゴンカズラ", "黄金葛", "デビルズアイビー", "ポトス・ゴールデン"],
+      "aliases": [
+        "オウゴンカズラ",
+        "黄金葛",
+        "おうごんかずら",
+        "デビルズアイビー",
+        "ポトス・ゴールデン"
+      ],
       "species": "Epipremnum aureum",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1〜2回",
-      "tempMin": 8, "tempMax": 30, "mist": "yes",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "つる性で丈夫。挿し木・水栽培で簡単に増やせる。"
     },
     {
       "name": "ポトス・マーブルクイーン",
-      "aliases": ["マーブルクイーン"],
+      "aliases": [
+        "マーブルクイーン"
+      ],
       "species": "Epipremnum aureum 'Marble Queen'",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1〜2回",
-      "tempMin": 8, "tempMax": 30, "mist": "yes",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "白い斑が多く明るい場所を好む。暗いと斑が薄くなる。"
     },
     {
       "name": "サンスベリア",
-      "aliases": ["サンセベリア", "トラノオ", "虎の尾", "ドラセナ・トリファスキアタ"],
+      "aliases": [
+        "サンセベリア",
+        "トラノオ",
+        "虎の尾",
+        "とらのお",
+        "ドラセナ・トリファスキアタ"
+      ],
       "species": "Sansevieria trifasciata",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 8, "tempMax": 35, "mist": "no",
+      "tempMin": 8,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "非常に乾燥に強い。水のやりすぎが根腐れの原因に。"
     },
     {
       "name": "サンスベリア・ハニー",
-      "aliases": ["ハーニー", "ホワイトハニー"],
+      "aliases": [
+        "ハーニー",
+        "ホワイトハニー"
+      ],
       "species": "Sansevieria trifasciata 'Hahnii'",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 8, "tempMax": 35, "mist": "no",
+      "tempMin": 8,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "ロゼット状でコンパクト。デスクサイズで人気。"
     },
     {
       "name": "ガジュマル",
-      "aliases": ["ニンジンガジュマル", "多幸の木", "フィカス・ミクロカルパ"],
+      "aliases": [
+        "ニンジンガジュマル",
+        "多幸の木",
+        "タコウノキ",
+        "たこうのき",
+        "フィカス・ミクロカルパ"
+      ],
       "species": "Ficus microcarpa",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "気根を持つ独特の樹形が魅力。日光をしっかり浴びさせる。"
     },
     {
       "name": "フィカス・ウンベラータ",
-      "aliases": ["ウンベラータ"],
+      "aliases": [
+        "ウンベラータ"
+      ],
       "species": "Ficus umbellata",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "大きなハート型の葉が特徴。インテリア人気No.1クラス。"
     },
     {
       "name": "フィカス・ベンガレンシス",
-      "aliases": ["ベンガレンシス", "ベンガルゴム", "ベンガルボダイジュ"],
+      "aliases": [
+        "ベンガレンシス",
+        "ベンガルゴム",
+        "ベンガルボダイジュ",
+        "ベンガルぼだいじゅ"
+      ],
       "species": "Ficus benghalensis",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "白い幹と緑の葉のコントラストが美しい。"
     },
     {
       "name": "フィカス・アルテシマ",
-      "aliases": ["アルテシマ", "アルテシーマ"],
+      "aliases": [
+        "アルテシマ",
+        "アルテシーマ"
+      ],
       "species": "Ficus altissima",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "黄色の斑入り葉が明るい印象。日当たりで斑が綺麗に。"
     },
     {
       "name": "ベンジャミン",
-      "aliases": ["フィカス・ベンジャミナ", "シダレガジュマル"],
+      "aliases": [
+        "フィカス・ベンジャミナ",
+        "シダレガジュマル",
+        "しだれがじゅまる"
+      ],
       "species": "Ficus benjamina",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "環境変化で葉が落ちやすい。置き場所は固定するのがコツ。"
     },
     {
       "name": "シェフレラ",
-      "aliases": ["カポック", "ホンコンカポック", "シェフレラ・アルボリコラ"],
+      "aliases": [
+        "カポック",
+        "ホンコンカポック",
+        "シェフレラ・アルボリコラ"
+      ],
       "species": "Schefflera arboricola",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 0, "tempMax": 30, "mist": "yes",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "寒さに比較的強く、関東以南なら屋外越冬も可能。"
     },
     {
       "name": "ドラセナ・コンシンネ",
-      "aliases": ["コンシンネ", "ドラセナ・マルギナータ"],
+      "aliases": [
+        "コンシンネ",
+        "ドラセナ・マルギナータ"
+      ],
       "species": "Dracaena marginata",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 8, "tempMax": 30, "mist": "yes",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "細長い葉とスラっとした樹形。比較的乾燥に強い。"
     },
     {
       "name": "ドラセナ・マッサンゲアナ",
-      "aliases": ["幸福の木", "マッサンゲアナ"],
+      "aliases": [
+        "幸福の木",
+        "コウフクノキ",
+        "こうふくのき",
+        "マッサンゲアナ"
+      ],
       "species": "Dracaena fragrans 'Massangeana'",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 8, "tempMax": 30, "mist": "yes",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "「幸福の木」として贈り物に人気。"
     },
     {
       "name": "ユッカ",
-      "aliases": ["青年の木", "ユッカ・エレファンティペス"],
+      "aliases": [
+        "青年の木",
+        "セイネンノキ",
+        "せいねんのき",
+        "ユッカ・エレファンティペス"
+      ],
       "species": "Yucca elephantipes",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 0, "tempMax": 35, "mist": "no",
+      "tempMin": 0,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "丈夫で日光を好む。乾燥にも強くオフィスでも人気。"
     },
     {
       "name": "オリーブ",
-      "aliases": ["オリーブの木"],
+      "aliases": [
+        "オリーブの木"
+      ],
       "species": "Olea europaea",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": -5, "tempMax": 35, "mist": "no",
+      "tempMin": -5,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "屋外でも育つ。実をつけるには異なる2品種が必要。"
     },
     {
       "name": "ストレリチア・レギネ",
-      "aliases": ["ゴクラクチョウカ", "極楽鳥花", "ストレチア", "ストレリチア"],
+      "aliases": [
+        "ゴクラクチョウカ",
+        "極楽鳥花",
+        "ごくらくちょうか",
+        "ストレチア",
+        "ストレリチア"
+      ],
       "species": "Strelitzia reginae",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 35, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
       "memo": "極楽鳥のような花が特徴的。大型に育つ。"
     },
     {
       "name": "ストレリチア・ニコライ",
-      "aliases": ["オーガスタ", "ニコライ"],
+      "aliases": [
+        "オーガスタ",
+        "ニコライ"
+      ],
       "species": "Strelitzia nicolai",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 35, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
       "memo": "大型でバナナのような葉。室内では3mを超えることも。"
     },
     {
       "name": "アンスリウム",
-      "aliases": ["オオベニウチワ", "大紅団扇"],
+      "aliases": [
+        "オオベニウチワ",
+        "大紅団扇",
+        "おおべにうちわ"
+      ],
       "species": "Anthurium andraeanum",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1〜2回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "ハート型の赤や白い苞が花のように見える。"
     },
     {
       "name": "スパティフィラム",
-      "aliases": ["ピースリリー"],
+      "aliases": [
+        "ピースリリー"
+      ],
       "species": "Spathiphyllum spp.",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "白い苞をつける。水切れすると葉が垂れるのでサインになる。"
     },
     {
       "name": "アグラオネマ",
-      "aliases": ["アグラオネマ・コンムタツム"],
+      "aliases": [
+        "アグラオネマ・コンムタツム"
+      ],
       "species": "Aglaonema commutatum",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "斑入りの葉が美しい。暗めの場所でも育つ。"
     },
     {
       "name": "カラテア",
-      "aliases": ["カラテア・オルビフォリア", "カラテア・マコヤナ"],
+      "aliases": [
+        "カラテア・オルビフォリア",
+        "カラテア・マコヤナ"
+      ],
       "species": "Calathea spp.",
       "location": "明るい日陰",
       "water": "土の表面が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "夜になると葉を閉じる。湿度を好むので葉水は毎日推奨。"
     },
     {
       "name": "ザミオクルカス",
-      "aliases": ["ザミオクルカス・ザミーフォリア", "ZZプラント", "金銭樹"],
+      "aliases": [
+        "ザミオクルカス・ザミーフォリア",
+        "ZZプラント",
+        "金銭樹",
+        "キンセンジュ",
+        "きんせんじゅ"
+      ],
       "species": "Zamioculcas zamiifolia",
       "location": "明るい日陰",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 8, "tempMax": 30, "mist": "no",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "非常に丈夫で水やり少なめでOK。初心者にも育てやすい。"
     },
     {
       "name": "テーブルヤシ",
-      "aliases": ["パーラーパーム", "チャメドレア"],
+      "aliases": [
+        "パーラーパーム",
+        "チャメドレア"
+      ],
       "species": "Chamaedorea elegans",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "コンパクトで育てやすい。日陰にも耐える。"
     },
     {
       "name": "ココヤシ",
-      "aliases": ["ココナッツヤシ", "ココスヤシ"],
+      "aliases": [
+        "ココナッツヤシ",
+        "ココスヤシ"
+      ],
       "species": "Cocos nucifera",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 35, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 35,
+      "mist": "yes",
       "memo": "南国らしい姿。冬は室内の暖かい場所へ。"
     },
     {
       "name": "アジアンタム",
-      "aliases": ["クジャクシダ", "孔雀羊歯"],
+      "aliases": [
+        "クジャクシダ",
+        "孔雀羊歯",
+        "くじゃくしだ"
+      ],
       "species": "Adiantum spp.",
       "location": "明るい日陰",
       "water": "土の表面が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 5, "tempMax": 28, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 28,
+      "mist": "yes",
       "memo": "繊細な葉が美しいシダ。湿度を好み乾燥に弱い。毎日葉水を。"
     },
     {
       "name": "ビカクシダ",
-      "aliases": ["プラティセリウム", "コウモリラン", "蝙蝠蘭"],
+      "aliases": [
+        "プラティセリウム",
+        "コウモリラン",
+        "蝙蝠蘭",
+        "こうもりらん"
+      ],
       "species": "Platycerium spp.",
       "location": "明るい日陰",
       "water": "土の表面が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "鹿の角のような葉が特徴。板付けでも植木鉢でもOK。"
     },
     {
       "name": "エバーフレッシュ",
-      "aliases": ["アカサヤネムノキ", "ピメコロビウム"],
+      "aliases": [
+        "アカサヤネムノキ",
+        "赤鞘合歓木",
+        "あかさやねむのき",
+        "ピメコロビウム"
+      ],
       "species": "Cojoba arborea",
       "location": "明るい日陰",
       "water": "土の表面が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "夜になると葉を閉じる。湿度を好み乾燥に弱い。"
     },
     {
       "name": "シュガーバイン",
-      "aliases": ["パルテノキッスス・シュガーバイン"],
+      "aliases": [
+        "パルテノキッスス・シュガーバイン"
+      ],
       "species": "Parthenocissus 'Sugar Vine'",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 0, "tempMax": 28, "mist": "yes",
+      "tempMin": 0,
+      "tempMax": 28,
+      "mist": "yes",
       "memo": "小さな5枚葉のつる植物。ハンギングで人気。"
     },
     {
       "name": "アイビー",
-      "aliases": ["ヘデラ", "セイヨウキヅタ", "西洋木蔦"],
+      "aliases": [
+        "ヘデラ",
+        "セイヨウキヅタ",
+        "西洋木蔦",
+        "せいようきづた"
+      ],
       "species": "Hedera helix",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": -5, "tempMax": 30, "mist": "yes",
+      "tempMin": -5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "つる性で丈夫。屋外でも育ち、種類豊富。"
     },
-
     {
       "name": "エケベリア",
-      "aliases": ["エチェベリア"],
+      "aliases": [
+        "エチェベリア"
+      ],
       "species": "Echeveria spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "夏（7〜8月）",
+      "dormant": "夏(7〜8月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春・秋に月1回",
-      "tempMin": 0, "tempMax": 35, "mist": "no",
+      "tempMin": 0,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "春秋型。バラの花のようなロゼット。夏の高温多湿に注意。"
     },
     {
       "name": "セダム",
-      "aliases": ["万年草", "マンネングサ"],
+      "aliases": [
+        "万年草",
+        "マンネングサ",
+        "まんねんぐさ"
+      ],
       "species": "Sedum spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "夏（7〜8月）",
+      "dormant": "夏(7〜8月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春・秋に月1回",
-      "tempMin": -5, "tempMax": 35, "mist": "no",
+      "tempMin": -5,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "春秋型。小型でグランドカバーや寄せ植えに人気。"
     },
     {
       "name": "ハオルチア",
-      "aliases": ["ハオルシア", "オブツーサ", "雫石"],
+      "aliases": [
+        "ハオルシア",
+        "オブツーサ",
+        "雫石",
+        "シズクイシ",
+        "しずくいし"
+      ],
       "species": "Haworthia spp.",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "夏（7〜8月）",
+      "dormant": "夏(7〜8月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春・秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "春秋型。透明な窓のある葉が美しい。強い直射日光は苦手。"
     },
     {
       "name": "クラッスラ",
-      "aliases": ["金のなる木", "花月", "カゲツ"],
+      "aliases": [
+        "金のなる木",
+        "カネノナルキ",
+        "かねのなるき",
+        "花月",
+        "カゲツ",
+        "かげつ"
+      ],
       "species": "Crassula spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "夏（7〜8月）",
+      "dormant": "夏(7〜8月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春・秋に月1回",
-      "tempMin": 3, "tempMax": 35, "mist": "no",
+      "tempMin": 3,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "春秋型が多い。「金のなる木」は丈夫で長寿。"
     },
     {
       "name": "リトープス",
-      "aliases": ["生きた宝石", "メセン"],
+      "aliases": [
+        "生きた宝石",
+        "イキタホウセキ",
+        "メセン"
+      ],
       "species": "Lithops spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから1週間後",
-      "dormant": "夏（7〜8月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "夏(7〜8月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "秋に1〜2回",
-      "tempMin": 5, "tempMax": 30, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "冬型。石のような姿。夏の水やり厳禁、秋〜春に脱皮する。"
     },
     {
       "name": "コノフィツム",
-      "aliases": ["メセン類"],
+      "aliases": [
+        "メセン類"
+      ],
       "species": "Conophytum spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから1週間後",
-      "dormant": "夏（7〜8月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "夏(7〜8月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "秋に1〜2回",
-      "tempMin": 5, "tempMax": 30, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "冬型。秋〜春に生育、夏は休眠。形が多様で愛好家が多い。"
     },
     {
       "name": "ユーフォルビア",
-      "aliases": ["大戟", "ダイゲキ"],
+      "aliases": [
+        "大戟",
+        "ダイゲキ",
+        "だいげき"
+      ],
       "species": "Euphorbia spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型が多い。白い樹液は刺激性なので扱いに注意。"
     },
     {
       "name": "アロエ・ベラ",
-      "aliases": ["アロエ", "アロエベラ"],
+      "aliases": [
+        "アロエ",
+        "アロエベラ"
+      ],
       "species": "Aloe vera",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 35, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "肉厚の葉に水分を蓄える。火傷や化粧水に使われることも。"
     },
     {
       "name": "キダチアロエ",
-      "aliases": ["木立アロエ", "医者いらず"],
+      "aliases": [
+        "木立アロエ",
+        "きだちあろえ",
+        "医者いらず",
+        "イシャイラズ"
+      ],
       "species": "Aloe arborescens",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": -3, "tempMax": 35, "mist": "no",
+      "tempMin": -3,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "アロエベラより耐寒性が高く屋外越冬も可能。"
     },
     {
       "name": "アガベ・チタノタ",
-      "aliases": ["チタノタ", "ホワイトアイス", "ブラックアンドブルー"],
+      "aliases": [
+        "チタノタ",
+        "ホワイトアイス",
+        "ブラックアンドブルー"
+      ],
       "species": "Agave titanota",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 0, "tempMax": 40, "mist": "no",
+      "tempMin": 0,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "ゴツゴツした鋸歯が魅力。耐寒性あり屋外越冬も可能。"
     },
     {
       "name": "アガベ・パリー",
-      "aliases": ["パリー", "ハチノコ"],
+      "aliases": [
+        "パリー"
+      ],
       "species": "Agave parryi",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": -10, "tempMax": 40, "mist": "no",
+      "tempMin": -10,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "耐寒性が非常に高い。コンパクトで青白い葉が美しい。"
     },
     {
       "name": "アガベ・アテナータ",
-      "aliases": ["アテナータ", "ボーチンブルー"],
+      "aliases": [
+        "アテナータ",
+        "ボーチンブルー"
+      ],
       "species": "Agave attenuata",
       "location": "直射日光",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 3, "tempMax": 35, "mist": "no",
+      "tempMin": 3,
+      "tempMax": 35,
+      "mist": "no",
       "memo": "鋸歯がなくしなやかな葉。寒さにやや弱い品種。"
     },
     {
       "name": "サボテン",
-      "aliases": ["カクタス", "シャコバサボテン"],
+      "aliases": [
+        "カクタス"
+      ],
       "species": "Cactaceae spp.",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "種類豊富。多くは強い日光と乾燥を好む。"
     },
     {
       "name": "金鯱",
-      "aliases": ["キンシャチ", "エキノカクタス・グルソニー"],
+      "aliases": [
+        "キンシャチ",
+        "きんしゃち",
+        "エキノカクタス・グルソニー"
+      ],
       "species": "Echinocactus grusonii",
       "location": "直射日光",
       "water": "土が完全に乾いてから1週間後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "黄色いトゲの球形サボテンの代表。長寿で育てやすい。"
     },
     {
       "name": "セレウス",
-      "aliases": ["セレウス・ペルヴィアヌス", "鬼面角"],
+      "aliases": [
+        "セレウス・ペルヴィアヌス",
+        "鬼面角",
+        "キメンカク",
+        "きめんかく"
+      ],
       "species": "Cereus peruvianus",
       "location": "直射日光",
       "water": "土が完全に乾いてから3〜4日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 3, "tempMax": 40, "mist": "no",
+      "tempMin": 3,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "柱状に伸びる柱サボテン。生長が早く育てやすい。"
     },
-
     {
       "name": "パキポディウム・グラキリス",
-      "aliases": ["グラキリス", "象牙宮"],
+      "aliases": [
+        "グラキリス",
+        "象牙宮",
+        "ゾウゲキュウ",
+        "ぞうげきゅう"
+      ],
       "species": "Pachypodium rosulatum var. gracilius",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 8, "tempMax": 40, "mist": "no",
+      "tempMin": 8,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。丸い幹が魅力。冬は完全断水・15℃以下に注意。"
     },
     {
       "name": "パキポディウム・ホロンベンセ",
-      "aliases": ["ホロンベンセ"],
+      "aliases": [
+        "ホロンベンセ"
+      ],
       "species": "Pachypodium horombense",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 40, "mist": "no",
+      "tempMin": 10,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。黄色い花を咲かせる。グラキリスより寒さに弱い。"
     },
     {
       "name": "パキポディウム・ラメリー",
-      "aliases": ["ラメリー", "ラメレイ"],
+      "aliases": [
+        "ラメリー",
+        "ラメレイ"
+      ],
       "species": "Pachypodium lamerei",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。柱状で大型化しやすい。比較的丈夫。"
     },
     {
       "name": "アデニウム",
-      "aliases": ["砂漠の薔薇", "アデニウム・オベスム"],
+      "aliases": [
+        "砂漠の薔薇",
+        "サバクノバラ",
+        "さばくのばら",
+        "アデニウム・オベスム"
+      ],
       "species": "Adenium obesum",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 40, "mist": "no",
+      "tempMin": 10,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。鮮やかなピンクや赤の花を咲かせる。"
     },
     {
       "name": "ディオスコレア・エレファンティペス",
-      "aliases": ["亀甲竜", "キッコウリュウ"],
+      "aliases": [
+        "亀甲竜",
+        "キッコウリュウ",
+        "きっこうりゅう"
+      ],
       "species": "Dioscorea elephantipes",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "夏（5〜9月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "夏(5〜9月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "秋〜春に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "冬型塊根。秋にツルが伸び始め、夏は休眠。亀の甲羅状の塊根が魅力。"
     },
     {
       "name": "オペルクリカリア・パキプス",
-      "aliases": ["パキプス"],
+      "aliases": [
+        "パキプス"
+      ],
       "species": "Operculicarya pachypus",
       "location": "直射日光",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。ゴツゴツした塊根とミニ盆栽的な樹形が人気。"
     },
     {
       "name": "ボウィエア・ボルビリス",
-      "aliases": ["蒼角殿", "ソウカクデン"],
+      "aliases": [
+        "蒼角殿",
+        "ソウカクデン",
+        "そうかくでん"
+      ],
       "species": "Bowiea volubilis",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "夏（6〜9月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "夏(6〜9月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "秋〜春に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "冬型塊根。緑の球根からツルが伸びる珍しい姿。"
     },
     {
       "name": "フォークイエリア・コルムナリス",
-      "aliases": ["コルムナリス", "観峰玉"],
+      "aliases": [
+        "コルムナリス",
+        "観峰玉",
+        "カンポウギョク",
+        "かんぽうぎょく"
+      ],
       "species": "Fouquieria columnaris",
       "location": "直射日光",
       "water": "土が完全に乾いてから3〜4日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型。柱状に伸びる珍奇植物。生育が非常にゆっくり。"
     },
     {
       "name": "ユーフォルビア・オベサ",
-      "aliases": ["オベサ", "バスケットボールプラント"],
+      "aliases": [
+        "オベサ",
+        "バスケットボールプラント"
+      ],
       "species": "Euphorbia obesa",
       "location": "直射日光",
       "water": "土が完全に乾いてから3〜4日後",
-      "dormant": "冬（12〜2月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 5, "tempMax": 40, "mist": "no",
+      "tempMin": 5,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型。球形のユーフォルビア。雌雄異株。"
     },
     {
       "name": "アデニア・グロボーサ",
-      "aliases": ["グロボーサ"],
+      "aliases": [
+        "グロボーサ"
+      ],
       "species": "Adenia globosa",
       "location": "直射日光",
       "water": "土が完全に乾いてから3〜4日後",
-      "dormant": "冬（11〜3月）",
-      "dormantWater": "水やりしない（断水）",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 40, "mist": "no",
+      "tempMin": 10,
+      "tempMax": 40,
+      "mist": "no",
       "memo": "夏型塊根。球形の塊根からトゲのある枝が出る。寒さに弱い。"
     },
     {
       "name": "シッサス・ロンビフォリア",
-      "aliases": ["ヤワタヅル"],
+      "aliases": [
+        "ヤワタヅル",
+        "やわたづる"
+      ],
       "species": "Cissus rhombifolia",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "つる性で育てやすい。半日陰でもよく育つ。"
     },
     {
       "name": "ストロマンテ・トリオスター",
-      "aliases": ["トリオスター", "ストロマンテ"],
+      "aliases": [
+        "トリオスター",
+        "ストロマンテ"
+      ],
       "species": "Stromanthe sanguinea 'Triostar'",
       "location": "明るい日陰",
       "water": "土の表面が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "ピンク・白・緑のカラフルな葉。湿度を好む。"
     },
     {
       "name": "クワズイモ",
-      "aliases": ["アロカシア・オドラ"],
+      "aliases": [
+        "くわずいも",
+        "アロカシア・オドラ"
+      ],
       "species": "Alocasia odora",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "大きな葉が特徴。サトイモ科だが食用ではない。"
     },
     {
       "name": "アロカシア・アマゾニカ",
-      "aliases": ["アマゾニカ", "ポリー"],
+      "aliases": [
+        "アマゾニカ",
+        "ポリー"
+      ],
       "species": "Alocasia 'Amazonica'",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから2〜3日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 10, "tempMax": 30, "mist": "yes",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "白い葉脈が際立つ黒緑の葉。湿度を好む。"
     },
     {
       "name": "フィロデンドロン・セローム",
-      "aliases": ["セローム", "ヒトデカズラ"],
+      "aliases": [
+        "セローム",
+        "ヒトデカズラ",
+        "ひとでかずら"
+      ],
       "species": "Philodendron bipinnatifidum",
       "location": "明るい日陰",
       "water": "土が乾いたらたっぷり",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから3〜4日後",
       "fertilize": "春〜秋に月1回",
-      "tempMin": 5, "tempMax": 30, "mist": "yes",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
       "memo": "深い切れ込みの葉が特徴。比較的耐寒性あり。"
     },
     {
       "name": "ペペロミア",
-      "aliases": ["ペペロミア・オブツシフォリア", "ペペロミア・サンデルシー"],
+      "aliases": [
+        "ペペロミア・オブツシフォリア",
+        "ペペロミア・サンデルシー"
+      ],
       "species": "Peperomia spp.",
       "location": "明るい日陰",
       "water": "土が完全に乾いてから2〜3日後",
-      "dormant": "冬（12〜2月）",
+      "dormant": "冬(12〜2月)",
       "dormantWater": "土が完全に乾いてから1週間後",
       "fertilize": "春〜秋に2ヶ月に1回",
-      "tempMin": 8, "tempMax": 30, "mist": "no",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "no",
       "memo": "肉厚の葉で乾燥に強い。種類が非常に豊富。"
+    },
+    {
+      "name": "コーヒーの木",
+      "aliases": [
+        "コーヒーノキ",
+        "こーひーのき",
+        "アラビカコーヒー"
+      ],
+      "species": "Coffea arabica",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 8,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "光沢のある濃緑の葉が美しい。数年で白い花や赤い実をつけることも。寒さに弱い。"
+    },
+    {
+      "name": "ステファニア・エレクタ",
+      "aliases": [
+        "ステファニアエレクタ",
+        "ステファニア",
+        "エレクタ"
+      ],
+      "species": "Stephania erecta",
+      "location": "明るい日陰",
+      "water": "土が完全に乾いてから2〜3日後",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 10,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "夏型塊根。茶色い球状の塊根から細い茎と丸い葉が伸びる珍奇植物。"
+    },
+    {
+      "name": "サボテン・ウチワサボテン",
+      "aliases": [
+        "ウチワサボテン",
+        "団扇サボテン",
+        "うちわさぼてん",
+        "オプンチア"
+      ],
+      "species": "Opuntia spp.",
+      "location": "直射日光",
+      "water": "土が完全に乾いてから1週間後",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水やりしない(断水)",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -5,
+      "tempMax": 40,
+      "mist": "no",
+      "memo": "平たい団扇状の茎が特徴。耐寒性のある種類もあり屋外越冬可能。"
+    },
+    {
+      "name": "クワノハエノキ",
+      "aliases": [
+        "桑の葉榎",
+        "くわのはえのき",
+        "クルメツバキ"
+      ],
+      "species": "Celtis sinensis",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -10,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "盆栽でも人気。落葉樹で冬は葉を落とす。"
+    },
+    {
+      "name": "ピレア・ペペロミオイデス",
+      "aliases": [
+        "ピレア",
+        "パンケーキプラント",
+        "ペペロミオイデス"
+      ],
+      "species": "Pilea peperomioides",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "コイン状の丸い葉が可愛らしい。子株が出やすく増やしやすい。"
+    },
+    {
+      "name": "オーガスタ",
+      "aliases": [
+        "ストレリチア・オーガスタ"
+      ],
+      "species": "Strelitzia alba",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "ストレリチアの一種。大型の葉が美しい。"
+    },
+    {
+      "name": "ホヤ",
+      "aliases": [
+        "サクララン",
+        "桜蘭",
+        "さくららん"
+      ],
+      "species": "Hoya carnosa",
+      "location": "明るい日陰",
+      "water": "土が完全に乾いてから2〜3日後",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから1週間後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "つる性で星形の花を咲かせる。多肉質の葉で乾燥に強い。"
+    },
+    {
+      "name": "ディシディア",
+      "aliases": [
+        "カンガルーポケット"
+      ],
+      "species": "Dischidia spp.",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "つる性で湿度を好む。袋状の葉を持つ種類もあり。"
+    },
+    {
+      "name": "ネオレゲリア",
+      "aliases": [
+        "ネオレゲリア・カロリナエ"
+      ],
+      "species": "Neoregelia spp.",
+      "location": "明るい日陰",
+      "water": "葉筒に水を貯める",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "葉筒の水を控えめに",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "パイナップル科。葉の中心の筒に水を溜めて育てる。"
+    },
+    {
+      "name": "チランジア",
+      "aliases": [
+        "エアプランツ",
+        "ティランジア"
+      ],
+      "species": "Tillandsia spp.",
+      "location": "明るい日陰",
+      "water": "週2〜3回霧吹き",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "週1回霧吹き",
+      "fertilize": "月1回薄めの液肥",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "土なしで育つエアプランツ。風通しが重要、蒸れに注意。"
+    },
+    {
+      "name": "胡蝶蘭",
+      "aliases": [
+        "コチョウラン",
+        "こちょうらん",
+        "ファレノプシス"
+      ],
+      "species": "Phalaenopsis spp.",
+      "location": "明るい日陰",
+      "water": "水苔が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "水苔が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1〜2回",
+      "tempMin": 15,
+      "tempMax": 28,
+      "mist": "yes",
+      "memo": "贈答用として人気の蘭。直射日光は避け、レースカーテン越しの光が最適。"
+    },
+    {
+      "name": "デンドロビウム",
+      "aliases": [
+        "デンドロビューム"
+      ],
+      "species": "Dendrobium spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(11〜2月)",
+      "dormantWater": "土が完全に乾いてから1週間後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "種類豊富な蘭。冬の低温と乾燥が花芽分化に重要。"
+    },
+    {
+      "name": "オンシジウム",
+      "aliases": [
+        "オンシジューム"
+      ],
+      "species": "Oncidium spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1〜2回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "黄色い小花が群れて咲く蘭。比較的育てやすい。"
+    },
+    {
+      "name": "シンビジウム",
+      "aliases": [
+        "シンビジューム"
+      ],
+      "species": "Cymbidium spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "耐寒性のある蘭。日光をよく当てると花つきがよい。"
+    },
+    {
+      "name": "ブーゲンビリア",
+      "aliases": [
+        "ブーゲンビレア",
+        "イカダカズラ",
+        "筏葛",
+        "いかだかずら"
+      ],
+      "species": "Bougainvillea spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "鮮やかな苞が美しい熱帯植物。日光をしっかり当てると花つきがよい。"
+    },
+    {
+      "name": "ハイビスカス",
+      "aliases": [
+        "ブッソウゲ",
+        "仏桑花",
+        "ぶっそうげ"
+      ],
+      "species": "Hibiscus rosa-sinensis",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月2回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "南国の代表花。日光と肥料を好み、夏中花を咲かせる。"
+    },
+    {
+      "name": "プルメリア",
+      "aliases": [
+        "インドソケイ",
+        "印度素馨"
+      ],
+      "species": "Plumeria spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(11〜3月)",
+      "dormantWater": "水やりしない(断水)",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "ハワイの代表花。冬は落葉して休眠。寒さに弱いので室内へ。"
+    },
+    {
+      "name": "クッカバラ",
+      "aliases": [
+        "フィロデンドロン・クッカバラ"
+      ],
+      "species": "Philodendron 'Xanadu'",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "セロームに似た深い切れ込みの葉。やや小型でコンパクト。"
+    },
+    {
+      "name": "ディフェンバキア",
+      "aliases": [
+        "ダム・ケーン"
+      ],
+      "species": "Dieffenbachia spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "斑入りの大きな葉が美しい。樹液は刺激性あり扱い注意。"
+    },
+    {
+      "name": "クロトン",
+      "aliases": [
+        "ヘンヨウボク",
+        "変葉木",
+        "へんようぼく"
+      ],
+      "species": "Codiaeum variegatum",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "カラフルな葉が美しい。日光をよく当てると葉色が鮮やかに。"
+    },
+    {
+      "name": "コルジリネ",
+      "aliases": [
+        "コルディリーネ",
+        "センネンボク",
+        "千年木",
+        "せんねんぼく"
+      ],
+      "species": "Cordyline spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "赤や紫の鮮やかな葉が美しい。ハワイで縁起の良い木とされる。"
+    },
+    {
+      "name": "シザンサス",
+      "aliases": [
+        "ニワナズナ"
+      ],
+      "species": "Schizanthus spp.",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "夏(6〜8月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "秋〜春に月1回",
+      "tempMin": 0,
+      "tempMax": 25,
+      "mist": "no",
+      "memo": "冬〜春咲きの一年草。蝶のような花が美しい。"
+    },
+    {
+      "name": "シクラメン",
+      "aliases": [
+        "かがり火草",
+        "カガリビバナ"
+      ],
+      "species": "Cyclamen persicum",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "夏(6〜8月)",
+      "dormantWater": "水やりしない(断水)",
+      "fertilize": "秋〜春に月2回",
+      "tempMin": 5,
+      "tempMax": 20,
+      "mist": "no",
+      "memo": "冬の代表的な鉢花。涼しい場所を好み、夏は休眠する。"
+    },
+    {
+      "name": "ペチュニア",
+      "aliases": [
+        "ツクバネアサガオ",
+        "衝羽根朝顔"
+      ],
+      "species": "Petunia spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月2回",
+      "tempMin": 0,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "夏花壇の定番。摘心して脇芽を増やすと花数が増える。"
+    },
+    {
+      "name": "ゼラニウム",
+      "aliases": [
+        "テンジクアオイ",
+        "天竺葵",
+        "てんじくあおい",
+        "ペラルゴニウム"
+      ],
+      "species": "Pelargonium spp.",
+      "location": "直射日光",
+      "water": "土が完全に乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "丈夫で四季咲き。乾燥に強く育てやすい。"
+    },
+    {
+      "name": "バラ",
+      "aliases": [
+        "ローズ",
+        "薔薇"
+      ],
+      "species": "Rosa spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -10,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "庭木の女王。剪定と肥料管理が育成のコツ。"
+    },
+    {
+      "name": "ラベンダー",
+      "aliases": [
+        "ラバンデュラ"
+      ],
+      "species": "Lavandula spp.",
+      "location": "直射日光",
+      "water": "土が完全に乾いてから2〜3日後",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから1週間後",
+      "fertilize": "春・秋に月1回",
+      "tempMin": -10,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "ハーブの代表。乾燥と日光を好み、蒸れに弱い。"
+    },
+    {
+      "name": "ローズマリー",
+      "aliases": [
+        "マンネンロウ",
+        "迷迭香"
+      ],
+      "species": "Salvia rosmarinus",
+      "location": "直射日光",
+      "water": "土が完全に乾いたらたっぷり",
+      "dormant": "なし",
+      "dormantWater": "通常通り",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "常緑のハーブ。乾燥に強く料理にも使える。"
+    },
+    {
+      "name": "ミント",
+      "aliases": [
+        "薄荷",
+        "ハッカ",
+        "はっか"
+      ],
+      "species": "Mentha spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -10,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "非常に丈夫で繁殖力旺盛。地植えすると広がりすぎるので鉢植え推奨。"
+    },
+    {
+      "name": "バジル",
+      "aliases": [
+        "バジリコ",
+        "メボウキ"
+      ],
+      "species": "Ocimum basilicum",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "枯れる",
+      "fertilize": "春〜秋に月2回",
+      "tempMin": 10,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "一年草扱い。摘心で枝数を増やすと収穫量アップ。"
+    },
+    {
+      "name": "ガーベラ",
+      "aliases": [
+        "アフリカセンボンヤリ"
+      ],
+      "species": "Gerbera jamesonii",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "切り花としても人気。花茎が長く伸びる。"
+    },
+    {
+      "name": "カーネーション",
+      "aliases": [
+        "オランダセキチク",
+        "和蘭石竹"
+      ],
+      "species": "Dianthus caryophyllus",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "夏(7〜8月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春・秋に月1回",
+      "tempMin": -5,
+      "tempMax": 28,
+      "mist": "no",
+      "memo": "母の日の代表花。涼しい気候を好む。"
+    },
+    {
+      "name": "チューリップ",
+      "aliases": [
+        "鬱金香",
+        "ウコンコウ",
+        "うこんこう"
+      ],
+      "species": "Tulipa spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "夏(6〜9月)",
+      "dormantWater": "水やりしない(断水)",
+      "fertilize": "秋〜春に月1回",
+      "tempMin": -10,
+      "tempMax": 25,
+      "mist": "no",
+      "memo": "春の代表花。秋に球根を植え、夏は休眠。"
+    },
+    {
+      "name": "アジサイ",
+      "aliases": [
+        "紫陽花",
+        "あじさい",
+        "ハイドランジア"
+      ],
+      "species": "Hydrangea macrophylla",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -10,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "梅雨の代表花。土壌pHで花色が変わる(酸性=青、アルカリ性=ピンク)。"
+    },
+    {
+      "name": "クリスマスローズ",
+      "aliases": [
+        "ヘレボルス",
+        "ヘレボラス"
+      ],
+      "species": "Helleborus spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "夏(7〜8月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "秋〜春に月1回",
+      "tempMin": -15,
+      "tempMax": 25,
+      "mist": "no",
+      "memo": "冬〜春咲き。耐寒性が非常に高く、日陰でも育つ。"
+    },
+    {
+      "name": "ベゴニア",
+      "aliases": [
+        "シュウカイドウ",
+        "秋海棠"
+      ],
+      "species": "Begonia spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "種類豊富。木立性、根茎性、球根性などタイプにより管理が異なる。"
+    },
+    {
+      "name": "コリウス",
+      "aliases": [
+        "ニシキジソ",
+        "錦紫蘇"
+      ],
+      "species": "Plectranthus scutellarioides",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "枯れることが多い",
+      "fertilize": "春〜秋に月2回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "カラフルな葉を観賞する一年草扱い。摘心で枝を増やす。"
+    },
+    {
+      "name": "アスパラガス",
+      "aliases": [
+        "アスパラガス・スプレンゲリー"
+      ],
+      "species": "Asparagus spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "観葉植物としてのアスパラガス。ふわふわした繊細な葉が美しい。"
+    },
+    {
+      "name": "オリヅルラン",
+      "aliases": [
+        "折鶴蘭",
+        "おりづるらん",
+        "クロロフィタム"
+      ],
+      "species": "Chlorophytum comosum",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "ランナーで子株が増える。空気清浄効果でも知られる定番観葉植物。"
+    },
+    {
+      "name": "プテリス",
+      "aliases": [
+        "イノモトソウ",
+        "井元草"
+      ],
+      "species": "Pteris spp.",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 28,
+      "mist": "yes",
+      "memo": "繊細なシダ。湿度を好み、葉水を欠かさず。"
+    },
+    {
+      "name": "ネフロレピス",
+      "aliases": [
+        "タマシダ",
+        "玉羊歯",
+        "たましだ",
+        "ボストンファーン"
+      ],
+      "species": "Nephrolepis exaltata",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから2〜3日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "代表的なシダ植物。ハンギングでよく育つ。"
+    },
+    {
+      "name": "ディプラデニア",
+      "aliases": [
+        "マンデビラ"
+      ],
+      "species": "Mandevilla spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "つる性で夏中花を咲かせる。トロピカルな印象。"
+    },
+    {
+      "name": "ブルグマンシア",
+      "aliases": [
+        "キダチチョウセンアサガオ",
+        "木立朝鮮朝顔",
+        "エンジェルストランペット"
+      ],
+      "species": "Brugmansia spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "大きなラッパ状の花が垂れ下がる。全草に毒があるので注意。"
+    },
+    {
+      "name": "ゲラニウム",
+      "aliases": [
+        "フウロソウ",
+        "風露草"
+      ],
+      "species": "Geranium spp.",
+      "location": "明るい日陰",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -10,
+      "tempMax": 28,
+      "mist": "no",
+      "memo": "宿根草。耐寒性が高く育てやすい。"
+    },
+    {
+      "name": "クレマチス",
+      "aliases": [
+        "カザグルマ",
+        "風車",
+        "テッセン",
+        "鉄線"
+      ],
+      "species": "Clematis spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -15,
+      "tempMax": 30,
+      "mist": "no",
+      "memo": "つる性植物の女王。剪定タイプで管理が異なるので品種確認が重要。"
+    },
+    {
+      "name": "ユーカリ",
+      "aliases": [
+        "ユーカリプタス"
+      ],
+      "species": "Eucalyptus spp.",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -5,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "銀緑色の葉が美しい。コアラの食べる種類とは異なる観賞用品種が一般的。"
+    },
+    {
+      "name": "ミモザ",
+      "aliases": [
+        "ギンヨウアカシア",
+        "銀葉アカシア",
+        "ぎんようあかしあ"
+      ],
+      "species": "Acacia baileyana",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に月1回",
+      "tempMin": -3,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "早春に黄色い花を咲かせる。乾燥に強く成長が早い。"
+    },
+    {
+      "name": "桜",
+      "aliases": [
+        "サクラ",
+        "さくら",
+        "ソメイヨシノ",
+        "染井吉野"
+      ],
+      "species": "Prunus × yedoensis",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "冬と初夏に年2回",
+      "tempMin": -15,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "日本の代表的な花木。春に美しい花を咲かせる。落葉樹で冬は葉を落とす。"
+    },
+    {
+      "name": "枝垂れ桜",
+      "aliases": [
+        "シダレザクラ",
+        "しだれざくら"
+      ],
+      "species": "Prunus pendula",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "冬と初夏に年2回",
+      "tempMin": -15,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "枝が垂れる優雅な姿の桜。寿命が長く長寿の象徴とされる。"
+    },
+    {
+      "name": "八重桜",
+      "aliases": [
+        "ヤエザクラ",
+        "やえざくら",
+        "ボタンザクラ",
+        "牡丹桜"
+      ],
+      "species": "Prunus lannesiana",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "冬と初夏に年2回",
+      "tempMin": -15,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "花びらが幾重にも重なる豪華な桜。ソメイヨシノより遅く咲く。"
+    },
+    {
+      "name": "河津桜",
+      "aliases": [
+        "カワヅザクラ",
+        "かわづざくら"
+      ],
+      "species": "Prunus lannesiana 'Kawazu-zakura'",
+      "location": "直射日光",
+      "water": "土が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が乾いたらたっぷり",
+      "fertilize": "冬と初夏に年2回",
+      "tempMin": -10,
+      "tempMax": 35,
+      "mist": "no",
+      "memo": "2月〜3月に咲く早咲きの桜。濃いピンクの花が特徴。"
     }
   ]
 }
