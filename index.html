@@ -409,7 +409,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.3</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.5</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -444,10 +444,6 @@
             </span>
             <button class="toggle-sw" id="drive-backup-toggle" onclick="toggleDriveBackup()"></button>
           </div>
-          <div style="padding:0 18px 10px;">
-            <input type="text" class="field-input" id="drive-client-id-input" placeholder="Client ID を入力してから有効化" style="font-size:12px;padding:8px 12px;" oninput="saveDriveClientId()">
-          </div>
-          <div class="opt-menu-divider"></div>
           <div class="opt-menu-divider"></div>
           <button class="opt-menu-item" onclick="location.reload()">🔄 最新に更新</button>
           <div class="opt-menu-divider"></div>
@@ -640,6 +636,10 @@
     <div class="modal-title">この内容を適用しますか？</div>
     <div class="modal-body">
       <div id="db-preview-body"></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--cream-dark);">
+        <button type="button" class="db-load-btn" onclick="searchPreviewExternal()">🔍 育て方を調べる</button>
+        <div style="font-size:10px;color:var(--earth-light);margin-top:6px;text-align:center;">※外部サイト(Google検索)が開きます</div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeDbPreviewModal()">キャンセル</button>
@@ -696,40 +696,36 @@
     <div class="modal-handle"></div>
     <div class="modal-title">☁️ Google Drive同期の設定</div>
     <div class="modal-body" style="font-size:13px;color:var(--ink-light);line-height:1.8;">
-      <p style="margin-bottom:12px;">Google Drive APIのClient IDが必要です。以下の手順で無料で取得できます。</p>
+      <p style="margin-bottom:12px;">Google Driveに記録を自動バックアップできます。バックアップしたデータはあなた自身のGoogle Driveに保存され、開発者からは見えません。</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">① Google Cloud Consoleへ</div>
-          <div><a href="https://console.cloud.google.com" target="_blank" style="color:var(--water);">console.cloud.google.com</a> にアクセスしてGoogleアカウントでログイン</div>
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">① テストユーザー登録を依頼</div>
+          <div>このアプリの提供者(あなたに紹介してくれた人)に、あなたのGmailアドレスを伝えてテストユーザー登録を依頼してください。</div>
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">② プロジェクト作成</div>
-          <div>「新しいプロジェクト」を作成（名前は何でもOK）</div>
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">② Drive同期をオンにする</div>
+          <div>「Google Drive同期」のスイッチをオンにすると、Googleログイン画面が開きます。テストユーザーに登録されているGmailアカウントでログインしてください。</div>
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">③ Drive APIを有効化</div>
-          <div>「APIとサービス」→「ライブラリ」→「Google Drive API」→「有効にする」</div>
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">③ 同期の動作</div>
+          <div>・記録を追加・編集すると自動でDriveにバックアップされます<br>
+          ・別の端末で同じアカウントでログインすれば、データが同期されます<br>
+          ・マイドライブ直下にJSONファイルとして保存されます</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;font-weight:600;color:var(--ink);">よくある質問</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">Q. 「アクセスをブロック」と表示される</div>
+          <div>テストユーザー登録がまだの可能性があります。提供者に確認してください。</div>
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">④ OAuth同意画面の設定</div>
-          <div>「APIとサービス」→「OAuth同意画面」を開く<br>
-          ・User Typeは「外部」を選択して「作成」<br>
-          ・アプリ名に好きな名前を入力（例：植物手帖）<br>
-          ・ユーザーサポートメールに自分のメールアドレスを選択<br>
-          ・デベロッパーの連絡先にも自分のメールアドレスを入力<br>
-          ・「保存して次へ」を3回押してそのまま完了</div>
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">Q. データはどこに保存される?</div>
+          <div>あなた自身のGoogle Driveのマイドライブ直下です。他の人や開発者からは見えません。</div>
         </div>
         <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑤ 認証情報の作成</div>
-          <div>「APIとサービス」→「認証情報」→「認証情報を作成」→「OAuthクライアントID」→「ウェブアプリケーション」を選択</div>
-        </div>
-        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑥ 承認済みオリジンを追加</div>
-          <div>「承認済みのJavaScriptオリジン」にこのアプリのURL（例：https://yourname.github.io）を追加→「作成」</div>
-        </div>
-        <div style="background:var(--mist);border-radius:12px;padding:12px 14px;">
-          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">⑦ Client IDをコピー</div>
-          <div>表示された「クライアントID」をコピーして、設定画面のClient ID欄に貼り付け</div>
+          <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">Q. 同期を止めたい</div>
+          <div>「Google Drive同期」のスイッチをオフにしてください。Drive上のデータは残ったままです(Drive側で手動削除も可能)。</div>
         </div>
       </div>
     </div>
@@ -930,7 +926,8 @@ async function initLocalBackup() {
 
 // ===== ③ GOOGLE DRIVE BACKUP =====
 let driveBackupEnabled = JSON.parse(localStorage.getItem('driveBackupEnabled') || 'false');
-let driveClientId = localStorage.getItem('driveClientId') || '';
+// ⚠️ 開発者：ここに自分のClient IDを設定してください
+const DRIVE_CLIENT_ID = '570804289602-qur2685jlouvt6sirc38r2baaai8681e.apps.googleusercontent.com';
 let driveAccessToken = null;
 let driveFileId = null;
 const DRIVE_FILE_NAME = 'plant-tracker-backup.json';
@@ -938,19 +935,16 @@ const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
 function initDriveBackupUI() {
   const sw = document.getElementById('drive-backup-toggle');
-  const input = document.getElementById('drive-client-id-input');
-  if (input) input.value = driveClientId;
-  const hasId = !!driveClientId;
-  sw.classList.toggle('on', driveBackupEnabled && hasId);
-  sw.style.opacity = hasId ? '1' : '0.35';
-  sw.title = hasId ? '' : 'Client IDを入力してから有効化してください';
+  sw.classList.toggle('on', driveBackupEnabled);
 }
 
-function saveDriveClientId() {
-  driveClientId = document.getElementById('drive-client-id-input').value.trim();
-  localStorage.setItem('driveClientId', driveClientId);
-  const sw = document.getElementById('drive-backup-toggle');
-  sw.style.opacity = driveClientId ? '1' : '0.35';
+function toggleDriveBackup() {
+  driveBackupEnabled = !driveBackupEnabled;
+  localStorage.setItem('driveBackupEnabled', JSON.stringify(driveBackupEnabled));
+  initDriveBackupUI();
+  if (driveBackupEnabled) {
+    driveAuth().then(() => driveLoadWithChoice());
+  }
 }
 
 // ===== TRI CHOICE DIALOG =====
@@ -974,21 +968,8 @@ function triConfirmCancel() {
   initDriveBackupUI();
 }
 
-function toggleDriveBackup() {
-  if (!driveClientId) {
-    showToast('\u26a0\ufe0f Client ID\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044');
-    return;
-  }
-  driveBackupEnabled = !driveBackupEnabled;
-  localStorage.setItem('driveBackupEnabled', JSON.stringify(driveBackupEnabled));
-  initDriveBackupUI();
-  if (driveBackupEnabled) {
-    driveAuth().then(() => driveLoadWithChoice());
-  }
-}
-
 async function driveLoadWithChoice() {
-  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveBackupEnabled) return;
   if (!driveAccessToken) {
     try { await driveAuth(); } catch(e) { return; }
   }
@@ -1039,7 +1020,7 @@ async function driveLoadWithChoice() {
 
 async function driveLoad() {
   // 起動時読み込み：ローカルが空のときだけDriveから全データ復元
-  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveBackupEnabled) return;
   if (!driveAccessToken) {
     try { await driveAuth(); } catch(e) { return; }
   }
@@ -1069,9 +1050,9 @@ async function driveLoad() {
 
 function driveAuth() {
   return new Promise((resolve, reject) => {
-    if (!driveClientId) { showToast('⚠️ Client IDを入力してください'); reject(); return; }
+    
     const params = new URLSearchParams({
-      client_id: driveClientId,
+      client_id: DRIVE_CLIENT_ID,
       redirect_uri: location.origin + '/',
       response_type: 'token',
       scope: DRIVE_SCOPE,
@@ -1111,7 +1092,7 @@ async function driveGetOrCreateFile() {
 }
 
 async function driveBackupSave() {
-  if (!driveBackupEnabled || !driveClientId) return;
+  if (!driveBackupEnabled) return;
   if (!driveAccessToken) {
     try { await driveAuth(); } catch(e) { return; }
   }
@@ -2052,7 +2033,8 @@ function searchPlantDb() {
   plantDbCandidates = scored;
   if (!scored.length) {
     listEl.innerHTML = '';
-    statusEl.textContent = '候補が見つかりませんでした';
+    const qSafe = q.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    statusEl.innerHTML = `候補が見つかりませんでした<div style="margin-top:12px;"><button type="button" class="db-load-btn" onclick="searchExternal('${qSafe}')">🔍 育て方を調べる</button><div style="font-size:10px;color:var(--earth-light);margin-top:6px;text-align:center;">※外部サイト(Google検索)が開きます</div></div>`;
     return;
   }
   statusEl.textContent = `${scored.length}件の候補`;
@@ -2060,9 +2042,18 @@ function searchPlantDb() {
     <div class="db-candidate" onclick="showDbPreview(${i})">
       <div class="db-candidate-name">${x.plant.name}</div>
       ${x.plant.species ? `<div class="db-candidate-species">${x.plant.species}</div>` : ''}
-      <div class="db-candidate-match">${x.label}${x.via ? `（${x.via}）` : ''}</div>
+      <div class="db-candidate-match">${x.label}${x.via ? `(${x.via})` : ''}</div>
     </div>
   `).join('');
+}
+
+function searchExternal(name) {
+  const url = 'https://www.google.com/search?q=' + encodeURIComponent(name + ' 育て方');
+  window.open(url, '_blank');
+}
+
+function searchPreviewExternal() {
+  if (pendingDbCandidate) searchExternal(pendingDbCandidate.name);
 }
 
 function showDbPreview(idx) {
@@ -2706,7 +2697,7 @@ initLocalBackupUI();
 initLocalBackup();
 initDriveBackupUI();
 // Drive自動読み込み
-if (driveBackupEnabled && driveClientId) driveLoad();
+if (driveBackupEnabled) driveLoad();
 // backup-help modal close on overlay
 document.getElementById('backup-help-modal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
 </script>
