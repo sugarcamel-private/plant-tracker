@@ -409,18 +409,12 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.5</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.7</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
         <div class="opt-menu" id="opt-menu">
-          <div class="opt-menu-section">エクスポート</div>
-          <button class="opt-menu-item" onclick="exportLogsCSV();closeOptMenu()">📋 記録をCSVで保存</button>
-          <button class="opt-menu-item" onclick="exportPlantsCSV();closeOptMenu()">🌿 植物情報をCSVで保存</button>
-          <div class="opt-menu-divider"></div>
-          <div class="opt-menu-section">インポート</div>
-          <button class="opt-menu-item" onclick="document.getElementById('import-logs-input').click();closeOptMenu()">📋 記録をCSVから読み込む</button>
-          <button class="opt-menu-item" onclick="document.getElementById('import-plants-input').click();closeOptMenu()">🌿 植物情報をCSVから読み込む</button>
+          <button class="opt-menu-item" onclick="openDataIOSheet();closeOptMenu()">📤 データの入出力</button>
           <div class="opt-menu-divider"></div>
           <div class="opt-menu-section">記録設定</div>
           <div class="opt-menu-toggle">
@@ -644,6 +638,26 @@
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeDbPreviewModal()">キャンセル</button>
       <button class="btn-save" onclick="applyDbCandidate()">適用</button>
+    </div>
+  </div>
+</div>
+
+<!-- DATA I/O SHEET -->
+<div class="modal-overlay" id="data-io-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">データの入出力</div>
+    <div class="modal-body">
+      <div class="opt-menu-section" style="padding:0 0 6px;">エクスポート</div>
+      <button class="opt-menu-item" style="border-radius:10px;" onclick="exportLogsCSV();closeDataIOSheet()">📋 記録をCSVで保存</button>
+      <button class="opt-menu-item" style="border-radius:10px;" onclick="exportPlantsCSV();closeDataIOSheet()">🌿 植物情報をCSVで保存</button>
+      <div class="opt-menu-divider" style="margin:10px 0;"></div>
+      <div class="opt-menu-section" style="padding:0 0 6px;">インポート</div>
+      <button class="opt-menu-item" style="border-radius:10px;" onclick="document.getElementById('import-logs-input').click();closeDataIOSheet()">📋 記録をCSVから読み込む</button>
+      <button class="opt-menu-item" style="border-radius:10px;" onclick="document.getElementById('import-plants-input').click();closeDataIOSheet()">🌿 植物情報をCSVから読み込む</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeDataIOSheet()">閉じる</button>
     </div>
   </div>
 </div>
@@ -2015,7 +2029,14 @@ function closeDbLoadModal() {
   document.getElementById('db-load-modal').classList.remove('open');
 }
 
+let plantDbDisplayCount = 8;
+
 function searchPlantDb() {
+  plantDbDisplayCount = 8;
+  doSearchPlantDb();
+}
+
+function doSearchPlantDb() {
   const q = document.getElementById('db-search-input').value.trim();
   const listEl = document.getElementById('db-candidate-list');
   const statusEl = document.getElementById('db-search-status');
@@ -2028,8 +2049,7 @@ function searchPlantDb() {
   if (!plantDb) { statusEl.textContent = 'データベース未読み込み'; return; }
   const scored = plantDb.plants.map(p => ({ plant: p, ...scorePlant(p, q) }))
     .filter(x => x.score > 0)
-    .sort((a,b) => b.score - a.score)
-    .slice(0, 8);
+    .sort((a,b) => b.score - a.score);
   plantDbCandidates = scored;
   if (!scored.length) {
     listEl.innerHTML = '';
@@ -2037,14 +2057,27 @@ function searchPlantDb() {
     statusEl.innerHTML = `候補が見つかりませんでした<div style="margin-top:12px;"><button type="button" class="db-load-btn" onclick="searchExternal('${qSafe}')">🔍 育て方を調べる</button><div style="font-size:10px;color:var(--earth-light);margin-top:6px;text-align:center;">※外部サイト(Google検索)が開きます</div></div>`;
     return;
   }
-  statusEl.textContent = `${scored.length}件の候補`;
-  listEl.innerHTML = scored.map((x, i) => `
+  const total = scored.length;
+  const shown = Math.min(plantDbDisplayCount, total);
+  statusEl.textContent = `${total}件の候補（${shown}件表示中）`;
+  let html = scored.slice(0, plantDbDisplayCount).map((x, i) => `
     <div class="db-candidate" onclick="showDbPreview(${i})">
       <div class="db-candidate-name">${x.plant.name}</div>
       ${x.plant.species ? `<div class="db-candidate-species">${x.plant.species}</div>` : ''}
       <div class="db-candidate-match">${x.label}${x.via ? `(${x.via})` : ''}</div>
     </div>
   `).join('');
+  if (total > plantDbDisplayCount) {
+    const remaining = total - plantDbDisplayCount;
+    const nextBatch = Math.min(8, remaining);
+    html += `<button type="button" class="db-load-btn" style="margin-top:4px;" onclick="showMoreCandidates()">もっと見る（あと${remaining}件中${nextBatch}件）</button>`;
+  }
+  listEl.innerHTML = html;
+}
+
+function showMoreCandidates() {
+  plantDbDisplayCount += 8;
+  doSearchPlantDb();
 }
 
 function searchExternal(name) {
@@ -2447,6 +2480,12 @@ function toggleOptMenu(e) {
 }
 function closeOptMenu() {
   document.getElementById('opt-menu').classList.remove('open');
+}
+function openDataIOSheet() {
+  document.getElementById('data-io-modal').classList.add('open');
+}
+function closeDataIOSheet() {
+  document.getElementById('data-io-modal').classList.remove('open');
 }
 document.addEventListener('click', (e) => {
   const menu = document.getElementById('opt-menu');
