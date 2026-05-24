@@ -50,6 +50,41 @@
   .tab { flex: 1; min-width: 64px; padding: 10px 4px; border: none; background: transparent; border-bottom: 2px solid transparent; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; color: var(--earth-light); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .tab.active { color: var(--sage-dark); border-bottom-color: var(--sage-dark); font-weight: 600; }
 
+  /* SUBTABS */
+  .subtabs { display: inline-flex; gap: 4px; background: var(--mist); border-radius: 14px; padding: 3px; margin-bottom: 14px; }
+  .subtab { background: transparent; border: none; padding: 6px 14px; border-radius: 11px; font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--earth-light); cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; }
+  .subtab.active { background: var(--cream); color: var(--sage-dark); font-weight: 600; box-shadow: 0 1px 2px rgba(30,42,31,0.08); }
+
+  /* SHOP */
+  .shop-controls { margin-bottom: 12px; }
+  .shop-filter { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .shop-filter::-webkit-scrollbar { display: none; }
+  .shop-filter .filter-chip { flex-shrink: 0; }
+  .shop-section-title { font-family: 'Shippori Mincho', serif; font-size: 14px; color: var(--ink); margin: 0 4px 10px; font-weight: 600; }
+  .shop-card { background: var(--cream); border-radius: 12px; padding: 7px 11px; margin-bottom: 6px; box-shadow: 0 1px 3px rgba(30,42,31,0.06); }
+  .shop-card-row1 { display: flex; align-items: center; gap: 6px; }
+  .shop-card-name { flex: 1; font-family: 'Shippori Mincho', serif; font-size: 14px; color: var(--ink); font-weight: 600; word-break: break-word; line-height: 1.3; }
+  .shop-card-row2 { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .shop-card-tags { flex: 1; display: flex; gap: 3px; flex-wrap: wrap; }
+  .shop-card-actions { display: flex; gap: 3px; flex-shrink: 0; }
+  .shop-fav-btn { background: transparent; border: none; cursor: pointer; padding: 0 2px; font-size: 16px; color: var(--cream-dark); flex-shrink: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; line-height: 1; }
+  .shop-fav-btn.on { color: #f0c050; }
+  .shop-edit-btn { background: transparent; border: none; cursor: pointer; padding: 0 2px; font-size: 13px; color: var(--earth-light); flex-shrink: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .shop-tag { font-size: 10px; padding: 1px 6px; border-radius: 6px; background: rgba(126,142,108,0.12); color: var(--sage-dark); }
+  .shop-action-btn { background: var(--mist); border: none; border-radius: 7px; padding: 3px 7px; font-size: 11px; color: var(--ink); cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; line-height: 1; }
+  .shop-action-btn:active { background: var(--cream-dark); }
+  .shop-empty { padding: 40px 20px; text-align: center; color: var(--earth-light); font-size: 13px; line-height: 1.7; }
+
+  /* WISHLIST */
+  .wish-kind-section { margin-bottom: 18px; }
+  .wish-kind-header { display: flex; align-items: center; gap: 8px; margin: 0 4px 8px; }
+  .wish-kind-title { flex: 1; font-family: 'Shippori Mincho', serif; font-size: 13px; color: var(--ink); font-weight: 600; }
+  .wish-kind-add-btn { background: transparent; border: 1.5px dashed var(--cream-dark); border-radius: 12px; padding: 3px 10px; font-size: 11px; color: var(--earth-light); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .wish-card { background: var(--cream); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
+  .wish-card-row { display: flex; align-items: center; gap: 8px; }
+  .wish-card-name { flex: 1; font-size: 13px; color: var(--ink); word-break: break-word; }
+  #wish-fav-filter-btn.on, #shop-fav-filter-btn.on { background: rgba(240,192,80,0.18); color: #b88928; }
+
   /* MAIN */
   .main { padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 20px); position: relative; z-index: 1; }
   .view { display: none; }
@@ -236,6 +271,8 @@
 
   /* MODALS */
   .modal-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  /* タグ追加など、別モーダルから呼び出されるサブモーダル */
+  #shop-tag-add-modal, #wish-tag-add-modal { z-index: 250; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--card-bg); border-radius: 24px 24px 0 0; width: 100%; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 32px; animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1); }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -519,7 +556,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.10</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v3.0</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -562,7 +599,7 @@
     <button class="tab" onclick="switchTab('logs',this)">記録</button>
     <button class="tab" onclick="switchTab('calendar',this)">カレンダー</button>
     <button class="tab" onclick="switchTab('garden',this)">庭</button>
-    <button class="tab" onclick="switchTab('stats',this)">統計</button>
+    <button class="tab" onclick="switchTab('note',this)">ノート</button>
   </div>
 </div>
 
@@ -574,23 +611,32 @@
 
   <!-- LOGS -->
   <div id="view-logs" class="view">
-    <div class="log-controls">
-      <div class="log-filter" id="log-filter">
-        <button class="filter-chip active" data-type="all" onclick="filterLogs('all',this)">すべて</button>
-        <button class="filter-chip" data-type="water" onclick="filterLogs('water',this)">💧 水やり</button>
-        <button class="filter-chip" data-type="fertilize" onclick="filterLogs('fertilize',this)">✨ 施肥</button>
-        <button class="filter-chip" data-type="repot" onclick="filterLogs('repot',this)">🪴 植替え</button>
-        <button class="filter-chip" data-type="pest" onclick="filterLogs('pest',this)">🐛 病害虫</button>
-        <button class="filter-chip" data-type="memo" onclick="filterLogs('memo',this)">📝 メモ</button>
-      </div>
-      <div class="sort-row">
-        <span class="sort-label">植物で絞り込み：</span>
-        <select class="sort-select" id="log-plant-filter" onchange="renderLogs()">
-          <option value="all">すべての植物</option>
-        </select>
-      </div>
+    <div class="subtabs">
+      <button class="subtab active" id="subtab-logs-history" onclick="switchLogSubtab('history',this)">記録</button>
+      <button class="subtab" id="subtab-logs-stats" onclick="switchLogSubtab('stats',this)">統計</button>
     </div>
-    <div id="timeline-list"></div>
+    <div id="subview-logs-history">
+      <div class="log-controls">
+        <div class="log-filter" id="log-filter">
+          <button class="filter-chip active" data-type="all" onclick="filterLogs('all',this)">すべて</button>
+          <button class="filter-chip" data-type="water" onclick="filterLogs('water',this)">💧 水やり</button>
+          <button class="filter-chip" data-type="fertilize" onclick="filterLogs('fertilize',this)">✨ 施肥</button>
+          <button class="filter-chip" data-type="repot" onclick="filterLogs('repot',this)">🪴 植替え</button>
+          <button class="filter-chip" data-type="pest" onclick="filterLogs('pest',this)">🐛 病害虫</button>
+          <button class="filter-chip" data-type="memo" onclick="filterLogs('memo',this)">📝 メモ</button>
+        </div>
+        <div class="sort-row">
+          <span class="sort-label">植物で絞り込み：</span>
+          <select class="sort-select" id="log-plant-filter" onchange="renderLogs()">
+            <option value="all">すべての植物</option>
+          </select>
+        </div>
+      </div>
+      <div id="timeline-list"></div>
+    </div>
+    <div id="subview-logs-stats" style="display:none;">
+      <div id="stats-content"></div>
+    </div>
   </div>
 
   <!-- CALENDAR -->
@@ -630,9 +676,32 @@
     <div id="garden-scene"></div>
   </div>
 
-  <!-- STATS -->
-  <div id="view-stats" class="view">
-    <div id="stats-content"></div>
+  <!-- NOTE -->
+  <div id="view-note" class="view">
+    <div class="subtabs">
+      <button class="subtab active" id="subtab-note-shops" onclick="switchNoteSubtab('shops',this)">お店</button>
+      <button class="subtab" id="subtab-note-wishlist" onclick="switchNoteSubtab('wishlist',this)">リスト</button>
+    </div>
+    <div id="subview-note-shops">
+      <div class="shop-controls">
+        <div class="shop-filter" id="shop-filter"></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+          <button class="shop-action-btn" id="shop-fav-filter-btn" onclick="toggleShopFavFilter()">⭐お気に入りのみ</button>
+        </div>
+      </div>
+      <div class="shop-section-title" id="shop-section-title">すべてのお店</div>
+      <div id="shop-list"></div>
+    </div>
+    <div id="subview-note-wishlist" style="display:none;">
+      <div class="shop-controls">
+        <div class="shop-filter" id="wish-filter"></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+          <button class="shop-action-btn" id="wish-fav-filter-btn" onclick="toggleWishFavFilter()">⭐お気に入りのみ</button>
+        </div>
+      </div>
+      <div class="shop-section-title" id="wish-section-title">すべて</div>
+      <div id="wish-list"></div>
+    </div>
   </div>
 </div>
 
@@ -755,6 +824,127 @@
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeDbPreviewModal()">キャンセル</button>
       <button class="btn-save" onclick="applyDbCandidate()">適用</button>
+    </div>
+  </div>
+</div>
+
+<!-- WISH TAG ADD MODAL -->
+<div class="modal-overlay" id="wish-tag-add-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">新しいタグを追加</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">タグ名</label>
+        <input type="text" class="field-input" id="wish-tag-add-input" placeholder="例：書籍、SNS" maxlength="20">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeWishTagAddModal()">キャンセル</button>
+      <button class="btn-save" onclick="confirmAddWishTag()">追加</button>
+    </div>
+  </div>
+</div>
+
+<!-- WISH ITEM MODAL -->
+<div class="modal-overlay" id="wish-item-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="wish-item-modal-title">品物を追加</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">タグ（複数選択可）</label>
+        <div class="item-selector" id="wish-tag-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">品物名</label>
+        <input type="text" class="field-input" id="wish-item-name" placeholder="例：ハイポネックス">
+      </div>
+      <div class="field-group">
+        <label class="field-label">リンク（任意）</label>
+        <input type="text" class="field-input" id="wish-item-link" placeholder="https://...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">メモ（任意）</label>
+        <textarea class="field-textarea" id="wish-item-memo" placeholder="購入予定、感想、参考情報など"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeWishItemModal()">キャンセル</button>
+      <button class="btn-save" id="wish-item-delete-btn" onclick="deleteWishItem()" style="display:none;background:var(--danger);">削除</button>
+      <button class="btn-save" onclick="saveWishItem()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP MEMO MODAL -->
+<div class="modal-overlay" id="shop-memo-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="shop-memo-modal-title">メモ</div>
+    <div class="modal-body">
+      <div id="shop-memo-modal-body" style="font-size:13px;color:var(--ink-light);line-height:1.7;white-space:pre-wrap;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-save" onclick="closeShopMemoModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP TAG ADD MODAL -->
+<div class="modal-overlay" id="shop-tag-add-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">新しいタグを追加</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">タグ名</label>
+        <input type="text" class="field-input" id="shop-tag-add-input" placeholder="例：カフェ" maxlength="20">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeShopTagAddModal()">キャンセル</button>
+      <button class="btn-save" onclick="confirmAddShopTag()">追加</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP MODAL -->
+<div class="modal-overlay" id="shop-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="shop-modal-title">お店を追加</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">タグ（複数選択可）</label>
+        <div class="item-selector" id="shop-tag-selector"></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">お店の名前</label>
+        <input type="text" class="field-input" id="shop-name-input" placeholder="例：グリーンマーケット">
+      </div>
+      <div class="field-group">
+        <label class="field-label">場所</label>
+        <input type="text" class="field-input" id="shop-place-input" placeholder="住所 または GoogleマップURL">
+        <div style="font-size:10px;color:var(--earth-light);margin-top:4px;line-height:1.5;">住所でもGoogleマップのURLでもOKです</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">お店のサイト</label>
+        <input type="text" class="field-input" id="shop-site-input" placeholder="https://...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">メモ</label>
+        <textarea class="field-textarea" id="shop-memo-input" placeholder="買ったもの、雰囲気など"></textarea>
+      </div>
+      <div class="field-group" style="display:flex;align-items:center;gap:8px;">
+        <button type="button" class="shop-fav-btn" id="shop-fav-toggle" onclick="toggleShopFav()" style="font-size:24px;">☆</button>
+        <span style="font-size:13px;color:var(--ink-light);">お気に入り</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeShopModal()">キャンセル</button>
+      <button class="btn-save" id="shop-delete-btn" onclick="deleteShop()" style="display:none;background:var(--danger);">削除</button>
+      <button class="btn-save" onclick="saveShop()">保存</button>
     </div>
   </div>
 </div>
@@ -1342,8 +1532,9 @@ function switchTab(view, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   btn.classList.add('active');
-  if (view === 'logs') { updateLogPlantFilter(); renderLogs(); }
+  if (view === 'logs') { updateLogPlantFilter(); renderLogs(); renderStats(); }
   if (view === 'calendar') renderCalendar();
+  if (view === 'note') { renderShopFilter(); renderShopList(); }
   if (view === 'garden') {
     updateGardenLocLabel();
     // 天気キャッシュをロード
@@ -1357,13 +1548,36 @@ function switchTab(view, btn) {
     }
     renderGarden();
   }
-  if (view === 'stats') renderStats();
+}
+
+function switchLogSubtab(sub, btn) {
+  document.querySelectorAll('#view-logs .subtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('subview-logs-history').style.display = (sub === 'history') ? 'block' : 'none';
+  document.getElementById('subview-logs-stats').style.display = (sub === 'stats') ? 'block' : 'none';
+  if (sub === 'stats') renderStats();
+}
+
+function switchNoteSubtab(sub, btn) {
+  document.querySelectorAll('#view-note .subtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('subview-note-shops').style.display = (sub === 'shops') ? 'block' : 'none';
+  document.getElementById('subview-note-wishlist').style.display = (sub === 'wishlist') ? 'block' : 'none';
+  if (sub === 'wishlist') { renderWishFilter(); renderWishList(); }
 }
 
 function handleAddBtn() {
   if (currentTab === 'logs') {
     if (!plants.length) { showConfirm('ℹ️','先に植物を登録してください','','OK',false,()=>{},false); return; }
     openLogModal(null);
+  } else if (currentTab === 'note') {
+    const shopsActive = document.getElementById('subview-note-shops').style.display !== 'none';
+    if (shopsActive) {
+      openShopModal(null);
+    } else {
+      openWishItemModal(null);
+    }
+    return;
   } else {
     openAddPlantModal();
   }
@@ -2629,21 +2843,472 @@ function locationChangePref() {
 }
 
 function locationClear() {
-  if (!confirm('地域の登録を削除しますか?')) return;
-  userLocation = null;
-  weatherCache = null;
-  localStorage.removeItem('userLocation');
-  localStorage.removeItem('weatherCache');
-  updateGardenLocLabel();
-  closeLocationModal();
-  showToast('地域の登録を削除しました');
-  renderGarden();
+  showConfirm('🗑', '地域の登録を削除しますか?', '', '削除する', true, () => {
+    userLocation = null;
+    weatherCache = null;
+    localStorage.removeItem('userLocation');
+    localStorage.removeItem('weatherCache');
+    updateGardenLocLabel();
+    closeLocationModal();
+    showToast('地域の登録を削除しました');
+    renderGarden();
+  });
 }
 
 function renderCurrentLocation() {
   if (!userLocation) return;
   document.getElementById('location-current-label').textContent =
     `${userLocation.pref}・${userLocation.city}`;
+}
+
+// ===== SHOPS =====
+let shops = JSON.parse(localStorage.getItem('shops') || '[]');
+let shopTags = JSON.parse(localStorage.getItem('shopTags') || '["植物","雑貨"]');
+let shopFilter = 'all'; // current filter tag
+let shopFavOnly = false;
+let editingShopId = null;
+let pendingShopTags = [];
+let pendingShopFav = false;
+
+function saveShopsToStorage() {
+  localStorage.setItem('shops', JSON.stringify(shops));
+}
+function saveShopTagsToStorage() {
+  localStorage.setItem('shopTags', JSON.stringify(shopTags));
+}
+
+function toggleShopFavFilter() {
+  shopFavOnly = !shopFavOnly;
+  document.getElementById('shop-fav-filter-btn').classList.toggle('on', shopFavOnly);
+  renderShopList();
+}
+
+function renderShopFilter() {
+  const container = document.getElementById('shop-filter');
+  if (!container) return;
+  const chips = [
+    `<button class="filter-chip${shopFilter === 'all' ? ' active' : ''}" data-tag="all" onclick="setShopFilter('all')">すべて</button>`,
+    ...shopTags.map(t => {
+      const safeAttr = t.replace(/"/g, '&quot;');
+      const safeArg = t.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return `<button class="filter-chip${shopFilter === t ? ' active' : ''}" data-tag="${safeAttr}" onclick="setShopFilter('${safeArg}')">${t}</button>`;
+    })
+  ];
+  container.innerHTML = chips.join('');
+}
+
+function setShopFilter(tag) {
+  shopFilter = tag;
+  // チップを作り直さず、アクティブクラスだけ更新
+  const container = document.getElementById('shop-filter');
+  if (container) {
+    container.querySelectorAll('.filter-chip').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tag === tag);
+    });
+  }
+  requestAnimationFrame(() => renderShopList());
+}
+
+function renderShopList() {
+  const list = document.getElementById('shop-list');
+  const title = document.getElementById('shop-section-title');
+  if (!list) return;
+  let filtered;
+  if (shopFilter === 'all') {
+    title.textContent = shopFavOnly ? 'お気に入り' : 'すべてのお店';
+    filtered = [...shops];
+  } else {
+    title.textContent = shopFilter;
+    filtered = shops.filter(s => (s.tags || []).includes(shopFilter));
+  }
+  if (shopFavOnly) filtered = filtered.filter(s => s.fav);
+  // ⭐お気に入りを上に、その下は新しい順（id降順）
+  filtered.sort((a, b) => {
+    if (a.fav !== b.fav) return a.fav ? -1 : 1;
+    return (b.id || 0) - (a.id || 0);
+  });
+  if (!filtered.length) {
+    list.innerHTML = `<div class="shop-empty">🏪<br>${shopFavOnly ? 'お気に入りに登録されたお店がありません' : 'お店が登録されていません'}<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(s => renderShopCard(s)).join('');
+}
+
+function renderShopCard(s) {
+  const tags = (s.tags || []).map(t => `<span class="shop-tag">${t}</span>`).join('');
+  const actions = [];
+  if (s.memo) {
+    actions.push(`<button class="shop-action-btn" onclick="openShopMemo('${s.id}')">📝</button>`);
+  }
+  if (s.place) {
+    actions.push(`<button class="shop-action-btn" onclick="openShopMap('${s.id}')">🗺</button>`);
+  }
+  if (s.site) {
+    actions.push(`<button class="shop-action-btn" onclick="openShopSite('${s.id}')">🌐</button>`);
+  }
+  return `
+    <div class="shop-card">
+      <div class="shop-card-row1">
+        <button class="shop-fav-btn ${s.fav ? 'on' : ''}" onclick="toggleShopFavCard('${s.id}')" title="お気に入り">${s.fav ? '★' : '☆'}</button>
+        <div class="shop-card-tags">${tags}</div>
+        ${actions.length ? `<div class="shop-card-actions">${actions.join('')}</div>` : ''}
+      </div>
+      <div class="shop-card-row2">
+        <div class="shop-card-name">${s.name}</div>
+        <button class="shop-edit-btn" onclick="openShopModal('${s.id}')" title="編集">✎</button>
+      </div>
+    </div>
+  `;
+}
+
+function openShopMemo(id) {
+  const s = shops.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('shop-memo-modal-title').textContent = s.name;
+  document.getElementById('shop-memo-modal-body').textContent = s.memo || '';
+  document.getElementById('shop-memo-modal').classList.add('open');
+}
+
+function closeShopMemoModal() {
+  document.getElementById('shop-memo-modal').classList.remove('open');
+}
+
+function openShopMap(id) {
+  const s = shops.find(x => x.id === id);
+  if (!s || !s.place) return;
+  // 既にGoogleマップURLならそのまま開く、そうでなければ検索クエリで開く
+  const place = s.place.trim();
+  let url;
+  if (/^https?:\/\/(maps\.google\.|www\.google\..*\/maps|goo\.gl\/maps|maps\.app\.goo\.gl)/.test(place)) {
+    url = place;
+  } else {
+    url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place);
+  }
+  window.open(url, '_blank');
+}
+
+function openShopSite(id) {
+  const s = shops.find(x => x.id === id);
+  if (!s || !s.site) return;
+  let url = s.site.trim();
+  if (!/^https?:\/\//.test(url)) url = 'https://' + url;
+  window.open(url, '_blank');
+}
+
+function toggleShopFavCard(id) {
+  const s = shops.find(x => x.id === id);
+  if (!s) return;
+  s.fav = !s.fav;
+  saveShopsToStorage();
+  renderShopList();
+}
+
+function openShopModal(id) {
+  editingShopId = id || null;
+  const s = id ? shops.find(x => x.id === id) : null;
+  document.getElementById('shop-modal-title').textContent = s ? 'お店を編集' : 'お店を追加';
+  document.getElementById('shop-name-input').value = s ? s.name : '';
+  document.getElementById('shop-place-input').value = s ? (s.place || '') : '';
+  document.getElementById('shop-site-input').value = s ? (s.site || '') : '';
+  document.getElementById('shop-memo-input').value = s ? (s.memo || '') : '';
+  pendingShopTags = s ? [...(s.tags || [])] : [];
+  pendingShopFav = s ? !!s.fav : false;
+  updateShopFavToggleUI();
+  renderShopTagSelector();
+  document.getElementById('shop-delete-btn').style.display = s ? 'inline-block' : 'none';
+  document.getElementById('shop-modal').classList.add('open');
+}
+
+function closeShopModal() {
+  document.getElementById('shop-modal').classList.remove('open');
+  editingShopId = null;
+  pendingShopTags = [];
+}
+
+function renderShopTagSelector() {
+  const container = document.getElementById('shop-tag-selector');
+  if (!container) return;
+  container.innerHTML = shopTags.map(t => {
+    const safe = t.replace(/'/g, "\\'");
+    const selected = pendingShopTags.includes(t);
+    return `<button type="button" class="item-chip${selected ? ' selected' : ''}" onclick="toggleShopTag('${safe}',this)">${t}</button>`;
+  }).join('') + `<button type="button" class="item-chip-add" onclick="addShopTag()">＋</button>`;
+}
+
+function toggleShopTag(tag) {
+  const idx = pendingShopTags.indexOf(tag);
+  if (idx >= 0) pendingShopTags.splice(idx, 1);
+  else pendingShopTags.push(tag);
+  renderShopTagSelector();
+}
+
+function addShopTag() {
+  document.getElementById('shop-tag-add-input').value = '';
+  document.getElementById('shop-tag-add-modal').classList.add('open');
+  setTimeout(() => document.getElementById('shop-tag-add-input').focus(), 50);
+}
+
+function closeShopTagAddModal() {
+  document.getElementById('shop-tag-add-modal').classList.remove('open');
+}
+
+function confirmAddShopTag() {
+  const t = document.getElementById('shop-tag-add-input').value.trim();
+  if (!t) { showToast('タグ名を入力してください'); return; }
+  if (!shopTags.includes(t)) {
+    shopTags.push(t);
+    saveShopTagsToStorage();
+  }
+  if (!pendingShopTags.includes(t)) pendingShopTags.push(t);
+  closeShopTagAddModal();
+  renderShopTagSelector();
+}
+
+function toggleShopFav() {
+  pendingShopFav = !pendingShopFav;
+  updateShopFavToggleUI();
+}
+
+function updateShopFavToggleUI() {
+  const btn = document.getElementById('shop-fav-toggle');
+  if (!btn) return;
+  btn.textContent = pendingShopFav ? '★' : '☆';
+  btn.classList.toggle('on', pendingShopFav);
+}
+
+function saveShop() {
+  const name = document.getElementById('shop-name-input').value.trim();
+  if (!name) { showToast('店名を入力してください'); return; }
+  const place = document.getElementById('shop-place-input').value.trim();
+  const site = document.getElementById('shop-site-input').value.trim();
+  const memo = document.getElementById('shop-memo-input').value.trim();
+  if (editingShopId) {
+    const s = shops.find(x => x.id === editingShopId);
+    if (s) {
+      s.name = name;
+      s.place = place;
+      s.site = site;
+      s.memo = memo;
+      s.tags = [...pendingShopTags];
+      s.fav = pendingShopFav;
+    }
+  } else {
+    const id = Date.now().toString(36);
+    shops.push({ id, name, place, site, memo, tags: [...pendingShopTags], fav: pendingShopFav });
+  }
+  saveShopsToStorage();
+  closeShopModal();
+  renderShopFilter();
+  renderShopList();
+  showToast(editingShopId ? 'お店を更新しました' : 'お店を追加しました');
+}
+
+function deleteShop() {
+  if (!editingShopId) return;
+  showConfirm('🗑', 'このお店を削除しますか?', '', '削除する', true, () => {
+    shops = shops.filter(x => x.id !== editingShopId);
+    saveShopsToStorage();
+    closeShopModal();
+    renderShopList();
+    showToast('お店を削除しました');
+  });
+}
+
+// ===== WISHLIST =====
+// wishItems: [{id, name, link, memo, tags[], fav}]
+let wishItems = JSON.parse(localStorage.getItem('wishItems') || '[]');
+let wishTags = JSON.parse(localStorage.getItem('wishTags') || '["園芸用品","育て方","SNS"]');
+let wishFilter = 'all';
+let wishFavOnly = false;
+let editingWishId = null;
+let pendingWishTags = [];
+
+function saveWishToStorage() {
+  localStorage.setItem('wishItems', JSON.stringify(wishItems));
+  localStorage.setItem('wishTags', JSON.stringify(wishTags));
+}
+
+function renderWishFilter() {
+  const container = document.getElementById('wish-filter');
+  if (!container) return;
+  const chips = [
+    `<button class="filter-chip${wishFilter === 'all' ? ' active' : ''}" data-tag="all" onclick="setWishFilter('all')">すべて</button>`,
+    ...wishTags.map(t => {
+      const safeAttr = t.replace(/"/g, '&quot;');
+      const safeArg = t.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return `<button class="filter-chip${wishFilter === t ? ' active' : ''}" data-tag="${safeAttr}" onclick="setWishFilter('${safeArg}')">${t}</button>`;
+    })
+  ];
+  container.innerHTML = chips.join('');
+}
+
+function setWishFilter(tag) {
+  wishFilter = tag;
+  document.getElementById('wish-filter').querySelectorAll('.filter-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tag === tag);
+  });
+  requestAnimationFrame(() => renderWishList());
+}
+
+function toggleWishFavFilter() {
+  wishFavOnly = !wishFavOnly;
+  document.getElementById('wish-fav-filter-btn').classList.toggle('on', wishFavOnly);
+  renderWishList();
+}
+
+function renderWishList() {
+  const list = document.getElementById('wish-list');
+  const title = document.getElementById('wish-section-title');
+  if (!list) return;
+  let filtered;
+  if (wishFilter === 'all') {
+    if (title) title.textContent = wishFavOnly ? 'お気に入り' : 'すべて';
+    filtered = [...wishItems];
+  } else {
+    if (title) title.textContent = wishFilter;
+    filtered = wishItems.filter(i => (i.tags || []).includes(wishFilter));
+  }
+  if (wishFavOnly) filtered = filtered.filter(i => i.fav);
+  filtered.sort((a, b) => {
+    if (a.fav !== b.fav) return a.fav ? -1 : 1;
+    return (b.id || '').localeCompare(a.id || '');
+  });
+  if (!filtered.length) {
+    list.innerHTML = `<div class="shop-empty">🎁<br>${wishFavOnly ? 'お気に入りに登録された品物がありません' : 'まだ何も登録されていません'}<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(i => renderWishItem(i)).join('');
+}
+
+function renderWishItem(item) {
+  const tags = (item.tags || []).map(t => `<span class="shop-tag">${t}</span>`).join('');
+  const actions = [];
+  if (item.memo) actions.push(`<button class="shop-action-btn" onclick="openWishMemo('${item.id}')">📝</button>`);
+  if (item.link) actions.push(`<button class="shop-action-btn" onclick="openWishLink('${item.id}')">🌐</button>`);
+  return `
+    <div class="shop-card">
+      <div class="shop-card-row1">
+        <button class="shop-fav-btn ${item.fav ? 'on' : ''}" onclick="toggleWishFav('${item.id}')">${item.fav ? '★' : '☆'}</button>
+        <div class="shop-card-tags">${tags}</div>
+        ${actions.length ? `<div class="shop-card-actions">${actions.join('')}</div>` : ''}
+      </div>
+      <div class="shop-card-row2">
+        <div class="shop-card-name">${item.name}</div>
+        <button class="shop-edit-btn" onclick="openWishItemModal('${item.id}')">✎</button>
+      </div>
+    </div>
+  `;
+}
+
+function toggleWishFav(id) {
+  const item = wishItems.find(i => i.id === id);
+  if (!item) return;
+  item.fav = !item.fav;
+  saveWishToStorage();
+  renderWishList();
+}
+
+function openWishMemo(id) {
+  const item = wishItems.find(i => i.id === id);
+  if (!item) return;
+  document.getElementById('shop-memo-modal-title').textContent = item.name;
+  document.getElementById('shop-memo-modal-body').textContent = item.memo || '';
+  document.getElementById('shop-memo-modal').classList.add('open');
+}
+
+function openWishLink(id) {
+  const item = wishItems.find(i => i.id === id);
+  if (!item || !item.link) return;
+  let url = item.link.trim();
+  if (!/^https?:\/\//.test(url)) url = 'https://' + url;
+  window.open(url, '_blank');
+}
+
+function openWishItemModal(id) {
+  editingWishId = id || null;
+  const item = id ? wishItems.find(i => i.id === id) : null;
+  document.getElementById('wish-item-modal-title').textContent = item ? '品物を編集' : '品物を追加';
+  document.getElementById('wish-item-name').value = item ? item.name : '';
+  document.getElementById('wish-item-link').value = item ? (item.link || '') : '';
+  document.getElementById('wish-item-memo').value = item ? (item.memo || '') : '';
+  pendingWishTags = item ? [...(item.tags || [])] : [];
+  renderWishTagSelector();
+  document.getElementById('wish-item-delete-btn').style.display = item ? 'inline-block' : 'none';
+  document.getElementById('wish-item-modal').classList.add('open');
+}
+
+function closeWishItemModal() {
+  document.getElementById('wish-item-modal').classList.remove('open');
+  editingWishId = null;
+  pendingWishTags = [];
+}
+
+function renderWishTagSelector() {
+  const container = document.getElementById('wish-tag-selector');
+  if (!container) return;
+  container.innerHTML = wishTags.map(t => {
+    const safe = t.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const selected = pendingWishTags.includes(t);
+    return `<button type="button" class="item-chip${selected ? ' selected' : ''}" onclick="togglePendingWishTag('${safe}')">${t}</button>`;
+  }).join('') + `<button type="button" class="item-chip-add" onclick="addWishTag()">＋</button>`;
+}
+
+function togglePendingWishTag(tag) {
+  const idx = pendingWishTags.indexOf(tag);
+  if (idx >= 0) pendingWishTags.splice(idx, 1);
+  else pendingWishTags.push(tag);
+  renderWishTagSelector();
+}
+
+function addWishTag() {
+  document.getElementById('wish-tag-add-input').value = '';
+  document.getElementById('wish-tag-add-modal').classList.add('open');
+  setTimeout(() => document.getElementById('wish-tag-add-input').focus(), 50);
+}
+function closeWishTagAddModal() {
+  document.getElementById('wish-tag-add-modal').classList.remove('open');
+}
+function confirmAddWishTag() {
+  const t = document.getElementById('wish-tag-add-input').value.trim();
+  if (!t) { showToast('タグ名を入力してください'); return; }
+  if (!wishTags.includes(t)) {
+    wishTags.push(t);
+    saveWishToStorage();
+  }
+  if (!pendingWishTags.includes(t)) pendingWishTags.push(t);
+  closeWishTagAddModal();
+  renderWishTagSelector();
+  renderWishFilter();
+}
+
+function saveWishItem() {
+  const name = document.getElementById('wish-item-name').value.trim();
+  if (!name) { showToast('品物名を入力してください'); return; }
+  const link = document.getElementById('wish-item-link').value.trim();
+  const memo = document.getElementById('wish-item-memo').value.trim();
+  if (editingWishId) {
+    const item = wishItems.find(i => i.id === editingWishId);
+    if (item) { item.name = name; item.link = link; item.memo = memo; item.tags = [...pendingWishTags]; }
+  } else {
+    const id = Date.now().toString(36);
+    wishItems.push({ id, name, link, memo, tags: [...pendingWishTags], fav: false });
+  }
+  saveWishToStorage();
+  closeWishItemModal();
+  renderWishFilter();
+  renderWishList();
+  showToast(editingWishId ? '品物を更新しました' : '品物を追加しました');
+}
+
+function deleteWishItem() {
+  if (!editingWishId) return;
+  showConfirm('🗑', 'この品物を削除しますか?', '', '削除する', true, () => {
+    wishItems = wishItems.filter(i => i.id !== editingWishId);
+    saveWishToStorage();
+    closeWishItemModal();
+    renderWishList();
+    showToast('品物を削除しました');
+  });
 }
 
 // ===== WEATHER =====
