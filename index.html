@@ -271,8 +271,8 @@
 
   /* MODALS */
   .modal-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
-  /* タグ追加など、別モーダルから呼び出されるサブモーダル */
-  #shop-tag-add-modal, #wish-tag-add-modal { z-index: 250; }
+  /* タグ管理シートは confirm より下に置く */
+  #tag-manage-overlay { z-index: 250; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--card-bg); border-radius: 24px 24px 0 0; width: 100%; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 32px; animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1); }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -556,7 +556,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v3.0</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v3.1</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -828,24 +828,6 @@
   </div>
 </div>
 
-<!-- WISH TAG ADD MODAL -->
-<div class="modal-overlay" id="wish-tag-add-modal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">新しいタグを追加</div>
-    <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label">タグ名</label>
-        <input type="text" class="field-input" id="wish-tag-add-input" placeholder="例：書籍、SNS" maxlength="20">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeWishTagAddModal()">キャンセル</button>
-      <button class="btn-save" onclick="confirmAddWishTag()">追加</button>
-    </div>
-  </div>
-</div>
-
 <!-- WISH ITEM MODAL -->
 <div class="modal-overlay" id="wish-item-modal">
   <div class="modal">
@@ -891,20 +873,15 @@
   </div>
 </div>
 
-<!-- SHOP TAG ADD MODAL -->
-<div class="modal-overlay" id="shop-tag-add-modal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">新しいタグを追加</div>
-    <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label">タグ名</label>
-        <input type="text" class="field-input" id="shop-tag-add-input" placeholder="例：カフェ" maxlength="20">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeShopTagAddModal()">キャンセル</button>
-      <button class="btn-save" onclick="confirmAddShopTag()">追加</button>
+<!-- TAG MANAGE SHEET (shop & wish 共用) -->
+<div class="options-sheet-overlay" id="tag-manage-overlay">
+  <div class="options-sheet">
+    <div class="options-sheet-handle"></div>
+    <div class="options-sheet-title" id="tag-manage-title">タグの管理</div>
+    <div class="options-sheet-list" id="tag-manage-list"></div>
+    <div class="options-sheet-add-row">
+      <input type="text" class="options-sheet-add-input" id="tag-manage-input" placeholder="新しいタグ">
+      <button class="options-sheet-add-btn" onclick="tagManageAdd()">追加</button>
     </div>
   </div>
 </div>
@@ -2861,6 +2838,124 @@ function renderCurrentLocation() {
     `${userLocation.pref}・${userLocation.city}`;
 }
 
+// ===== TAG MANAGE SHEET (shop & wish共用) =====
+let _tagMode = null; // 'shop' or 'wish'
+
+function openTagManageSheet(mode) {
+  _tagMode = mode;
+  document.getElementById('tag-manage-title').textContent =
+    (mode === 'shop' ? 'お店のタグ管理' : 'リストのタグ管理');
+  document.getElementById('tag-manage-input').value = '';
+  renderTagManageList();
+  document.getElementById('tag-manage-overlay').classList.add('open');
+}
+
+function closeTagManageSheet() {
+  document.getElementById('tag-manage-overlay').classList.remove('open');
+  _tagMode = null;
+}
+
+function getTagModeList() {
+  return _tagMode === 'shop' ? shopTags : wishTags;
+}
+
+function renderTagManageList() {
+  const list = getTagModeList();
+  document.getElementById('tag-manage-list').innerHTML = list.length
+    ? list.map((tag, i) => {
+        const safe = tag.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return `
+          <div class="options-sheet-item">
+            <span class="options-sheet-item-label">${tag}</span>
+            <button class="options-sheet-del-btn" onclick="tagManageDelete(${i})">🗑</button>
+          </div>`;
+      }).join('')
+    : '<div style="font-size:13px;color:var(--earth-light);padding:8px 4px;">タグがまだありません</div>';
+}
+
+function tagManageAdd() {
+  const val = document.getElementById('tag-manage-input').value.trim();
+  if (!val) return;
+  const list = getTagModeList();
+  if (list.includes(val)) {
+    showToast('同じタグがあります');
+    return;
+  }
+  list.push(val);
+  if (_tagMode === 'shop') {
+    saveShopTagsToStorage();
+    // 編集中なら選択状態にも追加
+    if (Array.isArray(pendingShopTags) && !pendingShopTags.includes(val)) pendingShopTags.push(val);
+  } else {
+    saveWishToStorage();
+    if (Array.isArray(pendingWishTags) && !pendingWishTags.includes(val)) pendingWishTags.push(val);
+  }
+  document.getElementById('tag-manage-input').value = '';
+  renderTagManageList();
+  // 元の画面のセレクター・フィルターも更新
+  if (_tagMode === 'shop') {
+    renderShopTagSelector();
+    renderShopFilter();
+  } else {
+    renderWishTagSelector();
+    renderWishFilter();
+  }
+}
+
+function tagManageDelete(idx) {
+  const list = getTagModeList();
+  const tag = list[idx];
+  // このタグを使っている件数を数える
+  let usedCount = 0;
+  if (_tagMode === 'shop') {
+    usedCount = shops.filter(s => (s.tags || []).includes(tag)).length;
+  } else {
+    usedCount = wishItems.filter(i => (i.tags || []).includes(tag)).length;
+  }
+  const message = usedCount > 0
+    ? `${usedCount}件の項目から「${tag}」タグが外れます。本当に削除しますか?`
+    : `「${tag}」を削除しますか?`;
+  showConfirm('🗑', message, '', '削除する', true, () => {
+    list.splice(idx, 1);
+    // 該当タグを使っている項目から削除
+    if (_tagMode === 'shop') {
+      shops.forEach(s => {
+        if (s.tags) s.tags = s.tags.filter(t => t !== tag);
+      });
+      if (Array.isArray(pendingShopTags)) {
+        pendingShopTags = pendingShopTags.filter(t => t !== tag);
+      }
+      if (shopFilter === tag) shopFilter = 'all';
+      saveShopsToStorage();
+      saveShopTagsToStorage();
+      renderTagManageList();
+      renderShopTagSelector();
+      renderShopFilter();
+      renderShopList();
+    } else {
+      wishItems.forEach(i => {
+        if (i.tags) i.tags = i.tags.filter(t => t !== tag);
+      });
+      if (Array.isArray(pendingWishTags)) {
+        pendingWishTags = pendingWishTags.filter(t => t !== tag);
+      }
+      if (wishFilter === tag) wishFilter = 'all';
+      saveWishToStorage();
+      renderTagManageList();
+      renderWishTagSelector();
+      renderWishFilter();
+      renderWishList();
+    }
+    showToast('タグを削除しました');
+  });
+}
+
+// シートの背景タップで閉じる
+document.addEventListener('click', (e) => {
+  const overlay = document.getElementById('tag-manage-overlay');
+  if (overlay && e.target === overlay) closeTagManageSheet();
+});
+
 // ===== SHOPS =====
 let shops = JSON.parse(localStorage.getItem('shops') || '[]');
 let shopTags = JSON.parse(localStorage.getItem('shopTags') || '["植物","雑貨"]');
@@ -3043,25 +3138,7 @@ function toggleShopTag(tag) {
 }
 
 function addShopTag() {
-  document.getElementById('shop-tag-add-input').value = '';
-  document.getElementById('shop-tag-add-modal').classList.add('open');
-  setTimeout(() => document.getElementById('shop-tag-add-input').focus(), 50);
-}
-
-function closeShopTagAddModal() {
-  document.getElementById('shop-tag-add-modal').classList.remove('open');
-}
-
-function confirmAddShopTag() {
-  const t = document.getElementById('shop-tag-add-input').value.trim();
-  if (!t) { showToast('タグ名を入力してください'); return; }
-  if (!shopTags.includes(t)) {
-    shopTags.push(t);
-    saveShopTagsToStorage();
-  }
-  if (!pendingShopTags.includes(t)) pendingShopTags.push(t);
-  closeShopTagAddModal();
-  renderShopTagSelector();
+  openTagManageSheet('shop');
 }
 
 function toggleShopFav() {
@@ -3261,24 +3338,7 @@ function togglePendingWishTag(tag) {
 }
 
 function addWishTag() {
-  document.getElementById('wish-tag-add-input').value = '';
-  document.getElementById('wish-tag-add-modal').classList.add('open');
-  setTimeout(() => document.getElementById('wish-tag-add-input').focus(), 50);
-}
-function closeWishTagAddModal() {
-  document.getElementById('wish-tag-add-modal').classList.remove('open');
-}
-function confirmAddWishTag() {
-  const t = document.getElementById('wish-tag-add-input').value.trim();
-  if (!t) { showToast('タグ名を入力してください'); return; }
-  if (!wishTags.includes(t)) {
-    wishTags.push(t);
-    saveWishToStorage();
-  }
-  if (!pendingWishTags.includes(t)) pendingWishTags.push(t);
-  closeWishTagAddModal();
-  renderWishTagSelector();
-  renderWishFilter();
+  openTagManageSheet('wish');
 }
 
 function saveWishItem() {
@@ -3483,14 +3543,16 @@ function getTimeOfDay() {
 
 function getSkyHTML(timeOfDay) {
   if (timeOfDay === 'morning') {
+    // 朝は太陽なし、雲だけ
     return `
-      <div class="garden-sun morning" style="top:32px;right:30px;"></div>
       <div class="garden-cloud morning" style="width:72px;height:26px;top:22px;left:18px;"></div>
       <div class="garden-cloud morning" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div>
+      <div class="garden-cloud morning" style="width:60px;height:20px;top:42px;left:40%;opacity:0.6;"></div>
     `;
   } else if (timeOfDay === 'evening') {
+    // 夕方は太陽を地平線近くまで下げる（空の下端寄り）
     return `
-      <div class="garden-sun evening" style="top:50%;right:30px;"></div>
+      <div class="garden-sun evening" style="top:calc(35% - 24px);right:30px;"></div>
       <div class="garden-cloud evening" style="width:80px;height:24px;top:24px;left:15px;"></div>
       <div class="garden-cloud evening" style="width:54px;height:20px;top:14px;left:60px;opacity:0.7;"></div>
       <div class="garden-cloud evening" style="width:46px;height:18px;top:42px;left:42%;opacity:0.55;"></div>
