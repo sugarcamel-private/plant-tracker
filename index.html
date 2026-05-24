@@ -342,6 +342,74 @@
   }
   .garden-cloud.evening { background: rgba(255,200,170,0.7); }
   .garden-cloud.night   { background: rgba(180,180,200,0.35); }
+
+  /* 天気オーバーレイ */
+  #garden-scene.weather-cloudy::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(180,190,200,0.5) 0%, rgba(180,190,200,0.3) 35%, transparent 35.1%);
+    pointer-events: none;
+  }
+  .weather-cloud-overlay {
+    position: absolute;
+    background: rgba(220,225,232,0.85);
+    border-radius: 50px;
+    pointer-events: none;
+  }
+  .weather-cloud-overlay.dark { background: rgba(120,130,145,0.75); }
+  .weather-cloud-overlay.thunder-flash {
+    animation: thunder-flash 9s ease-in-out infinite;
+  }
+  @keyframes thunder-flash {
+    0%, 100% { background: rgba(120,130,145,0.75); box-shadow: none; }
+    48% { background: rgba(120,130,145,0.75); box-shadow: none; }
+    50% { background: rgba(255,250,210,0.95); box-shadow: 0 0 40px 12px rgba(255,245,180,0.6); }
+    52% { background: rgba(120,130,145,0.75); box-shadow: none; }
+  }
+  .weather-raindrop {
+    position: absolute;
+    width: 2px; height: 12px;
+    background: linear-gradient(180deg, transparent 0%, rgba(180,210,235,0.8) 100%);
+    border-radius: 2px;
+    pointer-events: none;
+    animation: raindrop-fall linear infinite;
+  }
+  @keyframes raindrop-fall {
+    0% { transform: translateY(-20px); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  .weather-snowflake {
+    position: absolute;
+    color: rgba(255,255,255,0.9);
+    font-size: 10px;
+    pointer-events: none;
+    animation: snowflake-fall linear infinite;
+  }
+  @keyframes snowflake-fall {
+    0% { transform: translateY(-20px) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translateY(50vh) translateX(8px); }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh) translateX(-4px); opacity: 0; }
+  }
+  .weather-fog {
+    position: absolute;
+    inset: 0 0 35% 0;
+    background: linear-gradient(180deg, rgba(220,220,225,0.45) 0%, rgba(220,220,225,0.15) 100%);
+    pointer-events: none;
+  }
+  .weather-label {
+    position: absolute;
+    top: 8px; left: 12px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--ink);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
   /* Plant slot */
   .garden-plant {
     position: absolute;
@@ -450,7 +518,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.9</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.10</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -1274,7 +1342,19 @@ function switchTab(view, btn) {
   btn.classList.add('active');
   if (view === 'logs') { updateLogPlantFilter(); renderLogs(); }
   if (view === 'calendar') renderCalendar();
-  if (view === 'garden') { updateGardenLocLabel(); renderGarden(); }
+  if (view === 'garden') {
+    updateGardenLocLabel();
+    // 天気キャッシュをロード
+    if (userLocation) {
+      const cached = getCachedWeather();
+      if (cached && cached.lat === userLocation.lat && cached.lng === userLocation.lng) {
+        weatherCache = cached;
+      } else {
+        fetchWeather().then(w => { if (w) renderGarden(); });
+      }
+    }
+    renderGarden();
+  }
   if (view === 'stats') renderStats();
 }
 
@@ -2525,6 +2605,8 @@ function selectCity(name, lat, lng) {
   updateGardenLocLabel();
   closeLocationModal();
   showToast(`地域を「${userLocation.pref}・${userLocation.city}」に設定しました`);
+  // 天気を取得して庭を再描画
+  fetchWeather(true).then(() => renderGarden());
   renderGarden();
 }
 
@@ -2539,7 +2621,9 @@ function locationChangePref() {
 function locationClear() {
   if (!confirm('地域の登録を削除しますか?')) return;
   userLocation = null;
+  weatherCache = null;
   localStorage.removeItem('userLocation');
+  localStorage.removeItem('weatherCache');
   updateGardenLocLabel();
   closeLocationModal();
   showToast('地域の登録を削除しました');
@@ -2550,6 +2634,168 @@ function renderCurrentLocation() {
   if (!userLocation) return;
   document.getElementById('location-current-label').textContent =
     `${userLocation.pref}・${userLocation.city}`;
+}
+
+// ===== WEATHER =====
+// 天気コード参考: https://open-meteo.com/en/docs (WMO Weather codes)
+let weatherCache = null;
+let weatherFetchInProgress = false;
+
+function getCachedWeather() {
+  try {
+    const raw = localStorage.getItem('weatherCache');
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    // 30分以内のキャッシュは有効
+    if (Date.now() - c.fetchedAt < 30 * 60 * 1000) return c;
+  } catch (e) {}
+  return null;
+}
+
+function classifyWeather(code) {
+  // WMO Weather Codeを大カテゴリに分類
+  if (code === 0 || code === 1) return 'clear';        // 快晴・概ね晴れ
+  if (code === 2) return 'partlyCloudy';                // 一部曇り
+  if (code === 3) return 'cloudy';                      // 曇り
+  if (code >= 45 && code <= 48) return 'fog';           // 霧
+  // 雨を強度で分類
+  // 弱い雨: 51,53,61,80（霧雨・小雨・にわか雨）
+  // 中程度: 55,63,81（中程度の雨・にわか雨）
+  // 強い: 57,65,67,82（強い雨・凍雨・激しいにわか雨）
+  if ([51, 53, 61, 80].includes(code)) return 'rainLight';
+  if ([55, 63, 81].includes(code)) return 'rainMedium';
+  if ([57, 65, 67, 82].includes(code)) return 'rainHeavy';
+  if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return 'snow'; // 雪
+  if (code >= 95) return 'thunder';                     // 雷雨
+  return 'clear';
+}
+
+async function fetchWeather(force) {
+  if (!userLocation) return null;
+  if (weatherFetchInProgress) return null;
+  if (!force) {
+    const cached = getCachedWeather();
+    if (cached && cached.lat === userLocation.lat && cached.lng === userLocation.lng) {
+      weatherCache = cached;
+      return cached;
+    }
+  }
+  weatherFetchInProgress = true;
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${userLocation.lat}&longitude=${userLocation.lng}&current=weather_code&timezone=auto`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('weather fetch failed');
+    const data = await res.json();
+    const code = data.current && data.current.weather_code;
+    const category = classifyWeather(code);
+    weatherCache = {
+      code, category,
+      lat: userLocation.lat, lng: userLocation.lng,
+      fetchedAt: Date.now()
+    };
+    localStorage.setItem('weatherCache', JSON.stringify(weatherCache));
+    return weatherCache;
+  } catch (e) {
+    return null;
+  } finally {
+    weatherFetchInProgress = false;
+  }
+}
+
+function getWeatherLabel(category) {
+  const map = {
+    clear: '☀️ 晴れ',
+    partlyCloudy: '⛅ 一部曇り',
+    cloudy: '☁️ 曇り',
+    fog: '🌫 霧',
+    rainLight: '🌦 小雨',
+    rainMedium: '🌧 雨',
+    rainHeavy: '🌧 強い雨',
+    snow: '❄️ 雪',
+    thunder: '⛈ 雷雨'
+  };
+  return map[category] || '☀️ 晴れ';
+}
+
+function getWeatherOverlayHTML(category) {
+  if (!category || category === 'clear') return '';
+  if (category === 'partlyCloudy') {
+    return `
+      <div class="weather-cloud-overlay" style="width:96px;height:30px;top:36px;left:24%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:70px;height:22px;top:18px;left:55%;opacity:0.7;"></div>
+    `;
+  }
+  if (category === 'cloudy') {
+    return `
+      <div class="weather-cloud-overlay" style="width:110px;height:32px;top:14px;left:8%;"></div>
+      <div class="weather-cloud-overlay" style="width:88px;height:26px;top:40px;left:42%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay" style="width:74px;height:24px;top:24px;left:64%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:60px;height:20px;top:60px;left:18%;opacity:0.7;"></div>
+    `;
+  }
+  // 雨3段階
+  if (category === 'rainLight' || category === 'rainMedium' || category === 'rainHeavy') {
+    const config = {
+      rainLight:  { count: 15, dur: [1.2, 1.6], width: 1.5, opacity: 0.5, clouds: 'med' },
+      rainMedium: { count: 30, dur: [0.9, 1.2], width: 2,   opacity: 0.75, clouds: 'med' },
+      rainHeavy:  { count: 55, dur: [0.6, 0.85], width: 2.5, opacity: 0.9, clouds: 'heavy' }
+    }[category];
+    let drops = '';
+    for (let i = 0; i < config.count; i++) {
+      const left = (i * (100 / config.count) + (i % 5) * 1.2) % 100;
+      const dur = config.dur[0] + ((i % 5) / 5) * (config.dur[1] - config.dur[0]);
+      const delay = (i % 12) * 0.08;
+      const len = category === 'rainHeavy' ? 16 : (category === 'rainMedium' ? 12 : 9);
+      drops += `<div class="weather-raindrop" style="left:${left}%;width:${config.width}px;height:${len}px;opacity:${config.opacity};animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
+    }
+    const clouds = config.clouds === 'heavy' ? `
+      <div class="weather-cloud-overlay dark" style="width:130px;height:36px;top:6px;left:2%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:100px;height:30px;top:28px;left:34%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:90px;height:28px;top:14px;left:60%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:70px;height:22px;top:48px;left:14%;opacity:0.85;"></div>
+    ` : `
+      <div class="weather-cloud-overlay dark" style="width:120px;height:32px;top:8px;left:4%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:90px;height:26px;top:30px;left:38%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:80px;height:24px;top:14px;left:62%;"></div>
+    `;
+    return clouds + drops;
+  }
+  if (category === 'snow') {
+    let flakes = '';
+    const symbols = ['❄', '❅', '✦'];
+    for (let i = 0; i < 25; i++) {
+      const left = (i * 4 + (i % 7) * 2) % 100;
+      const dur = 4 + (i % 4) * 1.2;
+      const delay = (i % 10) * 0.4;
+      const sym = symbols[i % symbols.length];
+      flakes += `<div class="weather-snowflake" style="left:${left}%;animation-duration:${dur}s;animation-delay:${delay}s;font-size:${10 + (i % 3) * 2}px;">${sym}</div>`;
+    }
+    const clouds = `
+      <div class="weather-cloud-overlay" style="width:120px;height:32px;top:8px;left:4%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay" style="width:88px;height:26px;top:30px;left:42%;opacity:0.85;"></div>
+    `;
+    return clouds + flakes;
+  }
+  if (category === 'thunder') {
+    // 雷雨：強い雨 + 雲がゆっくり光る
+    let drops = '';
+    for (let i = 0; i < 45; i++) {
+      const left = (i * 2.5 + (i % 5) * 1.2) % 100;
+      const dur = 0.7 + (i % 5) * 0.1;
+      const delay = (i % 12) * 0.08;
+      drops += `<div class="weather-raindrop" style="left:${left}%;width:2.5px;height:14px;opacity:0.85;animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
+    }
+    const clouds = `
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:130px;height:36px;top:6px;left:2%;animation-delay:0s;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:100px;height:30px;top:28px;left:34%;animation-delay:3.5s;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:90px;height:28px;top:14px;left:60%;animation-delay:6s;"></div>
+    `;
+    return clouds + drops;
+  }
+  if (category === 'fog') {
+    return `<div class="weather-fog"></div>`;
+  }
+  return '';
 }
 
 function getTimeOfDay() {
@@ -2611,8 +2857,11 @@ function applySkyClass(scene) {
 function renderGarden() {
   const scene = document.getElementById('garden-scene');
   const tod = applySkyClass(scene);
+  const weather = weatherCache ? weatherCache.category : 'clear';
+  const weatherHTML = getWeatherOverlayHTML(weather);
+  const weatherLabel = (userLocation && weatherCache) ? `<div class="weather-label">${getWeatherLabel(weatherCache.category)}</div>` : '';
   if (!plants.length) {
-    scene.innerHTML = `${getSkyHTML(tod)}<div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
+    scene.innerHTML = `${getSkyHTML(tod)}${weatherHTML}${weatherLabel}<div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
     return;
   }
   const groups=[0,1,2,3,4].map(s=>plants.filter(p=>getGrowthStage(p)===s));
@@ -2672,7 +2921,7 @@ function renderGarden() {
     const fertEl  = hasFert  ? '<div class="effect-sparkle">✨</div>' : '';
     return `<div class="garden-plant" style="left:${x}%;top:${y}%;transform:translateX(-50%) translateY(-100%) scale(${depthScale.toFixed(2)});transform-origin:bottom center;z-index:${idx+1};opacity:${depthOpacity.toFixed(2)};"><div class="garden-plant-body" style="width:${tapW}px;height:${tapH}px;--svg-offset-x:${offsetX}px;--svg-offset-y:${offsetY}px" onclick="showGardenTooltip(event,'${p.id}')">${fertEl}${waterEl}${svg}</div></div>`;
   }).join('');
-  scene.innerHTML=`${getSkyHTML(tod)}${plants_html}`;
+  scene.innerHTML=`${getSkyHTML(tod)}${weatherHTML}${weatherLabel}${plants_html}`;
 }
 
 function showGardenTooltip(e, plantId) {
