@@ -277,6 +277,16 @@
   .plant-select-option.selected { border-color: var(--sage-dark); background: rgba(122,158,126,0.1); }
 
   /* GARDEN */
+  .garden-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .garden-loc-btn { background: var(--cream); border: 1.5px solid var(--cream-dark); border-radius: 14px; padding: 4px 10px; font-size: 11px; color: var(--ink); font-family: 'Shippori Mincho', serif; cursor: pointer; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; transition: background 0.15s; flex-shrink: 0; }
+  .garden-loc-btn:active { background: var(--cream-dark); }
+  .garden-loc-note { font-size: 10px; color: var(--earth-light); }
+  .loc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .loc-grid button { padding: 10px 4px; border-radius: 10px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 13px; color: var(--ink); cursor: pointer; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; font-family: 'Shippori Mincho', serif; }
+  .loc-grid button:active { background: var(--cream-dark); }
+  .loc-list { display: flex; flex-direction: column; gap: 4px; max-height: 50vh; overflow-y: auto; }
+  .loc-list button { padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--cream-dark); background: var(--cream); font-size: 14px; color: var(--ink); cursor: pointer; text-align: left; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; font-family: 'Shippori Mincho', serif; }
+  .loc-list button:active { background: var(--cream-dark); }
   #garden-scene {
     position: relative;
     width: 100%;
@@ -286,7 +296,14 @@
     overflow: hidden;
     background: linear-gradient(180deg, #c8e6f5 0%, #d4eef8 35%, #8bc4a0 35.1%, #6aaa82 55%, #5a9470 100%);
     box-shadow: 0 4px 20px rgba(30,42,31,0.15);
+    transition: background 1s ease;
   }
+  /* 時間帯別の空 */
+  #garden-scene.sky-morning { background: linear-gradient(180deg, #ffd6a5 0%, #ffe8c4 20%, #fff4d2 35%, #8bc4a0 35.1%, #6aaa82 55%, #5a9470 100%); }
+  #garden-scene.sky-day     { background: linear-gradient(180deg, #c8e6f5 0%, #d4eef8 35%, #8bc4a0 35.1%, #6aaa82 55%, #5a9470 100%); }
+  #garden-scene.sky-evening { background: linear-gradient(180deg, #ff9966 0%, #ffb38a 18%, #ffd1a1 35%, #7ba888 35.1%, #5d8e6f 55%, #4a7860 100%); }
+  #garden-scene.sky-night   { background: linear-gradient(180deg, #1a2748 0%, #2c3e63 20%, #3d5278 35%, #2d4a3a 35.1%, #1f3a2c 55%, #15281f 100%); }
+
   /* Sky elements */
   .garden-sun {
     position: absolute;
@@ -296,11 +313,35 @@
     border-radius: 50%;
     box-shadow: 0 0 20px 6px rgba(255,220,50,0.35);
   }
+  .garden-sun.morning { background: radial-gradient(circle, #fff5b8 60%, #ffd97d 100%); box-shadow: 0 0 24px 8px rgba(255,200,120,0.5); }
+  .garden-sun.evening { background: radial-gradient(circle, #ffb085 60%, #ff8855 100%); box-shadow: 0 0 28px 10px rgba(255,120,80,0.55); top: 60%; }
+  .garden-moon {
+    position: absolute;
+    top: 22px; right: 28px;
+    width: 38px; height: 38px;
+    background: radial-gradient(circle at 35% 35%, #fffbe8 60%, #e8e0bc 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 16px 4px rgba(255,250,220,0.4);
+  }
+  .garden-star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: #fffbe8;
+    border-radius: 50%;
+    box-shadow: 0 0 4px 1px rgba(255,250,220,0.6);
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
   .garden-cloud {
     position: absolute;
     background: rgba(255,255,255,0.85);
     border-radius: 50px;
   }
+  .garden-cloud.evening { background: rgba(255,200,170,0.7); }
+  .garden-cloud.night   { background: rgba(180,180,200,0.35); }
   /* Plant slot */
   .garden-plant {
     position: absolute;
@@ -409,7 +450,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.7</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v2.9</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -510,6 +551,12 @@
 
   <!-- GARDEN -->
   <div id="view-garden" class="view">
+    <div class="garden-header">
+      <button class="garden-loc-btn" onclick="openLocationModal()">
+        <span id="garden-loc-label">📍 地域を設定</span>
+      </button>
+      <div id="garden-loc-note" class="garden-loc-note">地域を登録すると天気が反映されます</div>
+    </div>
     <div id="garden-scene"></div>
   </div>
 
@@ -638,6 +685,39 @@
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeDbPreviewModal()">キャンセル</button>
       <button class="btn-save" onclick="applyDbCandidate()">適用</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOCATION MODAL -->
+<div class="modal-overlay" id="location-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="location-modal-title">地域を選ぶ</div>
+    <div class="modal-body">
+      <div id="location-step-pref" style="display:none;">
+        <div style="font-size:12px;color:var(--earth-light);margin-bottom:10px;">都道府県を選んでください</div>
+        <div id="location-pref-list" class="loc-grid"></div>
+      </div>
+      <div id="location-step-city" style="display:none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <button class="garden-loc-btn" style="font-size:12px;padding:4px 10px;" onclick="locationBackToPref()">← 戻る</button>
+          <span id="location-pref-label" style="font-size:13px;color:var(--ink);font-weight:600;"></span>
+        </div>
+        <input type="text" class="field-input" id="location-city-search" placeholder="市区町村を検索" oninput="filterCityList()" style="margin-bottom:10px;">
+        <div id="location-city-list" class="loc-list"></div>
+      </div>
+      <div id="location-step-current" style="display:none;">
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:14px;color:var(--ink);margin-bottom:8px;">現在の登録地</div>
+          <div id="location-current-label" style="font-size:18px;font-weight:600;color:var(--ink);font-family:'Shippori Mincho',serif;margin-bottom:14px;"></div>
+          <button class="garden-loc-btn" style="font-size:13px;" onclick="locationChangePref()">変更する</button>
+          <button class="garden-loc-btn" style="font-size:13px;margin-top:8px;color:var(--danger);" onclick="locationClear()">登録を削除</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeLocationModal()">閉じる</button>
     </div>
   </div>
 </div>
@@ -1194,7 +1274,7 @@ function switchTab(view, btn) {
   btn.classList.add('active');
   if (view === 'logs') { updateLogPlantFilter(); renderLogs(); }
   if (view === 'calendar') renderCalendar();
-  if (view === 'garden') renderGarden();
+  if (view === 'garden') { updateGardenLocLabel(); renderGarden(); }
   if (view === 'stats') renderStats();
 }
 
@@ -2354,10 +2434,185 @@ function plantSVG(type, stage, hue) {
   return `<svg width="102" height="138" viewBox="0 0 68 92" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>`;
 }
 
+// ===== LOCATION =====
+let locationDb = null;
+let userLocation = JSON.parse(localStorage.getItem('userLocation') || 'null');
+let locationPendingPref = null;
+
+async function loadLocationDb() {
+  try {
+    const cached = localStorage.getItem('locationDb');
+    if (cached) locationDb = JSON.parse(cached);
+    const res = await fetch('locations.json?t=' + Date.now());
+    if (!res.ok) return;
+    const fresh = await res.json();
+    locationDb = fresh;
+    localStorage.setItem('locationDb', JSON.stringify(fresh));
+  } catch (e) {}
+}
+loadLocationDb();
+
+function updateGardenLocLabel() {
+  const labelEl = document.getElementById('garden-loc-label');
+  const noteEl = document.getElementById('garden-loc-note');
+  if (!labelEl) return;
+  if (userLocation && userLocation.pref) {
+    labelEl.textContent = `📍 ${userLocation.pref}・${userLocation.city || ''}`;
+    noteEl.style.display = 'none';
+  } else {
+    labelEl.textContent = '📍 地域を設定';
+    noteEl.style.display = 'block';
+  }
+}
+
+function openLocationModal() {
+  if (!locationDb) {
+    showToast('地域データを読み込み中...');
+    loadLocationDb();
+    return;
+  }
+  document.getElementById('location-modal').classList.add('open');
+  if (userLocation && userLocation.pref) {
+    showLocationStep('current');
+  } else {
+    showLocationStep('pref');
+  }
+}
+
+function closeLocationModal() {
+  document.getElementById('location-modal').classList.remove('open');
+}
+
+function showLocationStep(step) {
+  ['pref','city','current'].forEach(s => {
+    document.getElementById('location-step-' + s).style.display = (s === step) ? 'block' : 'none';
+  });
+  if (step === 'pref') renderPrefList();
+  if (step === 'current') renderCurrentLocation();
+}
+
+function renderPrefList() {
+  const listEl = document.getElementById('location-pref-list');
+  const prefs = Object.keys(locationDb);
+  listEl.innerHTML = prefs.map(p => `<button onclick="selectPref('${p}')">${p}</button>`).join('');
+}
+
+function selectPref(pref) {
+  locationPendingPref = pref;
+  document.getElementById('location-pref-label').textContent = pref;
+  document.getElementById('location-city-search').value = '';
+  renderCityList();
+  showLocationStep('city');
+}
+
+function renderCityList() {
+  const filter = document.getElementById('location-city-search').value.trim();
+  const cities = locationDb[locationPendingPref].cities;
+  const filtered = filter
+    ? cities.filter(c => c.name.includes(filter) || (c.kana && c.kana.includes(filter)))
+    : cities;
+  const listEl = document.getElementById('location-city-list');
+  listEl.innerHTML = filtered.map(c => `<button onclick="selectCity('${c.name.replace(/'/g,"\\'")}', ${c.lat}, ${c.lng})">${c.name}</button>`).join('') || '<div style="padding:14px;color:var(--earth-light);font-size:12px;text-align:center;">該当する市区町村がありません</div>';
+}
+
+function filterCityList() {
+  renderCityList();
+}
+
+function selectCity(name, lat, lng) {
+  userLocation = { pref: locationPendingPref, city: name, lat: lat, lng: lng };
+  localStorage.setItem('userLocation', JSON.stringify(userLocation));
+  updateGardenLocLabel();
+  closeLocationModal();
+  showToast(`地域を「${userLocation.pref}・${userLocation.city}」に設定しました`);
+  renderGarden();
+}
+
+function locationBackToPref() {
+  showLocationStep('pref');
+}
+
+function locationChangePref() {
+  showLocationStep('pref');
+}
+
+function locationClear() {
+  if (!confirm('地域の登録を削除しますか?')) return;
+  userLocation = null;
+  localStorage.removeItem('userLocation');
+  updateGardenLocLabel();
+  closeLocationModal();
+  showToast('地域の登録を削除しました');
+  renderGarden();
+}
+
+function renderCurrentLocation() {
+  if (!userLocation) return;
+  document.getElementById('location-current-label').textContent =
+    `${userLocation.pref}・${userLocation.city}`;
+}
+
+function getTimeOfDay() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 9)  return 'morning';
+  if (h >= 9 && h < 17) return 'day';
+  if (h >= 17 && h < 19) return 'evening';
+  return 'night';
+}
+
+function getSkyHTML(timeOfDay) {
+  if (timeOfDay === 'morning') {
+    return `
+      <div class="garden-sun morning" style="top:32px;right:30px;"></div>
+      <div class="garden-cloud morning" style="width:72px;height:26px;top:22px;left:18px;"></div>
+      <div class="garden-cloud morning" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div>
+    `;
+  } else if (timeOfDay === 'evening') {
+    return `
+      <div class="garden-sun evening" style="top:50%;right:30px;"></div>
+      <div class="garden-cloud evening" style="width:80px;height:24px;top:24px;left:15px;"></div>
+      <div class="garden-cloud evening" style="width:54px;height:20px;top:14px;left:60px;opacity:0.7;"></div>
+      <div class="garden-cloud evening" style="width:46px;height:18px;top:42px;left:42%;opacity:0.55;"></div>
+    `;
+  } else if (timeOfDay === 'night') {
+    let stars = '';
+    const starPositions = [
+      [12, 8], [24, 18], [38, 12], [50, 22], [66, 14], [78, 10],
+      [18, 28], [44, 32], [72, 30], [90, 22],
+      [6, 38], [30, 42], [56, 38], [86, 40]
+    ];
+    starPositions.forEach(([x, y], i) => {
+      stars += `<div class="garden-star" style="left:${x}%;top:${y}px;animation-delay:${(i * 0.3) % 3}s;"></div>`;
+    });
+    return `
+      ${stars}
+      <div class="garden-moon"></div>
+      <div class="garden-cloud night" style="width:64px;height:20px;top:48px;left:20px;"></div>
+      <div class="garden-cloud night" style="width:48px;height:16px;top:60px;left:60%;opacity:0.5;"></div>
+    `;
+  } else {
+    // day
+    return `
+      <div class="garden-sun"></div>
+      <div class="garden-cloud" style="width:72px;height:26px;top:22px;left:18px;"></div>
+      <div class="garden-cloud" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div>
+      <div class="garden-cloud" style="width:56px;height:20px;top:36px;left:44px;opacity:0.45;"></div>
+    `;
+  }
+}
+
+function applySkyClass(scene) {
+  const tod = getTimeOfDay();
+  scene.classList.remove('sky-morning', 'sky-day', 'sky-evening', 'sky-night');
+  scene.classList.add('sky-' + tod);
+  return tod;
+}
+
 function renderGarden() {
   const scene = document.getElementById('garden-scene');
+  const tod = applySkyClass(scene);
   if (!plants.length) {
-    scene.innerHTML = `<div class="garden-sun"></div><div class="garden-cloud" style="width:70px;height:24px;top:28px;left:30px;"></div><div class="garden-cloud" style="width:50px;height:18px;top:20px;left:80px;opacity:0.7;"></div><div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
+    scene.innerHTML = `${getSkyHTML(tod)}<div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
     return;
   }
   const groups=[0,1,2,3,4].map(s=>plants.filter(p=>getGrowthStage(p)===s));
@@ -2417,7 +2672,7 @@ function renderGarden() {
     const fertEl  = hasFert  ? '<div class="effect-sparkle">✨</div>' : '';
     return `<div class="garden-plant" style="left:${x}%;top:${y}%;transform:translateX(-50%) translateY(-100%) scale(${depthScale.toFixed(2)});transform-origin:bottom center;z-index:${idx+1};opacity:${depthOpacity.toFixed(2)};"><div class="garden-plant-body" style="width:${tapW}px;height:${tapH}px;--svg-offset-x:${offsetX}px;--svg-offset-y:${offsetY}px" onclick="showGardenTooltip(event,'${p.id}')">${fertEl}${waterEl}${svg}</div></div>`;
   }).join('');
-  scene.innerHTML=`<div class="garden-sun"></div><div class="garden-cloud" style="width:72px;height:26px;top:22px;left:18px;"></div><div class="garden-cloud" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div><div class="garden-cloud" style="width:56px;height:20px;top:36px;left:44px;opacity:0.45;"></div>${plants_html}`;
+  scene.innerHTML=`${getSkyHTML(tod)}${plants_html}`;
 }
 
 function showGardenTooltip(e, plantId) {
