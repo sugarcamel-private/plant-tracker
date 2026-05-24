@@ -1,5 +1,5 @@
 {
-  "version": "7.0",
+  "version": "7.1",
   "updated": "2026-05-22",
   "plants": [
     {
@@ -8,7 +8,9 @@
         "モンステラ",
         "ホウライショウ",
         "鳳莱蕉",
-        "ほうらいしょう"
+        "ほうらいしょう",
+        "デリシオーサ",
+        "デリシオサ"
       ],
       "species": "Monstera deliciosa",
       "location": "明るい日陰",
@@ -25,7 +27,8 @@
       "name": "ヒメモンステラ",
       "aliases": [
         "モンステラ・アダンソニー",
-        "アダンソニー"
+        "アダンソニー",
+        "アダンソニイ"
       ],
       "species": "Monstera adansonii",
       "location": "明るい日陰",
@@ -101,7 +104,9 @@
         "トラノオ",
         "虎の尾",
         "とらのお",
-        "ドラセナ・トリファスキアタ"
+        "ドラセナ・トリファスキアタ",
+        "トリファシアタ",
+        "トリファスキアータ"
       ],
       "species": "Sansevieria trifasciata",
       "location": "直射日光",
@@ -118,7 +123,8 @@
       "name": "サンスベリア・ハニー",
       "aliases": [
         "ハーニー",
-        "ホワイトハニー"
+        "ホワイトハニー",
+        "ハニー"
       ],
       "species": "Sansevieria trifasciata 'Hahnii'",
       "location": "直射日光",
@@ -138,7 +144,9 @@
         "多幸の木",
         "タコウノキ",
         "たこうのき",
-        "フィカス・ミクロカルパ"
+        "フィカス・ミクロカルパ",
+        "ミクロカルパ",
+        "ミクロカーパ"
       ],
       "species": "Ficus microcarpa",
       "location": "直射日光",
@@ -154,7 +162,8 @@
     {
       "name": "フィカス・ウンベラータ",
       "aliases": [
-        "ウンベラータ"
+        "ウンベラータ",
+        "ウムベラータ"
       ],
       "species": "Ficus umbellata",
       "location": "明るい日陰",
@@ -173,7 +182,8 @@
         "ベンガレンシス",
         "ベンガルゴム",
         "ベンガルボダイジュ",
-        "ベンガルぼだいじゅ"
+        "ベンガルぼだいじゅ",
+        "ベンガレーンシス"
       ],
       "species": "Ficus benghalensis",
       "location": "明るい日陰",
@@ -190,7 +200,8 @@
       "name": "フィカス・アルテシマ",
       "aliases": [
         "アルテシマ",
-        "アルテシーマ"
+        "アルテシーマ",
+        "アルティシマ"
       ],
       "species": "Ficus altissima",
       "location": "明るい日陰",
@@ -208,7 +219,9 @@
       "aliases": [
         "フィカス・ベンジャミナ",
         "シダレガジュマル",
-        "しだれがじゅまる"
+        "しだれがじゅまる",
+        "ベンジャミナ",
+        "ベンジャミン"
       ],
       "species": "Ficus benjamina",
       "location": "明るい日陰",
@@ -727,7 +740,9 @@
       "aliases": [
         "チタノタ",
         "ホワイトアイス",
-        "ブラックアンドブルー"
+        "ブラックアンドブルー",
+        "チタノータ",
+        "アガベチタノタ"
       ],
       "species": "Agave titanota",
       "location": "直射日光",
@@ -743,7 +758,9 @@
     {
       "name": "アガベ・パリー",
       "aliases": [
-        "パリー"
+        "パリー",
+        "パリイ",
+        "パーリー"
       ],
       "species": "Agave parryi",
       "location": "直射日光",
@@ -760,7 +777,9 @@
       "name": "アガベ・アテナータ",
       "aliases": [
         "アテナータ",
-        "ボーチンブルー"
+        "ボーチンブルー",
+        "アテヌアタ",
+        "アッテヌアータ"
       ],
       "species": "Agave attenuata",
       "location": "直射日光",
@@ -832,7 +851,9 @@
         "グラキリス",
         "象牙宮",
         "ゾウゲキュウ",
-        "ぞうげきゅう"
+        "ぞうげきゅう",
+        "パキポディウムグラキリス",
+        "グラキリウス"
       ],
       "species": "Pachypodium rosulatum var. gracilius",
       "location": "直射日光",
@@ -848,7 +869,9 @@
     {
       "name": "パキポディウム・ホロンベンセ",
       "aliases": [
-        "ホロンベンセ"
+        "ホロンベンセ",
+        "パキポディウムホロンベンセ",
+        "ホロンベ"
       ],
       "species": "Pachypodium horombense",
       "location": "直射日光",
@@ -865,7 +888,10 @@
       "name": "パキポディウム・ラメリー",
       "aliases": [
         "ラメリー",
-        "ラメレイ"
+        "ラメレイ",
+        "パキポディウムラメリー",
+        "ラメリ",
+        "ラメイ"
       ],
       "species": "Pachypodium lamerei",
       "location": "直射日光",
@@ -902,7 +928,9 @@
       "aliases": [
         "亀甲竜",
         "キッコウリュウ",
-        "きっこうりゅう"
+        "きっこうりゅう",
+        "エレファンティペス",
+        "エレファンチペス"
       ],
       "species": "Dioscorea elephantipes",
       "location": "明るい日陰",
@@ -918,7 +946,9 @@
     {
       "name": "オペルクリカリア・パキプス",
       "aliases": [
-        "パキプス"
+        "パキプス",
+        "パキパス",
+        "オペルクリカリアパキプス"
       ],
       "species": "Operculicarya pachypus",
       "location": "直射日光",
@@ -936,7 +966,9 @@
       "aliases": [
         "蒼角殿",
         "ソウカクデン",
-        "そうかくでん"
+        "そうかくでん",
+        "ボルビリス",
+        "ヴォルビリス"
       ],
       "species": "Bowiea volubilis",
       "location": "明るい日陰",
@@ -955,7 +987,8 @@
         "コルムナリス",
         "観峰玉",
         "カンポウギョク",
-        "かんぽうぎょく"
+        "かんぽうぎょく",
+        "コラムナリス"
       ],
       "species": "Fouquieria columnaris",
       "location": "直射日光",
@@ -972,7 +1005,8 @@
       "name": "ユーフォルビア・オベサ",
       "aliases": [
         "オベサ",
-        "バスケットボールプラント"
+        "バスケットボールプラント",
+        "ユーフォルビアオベサ"
       ],
       "species": "Euphorbia obesa",
       "location": "直射日光",
@@ -988,7 +1022,10 @@
     {
       "name": "アデニア・グロボーサ",
       "aliases": [
-        "グロボーサ"
+        "グロボーサ",
+        "グロボサ",
+        "グローボサ",
+        "アデニアグロボーサ"
       ],
       "species": "Adenia globosa",
       "location": "直射日光",
@@ -1039,7 +1076,9 @@
       "name": "クワズイモ",
       "aliases": [
         "くわずいも",
-        "アロカシア・オドラ"
+        "アロカシア・オドラ",
+        "オドラ",
+        "オドーラ"
       ],
       "species": "Alocasia odora",
       "location": "明るい日陰",
@@ -1056,7 +1095,8 @@
       "name": "アロカシア・アマゾニカ",
       "aliases": [
         "アマゾニカ",
-        "ポリー"
+        "ポリー",
+        "アマゾーニカ"
       ],
       "species": "Alocasia 'Amazonica'",
       "location": "明るい日陰",
@@ -1216,7 +1256,9 @@
       "aliases": [
         "サクララン",
         "桜蘭",
-        "さくららん"
+        "さくららん",
+        "カルノサ",
+        "カルノーサ"
       ],
       "species": "Hoya carnosa",
       "location": "明るい日陰",
@@ -1991,7 +2033,8 @@
       "name": "ベンジャミン・バロック",
       "aliases": [
         "バロック",
-        "ベンジャミナ・バロック"
+        "ベンジャミナ・バロック",
+        "バーロック"
       ],
       "species": "Ficus benjamina 'Barok'",
       "location": "明るい日陰",
@@ -2008,7 +2051,8 @@
       "name": "フィカス・ティネケ",
       "aliases": [
         "ティネケ",
-        "フィカス・エラスティカ・ティネケ"
+        "フィカス・エラスティカ・ティネケ",
+        "テネキ"
       ],
       "species": "Ficus elastica 'Tineke'",
       "location": "明るい日陰",
@@ -2026,7 +2070,8 @@
       "aliases": [
         "バーガンディ",
         "クロゴム",
-        "黒ゴム"
+        "黒ゴム",
+        "バーガンディー"
       ],
       "species": "Ficus elastica 'Burgundy'",
       "location": "明るい日陰",
@@ -2045,7 +2090,8 @@
         "リラータ",
         "カシワバゴム",
         "柏葉ゴム",
-        "かしわばごむ"
+        "かしわばごむ",
+        "ライラータ"
       ],
       "species": "Ficus lyrata",
       "location": "明るい日陰",
@@ -2256,7 +2302,8 @@
     {
       "name": "アロカシア・ポリー",
       "aliases": [
-        "ポリー"
+        "ポリー",
+        "ポリ"
       ],
       "species": "Alocasia × amazonica 'Polly'",
       "location": "明るい日陰",
@@ -2272,7 +2319,8 @@
     {
       "name": "アロカシア・バンビーノ",
       "aliases": [
-        "バンビーノ"
+        "バンビーノ",
+        "バンビノ"
       ],
       "species": "Alocasia 'Bambino'",
       "location": "明るい日陰",
@@ -2289,7 +2337,8 @@
       "name": "アロカシア・ブラックベルベット",
       "aliases": [
         "ブラックベルベット",
-        "アロカシア・レジナエ"
+        "アロカシア・レジナエ",
+        "レジヌラ"
       ],
       "species": "Alocasia reginula 'Black Velvet'",
       "location": "明るい日陰",
@@ -2477,7 +2526,8 @@
       "aliases": [
         "オブツーサ",
         "雫石",
-        "シズクイシ"
+        "シズクイシ",
+        "オブツサ"
       ],
       "species": "Haworthia obtusa",
       "location": "明るい日陰",
@@ -2494,7 +2544,9 @@
       "name": "ハオルチア・十二の巻",
       "aliases": [
         "ジュウニノマキ",
-        "じゅうにのまき"
+        "じゅうにのまき",
+        "アテヌアタ",
+        "アッテヌアータ"
       ],
       "species": "Haworthia attenuata",
       "location": "明るい日陰",
@@ -2651,7 +2703,9 @@
       "name": "アガベ・ホリダ",
       "aliases": [
         "ホリダ",
-        "厳竜"
+        "厳竜",
+        "ホリーダ",
+        "アガベホリダ"
       ],
       "species": "Agave horrida",
       "location": "直射日光",
@@ -2668,7 +2722,9 @@
       "name": "アガベ・ベネズエラ",
       "aliases": [
         "ベネズエラ",
-        "アガベ・アメリカーナ"
+        "アガベ・アメリカーナ",
+        "アメリカーナ",
+        "アメリカナ"
       ],
       "species": "Agave americana 'Variegata'",
       "location": "直射日光",
@@ -2686,7 +2742,9 @@
       "aliases": [
         "ササノユキ",
         "ささのゆき",
-        "ビクトリアエレジーナ"
+        "ビクトリアエレジーナ",
+        "ビクトリアレジーナ",
+        "ビクトリアエ・レジーナ"
       ],
       "species": "Agave victoriae-reginae",
       "location": "直射日光",
@@ -2703,7 +2761,9 @@
       "name": "アガベ・吉祥天",
       "aliases": [
         "キッショウテン",
-        "きっしょうてん"
+        "きっしょうてん",
+        "パリトルンカタ",
+        "トルンカタ"
       ],
       "species": "Agave parryi var. truncata",
       "location": "直射日光",
@@ -2721,7 +2781,9 @@
       "aliases": [
         "サウンデルシー",
         "白馬城",
-        "ハクバジョウ"
+        "ハクバジョウ",
+        "サウンデルシ",
+        "ソウンダーシー"
       ],
       "species": "Pachypodium saundersii",
       "location": "直射日光",
@@ -2737,7 +2799,8 @@
     {
       "name": "パキポディウム・ビスピノーサム",
       "aliases": [
-        "ビスピノーサム"
+        "ビスピノーサム",
+        "ビスピノサム"
       ],
       "species": "Pachypodium bispinosum",
       "location": "直射日光",
@@ -2755,7 +2818,8 @@
       "aliases": [
         "バリダ",
         "万代",
-        "バンダイ"
+        "バンダイ",
+        "ヴァリダ"
       ],
       "species": "Euphorbia valida",
       "location": "直射日光",
@@ -2773,7 +2837,8 @@
       "aliases": [
         "ホリダ",
         "魁偉玉",
-        "カイイギョク"
+        "カイイギョク",
+        "ホリーダ"
       ],
       "species": "Euphorbia horrida",
       "location": "直射日光",
@@ -2791,7 +2856,8 @@
       "aliases": [
         "トリゴナ",
         "彩雲閣",
-        "サイウンカク"
+        "サイウンカク",
+        "トリゴーナ"
       ],
       "species": "Euphorbia trigona",
       "location": "直射日光",
@@ -2809,7 +2875,8 @@
       "aliases": [
         "ダンガイノジョオウ",
         "だんがいのじょおう",
-        "レウコトリカ"
+        "レウコトリカ",
+        "ロイコトリカ"
       ],
       "species": "Sinningia leucotricha",
       "location": "明るい日陰",
@@ -2825,7 +2892,8 @@
     {
       "name": "ペラルゴニウム・ミラビレ",
       "aliases": [
-        "ミラビレ"
+        "ミラビレ",
+        "ミラビーレ"
       ],
       "species": "Pelargonium mirabile",
       "location": "明るい日陰",
@@ -2841,7 +2909,8 @@
     {
       "name": "オトンナ・クラビフォリア",
       "aliases": [
-        "クラビフォリア"
+        "クラビフォリア",
+        "クラヴィフォリア"
       ],
       "species": "Othonna clavifolia",
       "location": "直射日光",
@@ -2859,7 +2928,9 @@
       "aliases": [
         "グンラン",
         "ぐんらん",
-        "チレコドン・レティキュラータス"
+        "チレコドン・レティキュラータス",
+        "レチクラタス",
+        "レティキュラータス"
       ],
       "species": "Tylecodon reticulatus",
       "location": "明るい日陰",
@@ -2911,7 +2982,10 @@
       "aliases": [
         "象足",
         "ゾウアシ",
-        "ジュベア"
+        "ジュベア",
+        "ジュッタエ",
+        "ユッタエ",
+        "シフォステンマ"
       ],
       "species": "Cyphostemma juttae",
       "location": "直射日光",
@@ -2928,7 +3002,10 @@
       "name": "アデニア・ベンシメンシス",
       "aliases": [
         "ベンシメンシス",
-        "幻蝶蔓"
+        "幻蝶蔓",
+        "ベネナータ",
+        "ヴェネナータ",
+        "アデニアベンシメンシス"
       ],
       "species": "Adenia venenata",
       "location": "直射日光",
@@ -2960,7 +3037,8 @@
     {
       "name": "オペルクリカリア・デカリー",
       "aliases": [
-        "デカリー"
+        "デカリー",
+        "デカリ"
       ],
       "species": "Operculicarya decaryi",
       "location": "直射日光",
@@ -2977,7 +3055,8 @@
       "name": "ドルステニア・ギガス",
       "aliases": [
         "ギガス",
-        "ジャイアントギガス"
+        "ジャイアントギガス",
+        "ジガス"
       ],
       "species": "Dorstenia gigas",
       "location": "直射日光",
@@ -2994,7 +3073,8 @@
       "name": "アボニア・パピラセア",
       "aliases": [
         "パピラセア",
-        "白蛇"
+        "白蛇",
+        "パピラケア"
       ],
       "species": "Avonia papyracea",
       "location": "直射日光",
@@ -3028,7 +3108,10 @@
       "name": "ステファニア・ピエレイ",
       "aliases": [
         "ピエレイ",
-        "ステファニアピエレイ"
+        "ステファニアピエレイ",
+        "ピエレー",
+        "ピエール",
+        "ステファニア・ピエレー"
       ],
       "species": "Stephania pierrei",
       "location": "明るい日陰",
@@ -3061,7 +3144,9 @@
       "name": "ホヤ・カルノーサ",
       "aliases": [
         "カルノーサ",
-        "サクララン"
+        "サクララン",
+        "カルノサ",
+        "バリエガータ"
       ],
       "species": "Hoya carnosa 'Variegata'",
       "location": "明るい日陰",
@@ -3078,7 +3163,9 @@
       "name": "ホヤ・ケリー",
       "aliases": [
         "ハートホヤ",
-        "ハート"
+        "ハート",
+        "ケリイ",
+        "ケリー"
       ],
       "species": "Hoya kerrii",
       "location": "明るい日陰",
@@ -3384,7 +3471,8 @@
       "name": "エケベリア・チワワエンシス",
       "aliases": [
         "チワワエンシス",
-        "チワワ"
+        "チワワ",
+        "チハハエンシス"
       ],
       "species": "Echeveria chihuahuaensis",
       "location": "直射日光",
@@ -3416,7 +3504,8 @@
     {
       "name": "エケベリア・アガボイデス",
       "aliases": [
-        "アガボイデス"
+        "アガボイデス",
+        "アガヴォイデス"
       ],
       "species": "Echeveria agavoides",
       "location": "直射日光",
@@ -3536,7 +3625,9 @@
       "aliases": [
         "ポタトラム",
         "吉祥冠",
-        "キッショウカン"
+        "キッショウカン",
+        "ポタトルム",
+        "アガベポタトラム"
       ],
       "species": "Agave potatorum",
       "location": "直射日光",
@@ -3554,7 +3645,8 @@
       "aliases": [
         "ストリクタ",
         "乱れ雪",
-        "ミダレユキ"
+        "ミダレユキ",
+        "アガベストリクタ"
       ],
       "species": "Agave stricta",
       "location": "直射日光",
@@ -3571,7 +3663,9 @@
       "name": "アガベ・フェロックス",
       "aliases": [
         "フェロックス",
-        "シャープリーフ"
+        "シャープリーフ",
+        "フェロクス",
+        "サルミアナ"
       ],
       "species": "Agave salmiana var. ferox",
       "location": "直射日光",
@@ -3621,7 +3715,9 @@
       "name": "ユーフォルビア・ミルクブッシュ",
       "aliases": [
         "ミルクブッシュ",
-        "青サンゴ"
+        "青サンゴ",
+        "ティルカリ",
+        "チルカリ"
       ],
       "species": "Euphorbia tirucalli",
       "location": "直射日光",
@@ -3720,7 +3816,9 @@
       "aliases": [
         "エビスワライ",
         "えびすわらい",
-        "ブレビカウレ"
+        "ブレビカウレ",
+        "ブレビカウル",
+        "パキポディウムブレビカウレ"
       ],
       "species": "Pachypodium brevicaule",
       "location": "直射日光",
@@ -3737,7 +3835,8 @@
       "name": "パキポディウム・恵比寿大黒",
       "aliases": [
         "エビスダイコク",
-        "えびすだいこく"
+        "えびすだいこく",
+        "ヱビスダイコク"
       ],
       "species": "Pachypodium 'Ebisu Daikoku'",
       "location": "直射日光",
@@ -3754,7 +3853,9 @@
       "name": "パキポディウム・ウィンゾリー",
       "aliases": [
         "ウィンゾリー",
-        "ロスラーツム・ウィンゾリー"
+        "ロスラーツム・ウィンゾリー",
+        "ウインゾリー",
+        "ウィンザー"
       ],
       "species": "Pachypodium rosulatum subsp. windsorii",
       "location": "直射日光",
@@ -3772,7 +3873,10 @@
       "aliases": [
         "ナマクアナム",
         "光堂",
-        "コウドウ"
+        "コウドウ",
+        "ナマカナム",
+        "ナマクアヌム",
+        "パキポディウムナマクアナム"
       ],
       "species": "Pachypodium namaquanum",
       "location": "直射日光",
@@ -3789,7 +3893,8 @@
       "name": "アデニア・グラウカ",
       "aliases": [
         "グラウカ",
-        "幻蝶蔓・グラウカ"
+        "幻蝶蔓・グラウカ",
+        "グロウカ"
       ],
       "species": "Adenia glauca",
       "location": "直射日光",
@@ -3805,7 +3910,9 @@
     {
       "name": "アデニア・スピノーサ",
       "aliases": [
-        "スピノーサ"
+        "スピノーサ",
+        "スピノサ",
+        "アデニアスピノーサ"
       ],
       "species": "Adenia spinosa",
       "location": "直射日光",
@@ -3821,7 +3928,9 @@
     {
       "name": "亀甲竜・南アフリカ",
       "aliases": [
-        "ミナミアフリカキッコウリュウ"
+        "ミナミアフリカキッコウリュウ",
+        "エレファンティペス",
+        "エレファンチペス"
       ],
       "species": "Dioscorea elephantipes",
       "location": "明るい日陰",
@@ -3838,7 +3947,9 @@
       "name": "亀甲竜・メキシカン",
       "aliases": [
         "メキシカンキッコウリュウ",
-        "メキシコ亀甲竜"
+        "メキシコ亀甲竜",
+        "メキシカーナ",
+        "メキシカナ"
       ],
       "species": "Dioscorea mexicana",
       "location": "明るい日陰",
@@ -3854,7 +3965,8 @@
     {
       "name": "ユーフォルビア・パキポディオイデス",
       "aliases": [
-        "パキポディオイデス"
+        "パキポディオイデス",
+        "パキポジオイデス"
       ],
       "species": "Euphorbia pachypodioides",
       "location": "直射日光",
@@ -3872,7 +3984,9 @@
       "aliases": [
         "スザンナエ",
         "瑠璃晃",
-        "ルリコウ"
+        "ルリコウ",
+        "スザンネ",
+        "スザンナ"
       ],
       "species": "Euphorbia susannae",
       "location": "直射日光",
@@ -3890,7 +4004,9 @@
       "aliases": [
         "グロボーサ",
         "玉鱗宝",
-        "ギョクリンポウ"
+        "ギョクリンポウ",
+        "グロボサ",
+        "グローボーサ"
       ],
       "species": "Euphorbia globosa",
       "location": "直射日光",
@@ -3907,7 +4023,9 @@
       "name": "オペルクリカリア・ヒフォイデス",
       "aliases": [
         "ヒフォイデス",
-        "ヒポフォイデス"
+        "ヒポフォイデス",
+        "ヒファエノイデス",
+        "ヒフェオノイデス"
       ],
       "species": "Operculicarya hyphaenoides",
       "location": "直射日光",
@@ -3923,7 +4041,9 @@
     {
       "name": "コミフォラ・ホルツィアナ",
       "aliases": [
-        "ホルツィアナ"
+        "ホルツィアナ",
+        "ホルツィアーナ",
+        "ホルチアナ"
       ],
       "species": "Commiphora holtziana",
       "location": "直射日光",
@@ -3939,7 +4059,9 @@
     {
       "name": "シンニンギア・カーディナル",
       "aliases": [
-        "カーディナル"
+        "カーディナル",
+        "カルディナリス",
+        "カーディナリス"
       ],
       "species": "Sinningia cardinalis",
       "location": "明るい日陰",
@@ -3971,7 +4093,8 @@
     {
       "name": "オトンナ・ユーフォルビオイデス",
       "aliases": [
-        "ユーフォルビオイデス"
+        "ユーフォルビオイデス",
+        "ユーホルビオイデス"
       ],
       "species": "Othonna euphorbioides",
       "location": "直射日光",
@@ -3988,7 +4111,9 @@
       "name": "チレコドン・万物想",
       "aliases": [
         "バンブツソウ",
-        "ばんぶつそう"
+        "ばんぶつそう",
+        "パニクラタス",
+        "パニキュラータス"
       ],
       "species": "Tylecodon paniculatus",
       "location": "明るい日陰",
@@ -4006,7 +4131,9 @@
       "aliases": [
         "クラシカウレ",
         "竜骨城",
-        "リュウコツジョウ"
+        "リュウコツジョウ",
+        "クラッシカウレ",
+        "クラシカウル"
       ],
       "species": "Sarcocaulon crassicaule",
       "location": "直射日光",
@@ -4023,7 +4150,8 @@
       "name": "シゾバシス・イントリカータ",
       "aliases": [
         "イントリカータ",
-        "幻の蝋燭"
+        "幻の蝋燭",
+        "イントリカタ"
       ],
       "species": "Schizobasis intricata",
       "location": "明るい日陰",
@@ -4041,7 +4169,9 @@
       "aliases": [
         "キッコウモメン",
         "きっこうもめん",
-        "アデニア"
+        "アデニア",
+        "フルチコサ",
+        "フルティコサ"
       ],
       "species": "Adenia fruticosa",
       "location": "直射日光",
@@ -4057,7 +4187,10 @@
     {
       "name": "ファロエニコフォリウム",
       "aliases": [
-        "フォークイエリア・マクドガリー"
+        "フォークイエリア・マクドガリー",
+        "マクドガリ",
+        "マクドゥーガリー",
+        "マックドガリ"
       ],
       "species": "Fouquieria macdougalii",
       "location": "直射日光",
@@ -4089,7 +4222,9 @@
     {
       "name": "ドルステニア・フォエティダ",
       "aliases": [
-        "フォエティダ"
+        "フォエティダ",
+        "フェティダ",
+        "フォエチダ"
       ],
       "species": "Dorstenia foetida",
       "location": "明るい日陰",
@@ -4105,7 +4240,8 @@
     {
       "name": "カランコエ・ウェンディ",
       "aliases": [
-        "ウェンディ"
+        "ウェンディ",
+        "ウェンディー"
       ],
       "species": "Kalanchoe 'Wendy'",
       "location": "明るい日陰",
@@ -4122,7 +4258,8 @@
       "name": "ファーガス",
       "aliases": [
         "フィカス・パルメリ",
-        "パルメリ"
+        "パルメリ",
+        "パーマー"
       ],
       "species": "Ficus palmeri",
       "location": "直射日光",
@@ -4139,7 +4276,9 @@
       "name": "ユーフォルビア・キリン角",
       "aliases": [
         "キリンカク",
-        "きりんかく"
+        "きりんかく",
+        "ネリイフォリア",
+        "ネリーフォリア"
       ],
       "species": "Euphorbia neriifolia",
       "location": "直射日光",
@@ -4155,7 +4294,9 @@
     {
       "name": "ペラルゴニウム・カルノーサム",
       "aliases": [
-        "カルノーサム"
+        "カルノーサム",
+        "カルノサム",
+        "カルノースム"
       ],
       "species": "Pelargonium carnosum",
       "location": "明るい日陰",
@@ -4171,7 +4312,8 @@
     {
       "name": "オトンナ・レトロサ",
       "aliases": [
-        "レトロサ"
+        "レトロサ",
+        "レトロルサ"
       ],
       "species": "Othonna retrorsa",
       "location": "明るい日陰",
@@ -4204,7 +4346,9 @@
       "name": "アガベ・チタノタ・FO-076",
       "aliases": [
         "FO-076",
-        "エフオーゼロナナロク"
+        "エフオーゼロナナロク",
+        "FO076",
+        "エフオー76"
       ],
       "species": "Agave titanota 'FO-076'",
       "location": "直射日光",
@@ -4286,7 +4430,9 @@
     {
       "name": "アガベ・ジェミニフローラ",
       "aliases": [
-        "ジェミニフローラ"
+        "ジェミニフローラ",
+        "ジェミニフロラ",
+        "ゲミニフロラ"
       ],
       "species": "Agave geminiflora",
       "location": "直射日光",
@@ -4303,7 +4449,9 @@
       "name": "アガベ・マルガリータエ",
       "aliases": [
         "マルガリータエ",
-        "マルガリータ"
+        "マルガリータ",
+        "マルガリタ",
+        "マーガリータ"
       ],
       "species": "Agave margaritae",
       "location": "直射日光",
@@ -4319,7 +4467,8 @@
     {
       "name": "アガベ・モンタナ",
       "aliases": [
-        "モンタナ"
+        "モンタナ",
+        "アガベモンタナ"
       ],
       "species": "Agave montana",
       "location": "直射日光",
@@ -4335,7 +4484,9 @@
     {
       "name": "アガベ・オバティフォリア",
       "aliases": [
-        "オバティフォリア"
+        "オバティフォリア",
+        "オヴァティフォリア",
+        "オバチフォリア"
       ],
       "species": "Agave ovatifolia",
       "location": "直射日光",
@@ -4368,7 +4519,9 @@
     {
       "name": "パキポディウム・ロスラーツム",
       "aliases": [
-        "ロスラーツム"
+        "ロスラーツム",
+        "ロスラータム",
+        "パキポディウムロスラーツム"
       ],
       "species": "Pachypodium rosulatum",
       "location": "直射日光",
@@ -4385,7 +4538,9 @@
       "name": "パキポディウム・デンシフローラム",
       "aliases": [
         "デンシフローラム",
-        "シバの女王の玉櫛"
+        "シバの女王の玉櫛",
+        "デンシフローラ",
+        "パキポディウムデンシフローラム"
       ],
       "species": "Pachypodium densiflorum",
       "location": "直射日光",
@@ -4402,7 +4557,10 @@
       "name": "パキポディウム・エブレネウム",
       "aliases": [
         "エブレネウム",
-        "象牙宮・象牙白"
+        "象牙宮・象牙白",
+        "エブルネウム",
+        "エバーニアム",
+        "パキポディウムエブレネウム"
       ],
       "species": "Pachypodium eburneum",
       "location": "直射日光",
@@ -4420,7 +4578,10 @@
       "aliases": [
         "サキュレンタム",
         "天馬空",
-        "テンマクウ"
+        "テンマクウ",
+        "スクレンタム",
+        "サキュレントゥム",
+        "パキポディウムサキュレンタム"
       ],
       "species": "Pachypodium succulentum",
       "location": "直射日光",
@@ -4436,7 +4597,9 @@
     {
       "name": "パキポディウム・カクチペス",
       "aliases": [
-        "カクチペス"
+        "カクチペス",
+        "カクティペス",
+        "カクチペース"
       ],
       "species": "Pachypodium rosulatum subsp. cactipes",
       "location": "直射日光",
@@ -4452,7 +4615,8 @@
     {
       "name": "パキポディウム・イノピナツム",
       "aliases": [
-        "イノピナツム"
+        "イノピナツム",
+        "イノピナタム"
       ],
       "species": "Pachypodium inopinatum",
       "location": "直射日光",
@@ -4468,7 +4632,9 @@
     {
       "name": "パキポディウム・ゲアイ",
       "aliases": [
-        "ゲアイ"
+        "ゲアイ",
+        "ゲアイー",
+        "ゲエイ"
       ],
       "species": "Pachypodium geayi",
       "location": "直射日光",
@@ -4516,7 +4682,9 @@
     {
       "name": "エケベリア・リラシナ",
       "aliases": [
-        "リラシナ"
+        "リラシナ",
+        "リラキナ",
+        "リラチナ"
       ],
       "species": "Echeveria lilacina",
       "location": "直射日光",
@@ -4532,7 +4700,9 @@
     {
       "name": "エケベリア・シャビアナ",
       "aliases": [
-        "シャビアナ"
+        "シャビアナ",
+        "シャヴィアナ",
+        "シャビアーナ"
       ],
       "species": "Echeveria shaviana",
       "location": "直射日光",
@@ -4549,7 +4719,8 @@
       "name": "エケベリア・エレガンス",
       "aliases": [
         "エレガンス",
-        "月影"
+        "月影",
+        "エレガーンス"
       ],
       "species": "Echeveria elegans",
       "location": "直射日光",
@@ -4566,7 +4737,9 @@
       "name": "エケベリア・パールフォンニュルンベルク",
       "aliases": [
         "パールフォンニュルンベルク",
-        "パール"
+        "パール",
+        "パールフォンニュルンベルグ",
+        "パール・フォン・ニュルンベルク"
       ],
       "species": "Echeveria 'Perle von Nürnberg'",
       "location": "直射日光",
@@ -4615,7 +4788,8 @@
       "name": "エケベリア・パリダ",
       "aliases": [
         "パリダ",
-        "白雪姫"
+        "白雪姫",
+        "パリーダ"
       ],
       "species": "Echeveria pallida",
       "location": "直射日光",
@@ -4632,7 +4806,9 @@
       "name": "エケベリア・ルンヨニー",
       "aliases": [
         "ルンヨニー",
-        "トプシータービー"
+        "トプシータービー",
+        "ルニオニ",
+        "ルニヨニ"
       ],
       "species": "Echeveria runyonii 'Topsy Turvy'",
       "location": "直射日光",
@@ -4682,7 +4858,8 @@
       "name": "フィカス・ルビギノーサ",
       "aliases": [
         "ルビギノーサ",
-        "サビオオフィカス"
+        "サビオオフィカス",
+        "ルビギノサ"
       ],
       "species": "Ficus rubiginosa",
       "location": "明るい日陰",
@@ -4714,7 +4891,8 @@
     {
       "name": "フィカス・ペティオラリス",
       "aliases": [
-        "ペティオラリス"
+        "ペティオラリス",
+        "ペチオラリス"
       ],
       "species": "Ficus petiolaris",
       "location": "直射日光",
@@ -4748,7 +4926,9 @@
       "aliases": [
         "アルボ",
         "アルボヴァリエガータ",
-        "白斑モンステラ"
+        "白斑モンステラ",
+        "アルボ・ヴァリエガータ",
+        "アルボバリエガータ"
       ],
       "species": "Monstera deliciosa 'Albo Variegata'",
       "location": "明るい日陰",
@@ -4764,7 +4944,8 @@
     {
       "name": "モンステラ・タイコンステレーション",
       "aliases": [
-        "タイコンステレーション"
+        "タイコンステレーション",
+        "タイ・コンステレーション"
       ],
       "species": "Monstera deliciosa 'Thai Constellation'",
       "location": "明るい日陰",
@@ -4829,7 +5010,8 @@
     {
       "name": "ホヤ・オブスキュラ",
       "aliases": [
-        "オブスキュラ"
+        "オブスキュラ",
+        "オブスクラ"
       ],
       "species": "Hoya obscura",
       "location": "明るい日陰",
@@ -4861,7 +5043,9 @@
     {
       "name": "ホヤ・レツーサ",
       "aliases": [
-        "レツーサ"
+        "レツーサ",
+        "レトゥーサ",
+        "レチューサ"
       ],
       "species": "Hoya retusa",
       "location": "明るい日陰",
@@ -4877,7 +5061,8 @@
     {
       "name": "ホヤ・プビカリックス",
       "aliases": [
-        "プビカリックス"
+        "プビカリックス",
+        "プビカリクス"
       ],
       "species": "Hoya pubicalyx",
       "location": "明るい日陰",
@@ -4893,7 +5078,8 @@
     {
       "name": "ホヤ・カウダータ",
       "aliases": [
-        "カウダータ"
+        "カウダータ",
+        "カウダタ"
       ],
       "species": "Hoya caudata",
       "location": "明るい日陰",
@@ -4909,7 +5095,8 @@
     {
       "name": "ホヤ・クミンギアナ",
       "aliases": [
-        "クミンギアナ"
+        "クミンギアナ",
+        "カミンギアナ"
       ],
       "species": "Hoya cumingiana",
       "location": "明るい日陰",
@@ -4925,7 +5112,8 @@
     {
       "name": "ホヤ・マクロフィラ",
       "aliases": [
-        "マクロフィラ"
+        "マクロフィラ",
+        "マクロフィッラ"
       ],
       "species": "Hoya macrophylla",
       "location": "明るい日陰",
@@ -5023,7 +5211,8 @@
     {
       "name": "アロカシア・フライデック",
       "aliases": [
-        "フライデック"
+        "フライデック",
+        "フリーデック"
       ],
       "species": "Alocasia 'Frydek'",
       "location": "明るい日陰",
@@ -5039,7 +5228,8 @@
     {
       "name": "アロカシア・ドラゴンスケール",
       "aliases": [
-        "ドラゴンスケール"
+        "ドラゴンスケール",
+        "バギンダ"
       ],
       "species": "Alocasia baginda 'Dragon Scale'",
       "location": "明るい日陰",
@@ -5071,7 +5261,8 @@
     {
       "name": "アロカシア・ゼブリナ",
       "aliases": [
-        "ゼブリナ"
+        "ゼブリナ",
+        "ゼブリーナ"
       ],
       "species": "Alocasia zebrina",
       "location": "明るい日陰",
@@ -5088,7 +5279,9 @@
       "name": "ハオルチア・玉扇",
       "aliases": [
         "ギョクセン",
-        "ぎょくせん"
+        "ぎょくせん",
+        "トルンカタ",
+        "トルンカータ"
       ],
       "species": "Haworthia truncata",
       "location": "明るい日陰",
@@ -5105,7 +5298,9 @@
       "name": "ハオルチア・万象",
       "aliases": [
         "マンゾウ",
-        "まんぞう"
+        "まんぞう",
+        "モーガニー",
+        "マウガニ"
       ],
       "species": "Haworthia maughanii",
       "location": "明るい日陰",
@@ -5122,7 +5317,8 @@
       "name": "ハオルチア・ピグマエア",
       "aliases": [
         "ピグマエア",
-        "ピグマイア"
+        "ピグマイア",
+        "ピグメア"
       ],
       "species": "Haworthia pygmaea",
       "location": "明るい日陰",
@@ -5205,7 +5401,9 @@
     {
       "name": "サンスベリア・ローレンチ",
       "aliases": [
-        "ローレンチ"
+        "ローレンチ",
+        "ローレンティ",
+        "ロウレンティイ"
       ],
       "species": "Sansevieria trifasciata 'Laurentii'",
       "location": "直射日光",
@@ -5238,7 +5436,8 @@
       "name": "サンスベリア・キリンドリカ",
       "aliases": [
         "キリンドリカ",
-        "シリンドリカ"
+        "シリンドリカ",
+        "シリンドリーカ"
       ],
       "species": "Sansevieria cylindrica",
       "location": "直射日光",
@@ -5270,7 +5469,10 @@
     {
       "name": "パキポディウム・バロニー",
       "aliases": [
-        "バロニー"
+        "バロニー",
+        "バロニ",
+        "バロン",
+        "パキポディウムバロニー"
       ],
       "species": "Pachypodium baronii",
       "location": "直射日光",
@@ -5302,7 +5504,8 @@
     {
       "name": "パキポディウム・デカリー",
       "aliases": [
-        "デカリー"
+        "デカリー",
+        "デカリ"
       ],
       "species": "Pachypodium decaryi",
       "location": "直射日光",
@@ -5335,7 +5538,9 @@
       "name": "パキポディウム・ルテンベルギアナム",
       "aliases": [
         "ルテンベルギアナム",
-        "ラメリー・ルテンベルギアナム"
+        "ラメリー・ルテンベルギアナム",
+        "ルテンベルギ",
+        "ルテンベルキアナム"
       ],
       "species": "Pachypodium rutenbergianum",
       "location": "直射日光",
@@ -5353,7 +5558,8 @@
       "aliases": [
         "ギラウミニアナ",
         "孔雀玉",
-        "クジャクダマ"
+        "クジャクダマ",
+        "ギヨーミニアナ"
       ],
       "species": "Euphorbia guillauminiana",
       "location": "直射日光",
@@ -5371,7 +5577,9 @@
       "aliases": [
         "ステラータ",
         "飛竜",
-        "ヒリュウ"
+        "ヒリュウ",
+        "ステラタ",
+        "スッテラータ"
       ],
       "species": "Euphorbia stellata",
       "location": "明るい日陰",
@@ -5387,7 +5595,9 @@
     {
       "name": "ユーフォルビア・スクアロサ",
       "aliases": [
-        "スクアロサ"
+        "スクアロサ",
+        "スクァロサ",
+        "スクワローサ"
       ],
       "species": "Euphorbia squarrosa",
       "location": "直射日光",
@@ -5403,7 +5613,9 @@
     {
       "name": "ユーフォルビア・トルチラマ",
       "aliases": [
-        "トルチラマ"
+        "トルチラマ",
+        "トルチラーマ",
+        "トーティラマ"
       ],
       "species": "Euphorbia tortirama",
       "location": "直射日光",
@@ -5436,7 +5648,8 @@
     {
       "name": "ユーフォルビア・ピスキデルミス",
       "aliases": [
-        "ピスキデルミス"
+        "ピスキデルミス",
+        "ピスキデルミ"
       ],
       "species": "Euphorbia piscidermis",
       "location": "直射日光",
@@ -5484,7 +5697,9 @@
     {
       "name": "アデニア・ペシリ",
       "aliases": [
-        "ペシリ"
+        "ペシリ",
+        "ペチュエリ",
+        "ペチュエリー"
       ],
       "species": "Adenia pechuelii",
       "location": "直射日光",
@@ -5500,7 +5715,9 @@
     {
       "name": "アデニア・エピジェア",
       "aliases": [
-        "エピジェア"
+        "エピジェア",
+        "エピジア",
+        "エピゲア"
       ],
       "species": "Adenia epigea",
       "location": "明るい日陰",
@@ -5516,7 +5733,8 @@
     {
       "name": "アデニア・フィルマ",
       "aliases": [
-        "フィルマ"
+        "フィルマ",
+        "アデニアフィルマ"
       ],
       "species": "Adenia firma",
       "location": "直射日光",
@@ -5548,7 +5766,8 @@
     {
       "name": "コミフォラ・モンストロサ",
       "aliases": [
-        "モンストロサ"
+        "モンストロサ",
+        "モンストルオサ"
       ],
       "species": "Commiphora monstruosa",
       "location": "直射日光",
@@ -5564,7 +5783,8 @@
     {
       "name": "コミフォラ・カタフ",
       "aliases": [
-        "カタフ"
+        "カタフ",
+        "カターフ"
       ],
       "species": "Commiphora kataf",
       "location": "直射日光",
@@ -5596,7 +5816,8 @@
     {
       "name": "コミフォラ・アフリカーナ",
       "aliases": [
-        "アフリカーナ"
+        "アフリカーナ",
+        "アフリカナ"
       ],
       "species": "Commiphora africana",
       "location": "直射日光",
@@ -5613,7 +5834,8 @@
       "name": "フォークイエリア・スプレンデンス",
       "aliases": [
         "スプレンデンス",
-        "オコティロ"
+        "オコティロ",
+        "スプレンディエンス"
       ],
       "species": "Fouquieria splendens",
       "location": "直射日光",
@@ -5629,7 +5851,8 @@
     {
       "name": "フォークイエリア・ファシキュラータ",
       "aliases": [
-        "ファシキュラータ"
+        "ファシキュラータ",
+        "ファスキクラータ"
       ],
       "species": "Fouquieria fasciculata",
       "location": "直射日光",
@@ -5645,7 +5868,8 @@
     {
       "name": "フォークイエリア・プルプシー",
       "aliases": [
-        "プルプシー"
+        "プルプシー",
+        "パープシー"
       ],
       "species": "Fouquieria purpusii",
       "location": "直射日光",
@@ -5677,7 +5901,9 @@
     {
       "name": "オペルクリカリア・ゴメフォエラ",
       "aliases": [
-        "ゴメフォエラ"
+        "ゴメフォエラ",
+        "グミフェラ",
+        "グッミフェラ"
       ],
       "species": "Operculicarya gummifera",
       "location": "直射日光",
@@ -5694,7 +5920,8 @@
       "name": "ボスウェリア・サクラ",
       "aliases": [
         "サクラ",
-        "フランキンセンス"
+        "フランキンセンス",
+        "ボスウェリアサクラ"
       ],
       "species": "Boswellia sacra",
       "location": "直射日光",
@@ -5726,7 +5953,8 @@
     {
       "name": "ボスウェリア・パピリフェラ",
       "aliases": [
-        "パピリフェラ"
+        "パピリフェラ",
+        "パピリフェーラ"
       ],
       "species": "Boswellia papyrifera",
       "location": "直射日光",
@@ -5744,7 +5972,9 @@
       "aliases": [
         "ジュッタエ",
         "象の足",
-        "ゾウノアシ"
+        "ゾウノアシ",
+        "ユッタエ",
+        "シフォステンマ"
       ],
       "species": "Cyphostemma juttae",
       "location": "直射日光",
@@ -5760,7 +5990,8 @@
     {
       "name": "シッサス・ツベローサ",
       "aliases": [
-        "ツベローサ"
+        "ツベローサ",
+        "チュベローサ"
       ],
       "species": "Cissus tuberosa",
       "location": "明るい日陰",
@@ -5778,7 +6009,10 @@
       "aliases": [
         "カタルティカ",
         "ナンヨウザクラ",
-        "南洋桜"
+        "南洋桜",
+        "カタルチカ",
+        "カタールチカ",
+        "カータルチカ"
       ],
       "species": "Jatropha cathartica",
       "location": "直射日光",
@@ -5794,7 +6028,8 @@
     {
       "name": "ヤトロファ・ベルランディエリ",
       "aliases": [
-        "ベルランディエリ"
+        "ベルランディエリ",
+        "ベランディエリ"
       ],
       "species": "Jatropha berlandieri",
       "location": "直射日光",
@@ -5827,7 +6062,9 @@
     {
       "name": "モンソニア・パテルソニー",
       "aliases": [
-        "パテルソニー"
+        "パテルソニー",
+        "パテルソニ",
+        "パターソニー"
       ],
       "species": "Monsonia patersonii",
       "location": "明るい日陰",
@@ -5843,7 +6080,8 @@
     {
       "name": "モンソニア・ムルティフィダ",
       "aliases": [
-        "ムルティフィダ"
+        "ムルティフィダ",
+        "ムルチフィダ"
       ],
       "species": "Monsonia multifida",
       "location": "明るい日陰",
@@ -5859,7 +6097,8 @@
     {
       "name": "ケラリア・ピグマエア",
       "aliases": [
-        "ピグマエア"
+        "ピグマエア",
+        "ピグメア"
       ],
       "species": "Ceraria pygmaea",
       "location": "直射日光",
@@ -5875,7 +6114,8 @@
     {
       "name": "ケラリア・ナマクエンシス",
       "aliases": [
-        "ナマクエンシス"
+        "ナマクエンシス",
+        "ナマクァエンシス"
       ],
       "species": "Ceraria namaquensis",
       "location": "直射日光",
@@ -5891,7 +6131,9 @@
     {
       "name": "ティロサ・カピタタ",
       "aliases": [
-        "カピタタ"
+        "カピタタ",
+        "エスクレンタム",
+        "エスクレントム"
       ],
       "species": "Tylosema esculentum",
       "location": "直射日光",
@@ -5941,7 +6183,8 @@
       "aliases": [
         "奇想天外",
         "キソウテンガイ",
-        "きそうてんがい"
+        "きそうてんがい",
+        "ミラビリス"
       ],
       "species": "Welwitschia mirabilis",
       "location": "直射日光",
@@ -5958,7 +6201,9 @@
       "name": "ブーファン・ディスティカ",
       "aliases": [
         "ディスティカ",
-        "ブンファネ"
+        "ブンファネ",
+        "ディスティチャ",
+        "ブーファネ"
       ],
       "species": "Boophone disticha",
       "location": "直射日光",
@@ -5974,7 +6219,8 @@
     {
       "name": "ブーファン・ハエマントイデス",
       "aliases": [
-        "ハエマントイデス"
+        "ハエマントイデス",
+        "ヘマントイデス"
       ],
       "species": "Boophone haemanthoides",
       "location": "直射日光",
@@ -5991,7 +6237,8 @@
       "name": "ペラルゴニウム・コティレドニス",
       "aliases": [
         "コティレドニス",
-        "貝殻葉"
+        "貝殻葉",
+        "コチレドニス"
       ],
       "species": "Pelargonium cotyledonis",
       "location": "明るい日陰",
@@ -6007,7 +6254,8 @@
     {
       "name": "ペラルゴニウム・テトラゴナム",
       "aliases": [
-        "テトラゴナム"
+        "テトラゴナム",
+        "テトラゴーナム"
       ],
       "species": "Pelargonium tetragonum",
       "location": "明るい日陰",
@@ -6023,7 +6271,9 @@
     {
       "name": "ペラルゴニウム・アペンディキュラータム",
       "aliases": [
-        "アペンディキュラータム"
+        "アペンディキュラータム",
+        "アペンディクラタム",
+        "アッペンディキュラータム"
       ],
       "species": "Pelargonium appendiculatum",
       "location": "明るい日陰",
@@ -6039,7 +6289,8 @@
     {
       "name": "オトンナ・ヘレイ",
       "aliases": [
-        "ヘレイ"
+        "ヘレイ",
+        "ヘリ"
       ],
       "species": "Othonna herrei",
       "location": "直射日光",
@@ -6055,7 +6306,8 @@
     {
       "name": "オトンナ・カカリオイデス",
       "aliases": [
-        "カカリオイデス"
+        "カカリオイデス",
+        "カカリオデス"
       ],
       "species": "Othonna cacalioides",
       "location": "明るい日陰",
@@ -6071,7 +6323,8 @@
     {
       "name": "チレコドン・ペアルソニー",
       "aliases": [
-        "ペアルソニー"
+        "ペアルソニー",
+        "ピアソニー"
       ],
       "species": "Tylecodon pearsonii",
       "location": "明るい日陰",
@@ -6087,7 +6340,9 @@
     {
       "name": "チレコドン・ブッホルツィアヌス",
       "aliases": [
-        "ブッホルツィアヌス"
+        "ブッホルツィアヌス",
+        "ブフホルジアヌス",
+        "ブッフホルジアヌス"
       ],
       "species": "Tylecodon buchholzianus",
       "location": "明るい日陰",
@@ -6104,7 +6359,9 @@
       "name": "チレコドン・ヴァンニリディアエ",
       "aliases": [
         "ヴァンニリディアエ",
-        "バンニリディアエ"
+        "バンニリディアエ",
+        "バンヘーデイ",
+        "ファンヘールデイ"
       ],
       "species": "Tylecodon vanheerdei",
       "location": "明るい日陰",
@@ -6121,7 +6378,9 @@
       "name": "シンニンギア・スペキオサ",
       "aliases": [
         "スペキオサ",
-        "グロキシニア"
+        "グロキシニア",
+        "スペシオサ",
+        "スペキオーサ"
       ],
       "species": "Sinningia speciosa",
       "location": "明るい日陰",
@@ -6137,7 +6396,8 @@
     {
       "name": "シンニンギア・ブラジリエンシス",
       "aliases": [
-        "ブラジリエンシス"
+        "ブラジリエンシス",
+        "ブラシリエンシス"
       ],
       "species": "Sinningia brasiliensis",
       "location": "明るい日陰",
@@ -6185,7 +6445,8 @@
     {
       "name": "ドルステニア・ホルウッディ",
       "aliases": [
-        "ホルウッディ"
+        "ホルウッディ",
+        "ハーウッディ"
       ],
       "species": "Dorstenia horwoodii",
       "location": "明るい日陰",
@@ -6201,7 +6462,9 @@
     {
       "name": "アボニア・クインクエファリア",
       "aliases": [
-        "クインクエファリア"
+        "クインクエファリア",
+        "クイナリア",
+        "クィナリア"
       ],
       "species": "Avonia quinaria",
       "location": "直射日光",
@@ -6217,7 +6480,9 @@
     {
       "name": "アボニア・ウバキイ",
       "aliases": [
-        "ウバキイ"
+        "ウバキイ",
+        "ウボムボエンシス",
+        "ウボンボエンシス"
       ],
       "species": "Avonia ubomboensis",
       "location": "直射日光",
@@ -6235,7 +6500,9 @@
       "aliases": [
         "アーティキュラータス",
         "サンゴ",
-        "珊瑚"
+        "珊瑚",
+        "アーティキュラトゥス",
+        "アルティキュラタス"
       ],
       "species": "Senecio articulatus",
       "location": "明るい日陰",
@@ -6251,7 +6518,9 @@
     {
       "name": "セネシオ・ピラリス",
       "aliases": [
-        "ピラリス"
+        "ピラリス",
+        "ピラミダタス",
+        "ピラミダトゥス"
       ],
       "species": "Senecio pyramidatus",
       "location": "直射日光",
@@ -6267,7 +6536,10 @@
     {
       "name": "ステファニア・ベナンサ",
       "aliases": [
-        "ベナンサ"
+        "ベナンサ",
+        "ベノーサ",
+        "ベノサ",
+        "ステファニアベノサ"
       ],
       "species": "Stephania venosa",
       "location": "明るい日陰",
@@ -6281,9 +6553,13 @@
       "memo": "夏型塊根。葉脈が浮き出る大型のステファニア。"
     },
     {
-      "name": "ステファニア・スーベイ",
+      "name": "ステファニア・スベローサ",
       "aliases": [
-        "スーベイ"
+        "スーベイ",
+        "スベローサ",
+        "スバローサ",
+        "ステファニアスベローサ",
+        "ステファニア・スバローサ"
       ],
       "species": "Stephania suberosa",
       "location": "明るい日陰",
@@ -6300,7 +6576,8 @@
       "name": "ボウィエア・コエルレア",
       "aliases": [
         "コエルレア",
-        "青蒼角"
+        "青蒼角",
+        "ガリエペンシス"
       ],
       "species": "Bowiea gariepensis",
       "location": "明るい日陰",
