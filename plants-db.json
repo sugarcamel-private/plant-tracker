@@ -1,5 +1,5 @@
 {
-  "version": "7.1",
+  "version": "8.0",
   "updated": "2026-05-22",
   "plants": [
     {
@@ -6589,6 +6589,498 @@
       "tempMax": 30,
       "mist": "no",
       "memo": "冬型塊根。青みがかった蒼角殿の近縁種。"
+    },
+    {
+      "name": "ビカクシダ・ビフルカツム",
+      "aliases": [
+        "ビフルカツム",
+        "ビフルカタム",
+        "プラティセリウム・ビフルカツム"
+      ],
+      "species": "Platycerium bifurcatum",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "原種の中で最も丈夫で耐寒性も高い。初心者向け。"
+    },
+    {
+      "name": "ビカクシダ・ヴィーチー",
+      "aliases": [
+        "ヴィーチー",
+        "ビーチー",
+        "プラティセリウム・ヴィーチー"
+      ],
+      "species": "Platycerium veitchii",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "白い葉が美しいオーストラリア原産種。直射日光と乾燥に強い。"
+    },
+    {
+      "name": "ビカクシダ・ヒリー",
+      "aliases": [
+        "ヒリー",
+        "プラティセリウム・ヒリー"
+      ],
+      "species": "Platycerium hillii",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "胞子葉が短く直立する。コンパクトな樹形が魅力。"
+    },
+    {
+      "name": "ビカクシダ・ウィリンキー",
+      "aliases": [
+        "ウィリンキー",
+        "ウィリンキイ",
+        "プラティセリウム・ウィリンキー"
+      ],
+      "species": "Platycerium willinckii",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "細長く垂れる胞子葉が美しい。ジャワ島原産。"
+    },
+    {
+      "name": "ビカクシダ・スペルブム",
+      "aliases": [
+        "スペルブム",
+        "スパーバム",
+        "プラティセリウム・スペルブム"
+      ],
+      "species": "Platycerium superbum",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "貯水葉が王冠のように立ち上がる大型種。"
+    },
+    {
+      "name": "ビカクシダ・グランデ",
+      "aliases": [
+        "グランデ",
+        "プラティセリウム・グランデ"
+      ],
+      "species": "Platycerium grande",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "フィリピン原産の希少大型種。胞子葉が2股に分かれる。"
+    },
+    {
+      "name": "ビカクシダ・アルシコルネ",
+      "aliases": [
+        "アルシコルネ",
+        "プラティセリウム・アルシコルネ"
+      ],
+      "species": "Platycerium alcicorne",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "アフリカ・マダガスカル原産。比較的小型でまとまる。"
+    },
+    {
+      "name": "ビカクシダ・ステマリア",
+      "aliases": [
+        "ステマリア",
+        "プラティセリウム・ステマリア"
+      ],
+      "species": "Platycerium stemaria",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "アフリカ原産。胞子葉が深く2裂する。"
+    },
+    {
+      "name": "ビカクシダ・エレファントティス",
+      "aliases": [
+        "エレファントティス",
+        "プラティセリウム・エレファントティス"
+      ],
+      "species": "Platycerium elephantotis",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "象の耳のような大きな貯水葉が特徴。アフリカ原産。"
+    },
+    {
+      "name": "ビカクシダ・ワンダエ",
+      "aliases": [
+        "ワンダエ",
+        "プラティセリウム・ワンダエ"
+      ],
+      "species": "Platycerium wandae",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "ニューギニア原産の大型種。胞子葉が垂れ下がる。"
+    },
+    {
+      "name": "ビカクシダ・コロナリウム",
+      "aliases": [
+        "コロナリウム",
+        "プラティセリウム・コロナリウム"
+      ],
+      "species": "Platycerium coronarium",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "王冠のような貯水葉と長く垂れる胞子葉。東南アジア原産。"
+    },
+    {
+      "name": "ビカクシダ・ホルタミー",
+      "aliases": [
+        "ホルタミー",
+        "プラティセリウム・ホルタミー"
+      ],
+      "species": "Platycerium holttumii",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 10,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "東南アジア原産の大型種。胞子葉が2回分岐する。"
+    },
+    {
+      "name": "ビカクシダ・リドレイ",
+      "aliases": [
+        "リドレイ",
+        "プラティセリウム・リドレイ"
+      ],
+      "species": "Platycerium ridleyi",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 15,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "希少な原種。貯水葉の葉脈が網目状に浮き出る。"
+    },
+    {
+      "name": "ビカクシダ・マダガスカリエンセ",
+      "aliases": [
+        "マダガスカリエンセ",
+        "プラティセリウム・マダガスカリエンセ"
+      ],
+      "species": "Platycerium madagascariense",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 15,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "貯水葉が波状に隆起する珍奇種。マダガスカル固有。"
+    },
+    {
+      "name": "ビカクシダ・ヴィーチー・シルバーフロンド",
+      "aliases": [
+        "シルバーフロンド",
+        "ヴィーチー・シルバーフロンド"
+      ],
+      "species": "Platycerium veitchii 'Silver Frond'",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "ヴィーチーの中でも特に銀色が強い人気品種。"
+    },
+    {
+      "name": "ビカクシダ・ヴィーチー・レメリー",
+      "aliases": [
+        "レメリー",
+        "ヴィーチー・レメリー"
+      ],
+      "species": "Platycerium veitchii 'Lemoinei'",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "細く長い胞子葉が垂れる。優美な樹形。"
+    },
+    {
+      "name": "ビカクシダ・ヴィーチー・ホワイトグレイ",
+      "aliases": [
+        "ホワイトグレイ",
+        "ヴィーチー・ホワイトグレイ"
+      ],
+      "species": "Platycerium veitchii 'White Grey'",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "白灰色がかった葉が美しいヴィーチー選抜種。"
+    },
+    {
+      "name": "ビカクシダ・ヴィーチー・ファイナーフォーム",
+      "aliases": [
+        "ファイナーフォーム"
+      ],
+      "species": "Platycerium veitchii 'Finer Form'",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 35,
+      "mist": "yes",
+      "memo": "胞子葉が細く繊細な選抜種。"
+    },
+    {
+      "name": "ビカクシダ・ビフルカツム・ネザーランド",
+      "aliases": [
+        "ネザーランド",
+        "ビフル・ネザーランド"
+      ],
+      "species": "Platycerium bifurcatum 'Netherlands'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "ビフルカツムの定番選抜種。コンパクトで育てやすい。"
+    },
+    {
+      "name": "ビカクシダ・ビフルカツム・ムーンライト",
+      "aliases": [
+        "ムーンライト",
+        "ビフル・ムーンライト"
+      ],
+      "species": "Platycerium bifurcatum 'Moonlight'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "白っぽい銀色の葉が美しい品種。"
+    },
+    {
+      "name": "ビカクシダ・ビフルカツム・ロボ",
+      "aliases": [
+        "ロボ",
+        "ビフル・ロボ"
+      ],
+      "species": "Platycerium bifurcatum 'Lobo'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 0,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "胞子葉が広く厚みのある品種。"
+    },
+    {
+      "name": "ビカクシダ・ウィリンキー・ジェイド",
+      "aliases": [
+        "ジェイド",
+        "ウィリンキー・ジェイド"
+      ],
+      "species": "Platycerium willinckii 'Jade'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "緑が濃く美しいウィリンキー品種。"
+    },
+    {
+      "name": "ビカクシダ・ウィリンキー・スコフィールド",
+      "aliases": [
+        "スコフィールド",
+        "ウィリンキー・スコフィールド"
+      ],
+      "species": "Platycerium willinckii 'Scofield'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "胞子葉が長く流れるように垂れる人気品種。"
+    },
+    {
+      "name": "ビカクシダ・ウィリンキー・チャーミー",
+      "aliases": [
+        "チャーミー",
+        "ウィリンキー・チャーミー"
+      ],
+      "species": "Platycerium willinckii 'Charmy'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "可愛らしいコンパクトなウィリンキー品種。"
+    },
+    {
+      "name": "ビカクシダ・ウィリンキー・ロイヤルエレファント",
+      "aliases": [
+        "ロイヤルエレファント"
+      ],
+      "species": "Platycerium willinckii 'Royal Elephant'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "大型化する豪華なウィリンキー品種。"
+    },
+    {
+      "name": "ビカクシダ・ペガサス",
+      "aliases": [
+        "ペガサス"
+      ],
+      "species": "Platycerium 'Pegasus'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "ヴィーチーとウィリンキーの交配。優美な羽根のような姿。"
+    },
+    {
+      "name": "ビカクシダ・ホワイトホーク",
+      "aliases": [
+        "ホワイトホーク"
+      ],
+      "species": "Platycerium 'White Hawk'",
+      "location": "直射日光",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "白い葉が際立つ人気ハイブリッド品種。"
+    },
+    {
+      "name": "ビカクシダ・キッチャクル",
+      "aliases": [
+        "キッチャクル",
+        "キッチャクール"
+      ],
+      "species": "Platycerium 'Kitshakood'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "タイ由来の人気ハイブリッド。胞子葉の形が独特。"
+    },
+    {
+      "name": "ビカクシダ・ドラゴン",
+      "aliases": [
+        "ドラゴンビカクシダ"
+      ],
+      "species": "Platycerium 'Dragon'",
+      "location": "明るい日陰",
+      "water": "土の表面が乾いたらたっぷり",
+      "dormant": "冬(12〜2月)",
+      "dormantWater": "土が完全に乾いてから3〜4日後",
+      "fertilize": "春〜秋に2ヶ月に1回",
+      "tempMin": 5,
+      "tempMax": 30,
+      "mist": "yes",
+      "memo": "胞子葉が竜の角のように曲がる特殊な選抜種。"
     }
   ]
 }
