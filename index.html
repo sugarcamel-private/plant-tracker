@@ -83,7 +83,6 @@
   .wish-card { background: var(--cream); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
   .wish-card-row { display: flex; align-items: center; gap: 8px; }
   .wish-card-name { flex: 1; font-size: 13px; color: var(--ink); word-break: break-word; }
-  #wish-fav-filter-btn.on, #shop-fav-filter-btn.on { background: rgba(240,192,80,0.18); color: #b88928; }
 
   /* MAIN */
   .main { padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 20px); position: relative; z-index: 1; }
@@ -581,7 +580,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v3.2</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v3.3</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -712,9 +711,6 @@
     <div id="subview-note-shops">
       <div class="shop-controls">
         <div class="shop-filter" id="shop-filter"></div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-          <button class="shop-action-btn" id="shop-fav-filter-btn" onclick="toggleShopFavFilter()">⭐お気に入りのみ</button>
-        </div>
       </div>
       <div class="shop-section-title" id="shop-section-title">すべてのお店</div>
       <div id="shop-list"></div>
@@ -722,9 +718,6 @@
     <div id="subview-note-wishlist" style="display:none;">
       <div class="shop-controls">
         <div class="shop-filter" id="wish-filter"></div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-          <button class="shop-action-btn" id="wish-fav-filter-btn" onclick="toggleWishFavFilter()">⭐お気に入りのみ</button>
-        </div>
       </div>
       <div class="shop-section-title" id="wish-section-title">すべて</div>
       <div id="wish-list"></div>
@@ -3007,10 +3000,26 @@ document.addEventListener('click', (e) => {
 });
 
 // ===== SHOPS =====
+
+// 名前順ソート用ヘルパー（英数字→ひらがな→カタカナ→漢字）
+function nameGroupKey(name) {
+  if (!name) return 4;
+  const c = name.charCodeAt(0);
+  if (c < 0x3040) return 0;                  // ASCII含む英数記号
+  if (c >= 0x3040 && c <= 0x309f) return 1;  // ひらがな
+  if (c >= 0x30a0 && c <= 0x30ff) return 2;  // カタカナ
+  return 3;                                   // 漢字その他
+}
+
+function compareByName(a, b) {
+  const ga = nameGroupKey(a.name);
+  const gb = nameGroupKey(b.name);
+  if (ga !== gb) return ga - gb;
+  return (a.name || '').localeCompare(b.name || '', 'ja');
+}
 let shops = JSON.parse(localStorage.getItem('shops') || '[]');
 let shopTags = JSON.parse(localStorage.getItem('shopTags') || '["植物","雑貨"]');
 let shopFilter = 'all'; // current filter tag
-let shopFavOnly = false;
 let editingShopId = null;
 let pendingShopTags = [];
 let pendingShopFav = false;
@@ -3020,12 +3029,6 @@ function saveShopsToStorage() {
 }
 function saveShopTagsToStorage() {
   localStorage.setItem('shopTags', JSON.stringify(shopTags));
-}
-
-function toggleShopFavFilter() {
-  shopFavOnly = !shopFavOnly;
-  document.getElementById('shop-fav-filter-btn').classList.toggle('on', shopFavOnly);
-  renderShopList();
 }
 
 function renderShopFilter() {
@@ -3060,20 +3063,19 @@ function renderShopList() {
   if (!list) return;
   let filtered;
   if (shopFilter === 'all') {
-    title.textContent = shopFavOnly ? 'お気に入り' : 'すべてのお店';
+    title.textContent = 'すべてのお店';
     filtered = [...shops];
   } else {
     title.textContent = shopFilter;
     filtered = shops.filter(s => (s.tags || []).includes(shopFilter));
   }
-  if (shopFavOnly) filtered = filtered.filter(s => s.fav);
-  // ⭐お気に入りを上に、その下は新しい順（id降順）
+  // ⭐お気に入りを上に、その下は名前順
   filtered.sort((a, b) => {
     if (a.fav !== b.fav) return a.fav ? -1 : 1;
-    return (b.id || 0) - (a.id || 0);
+    return compareByName(a, b);
   });
   if (!filtered.length) {
-    list.innerHTML = `<div class="shop-empty">🏪<br>${shopFavOnly ? 'お気に入りに登録されたお店がありません' : 'お店が登録されていません'}<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
+    list.innerHTML = `<div class="shop-empty">🏪<br>お店が登録されていません<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
     return;
   }
   list.innerHTML = filtered.map(s => renderShopCard(s)).join('');
@@ -3246,7 +3248,6 @@ function deleteShop() {
 let wishItems = JSON.parse(localStorage.getItem('wishItems') || '[]');
 let wishTags = JSON.parse(localStorage.getItem('wishTags') || '["園芸用品","育て方","SNS"]');
 let wishFilter = 'all';
-let wishFavOnly = false;
 let editingWishId = null;
 let pendingWishTags = [];
 
@@ -3277,31 +3278,25 @@ function setWishFilter(tag) {
   requestAnimationFrame(() => renderWishList());
 }
 
-function toggleWishFavFilter() {
-  wishFavOnly = !wishFavOnly;
-  document.getElementById('wish-fav-filter-btn').classList.toggle('on', wishFavOnly);
-  renderWishList();
-}
-
 function renderWishList() {
   const list = document.getElementById('wish-list');
   const title = document.getElementById('wish-section-title');
   if (!list) return;
   let filtered;
   if (wishFilter === 'all') {
-    if (title) title.textContent = wishFavOnly ? 'お気に入り' : 'すべて';
+    if (title) title.textContent = 'すべて';
     filtered = [...wishItems];
   } else {
     if (title) title.textContent = wishFilter;
     filtered = wishItems.filter(i => (i.tags || []).includes(wishFilter));
   }
-  if (wishFavOnly) filtered = filtered.filter(i => i.fav);
+  // ⭐お気に入りを上に、その下は名前順
   filtered.sort((a, b) => {
     if (a.fav !== b.fav) return a.fav ? -1 : 1;
-    return (b.id || '').localeCompare(a.id || '');
+    return compareByName(a, b);
   });
   if (!filtered.length) {
-    list.innerHTML = `<div class="shop-empty">🎁<br>${wishFavOnly ? 'お気に入りに登録された品物がありません' : 'まだ何も登録されていません'}<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
+    list.innerHTML = `<div class="shop-empty">🎁<br>まだ何も登録されていません<br><span style="font-size:11px;">右上の + から追加できます</span></div>`;
     return;
   }
   list.innerHTML = filtered.map(i => renderWishItem(i)).join('');
