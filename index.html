@@ -354,10 +354,10 @@
     pointer-events: none;
     z-index: 1;
   }
-  #garden-scene.weather-cloudy::after { background: rgba(140,150,160,0.30); }
+  #garden-scene.weather-cloudy::after { background: rgba(40,55,75,0.22); }
   #garden-scene.weather-rain::after,
-  #garden-scene.weather-thunder::after { background: rgba(80,90,100,0.45); }
-  #garden-scene.weather-fog::after { background: rgba(200,200,200,0.30); }
+  #garden-scene.weather-thunder::after { background: rgba(20,30,50,0.38); }
+  #garden-scene.weather-fog::after { background: rgba(220,225,230,0.30); }
 
   /* Sky elements */
   .garden-sun {
@@ -3479,12 +3479,20 @@ function getWeatherOverlayHTML(category) {
   }
   if (category === 'cloudy') {
     return `
-      <div class="weather-cloud-overlay" style="width:55%;height:34px;top:6px;left:-5%;"></div>
-      <div class="weather-cloud-overlay" style="width:50%;height:30px;top:14px;left:42%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay" style="width:60%;height:32px;top:34px;left:8%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay" style="width:48%;height:28px;top:42px;left:60%;opacity:0.85;"></div>
-      <div class="weather-cloud-overlay" style="width:55%;height:26px;top:62px;left:-3%;opacity:0.8;"></div>
-      <div class="weather-cloud-overlay" style="width:46%;height:24px;top:68px;left:54%;opacity:0.75;"></div>
+      <div class="weather-cloud-overlay" style="width:72px;height:24px;top:6px;left:2%;"></div>
+      <div class="weather-cloud-overlay" style="width:54px;height:20px;top:12px;left:24%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay" style="width:88px;height:28px;top:4px;left:38%;"></div>
+      <div class="weather-cloud-overlay" style="width:46px;height:18px;top:14px;left:64%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:64px;height:22px;top:8px;left:78%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay" style="width:60px;height:22px;top:32px;left:-2%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:80px;height:26px;top:28px;left:18%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay" style="width:48px;height:18px;top:36px;left:46%;opacity:0.8;"></div>
+      <div class="weather-cloud-overlay" style="width:70px;height:24px;top:30px;left:60%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay" style="width:42px;height:16px;top:40px;left:84%;opacity:0.75;"></div>
+      <div class="weather-cloud-overlay" style="width:56px;height:20px;top:56px;left:6%;opacity:0.8;"></div>
+      <div class="weather-cloud-overlay" style="width:68px;height:22px;top:60px;left:34%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:50px;height:18px;top:58px;left:62%;opacity:0.75;"></div>
+      <div class="weather-cloud-overlay" style="width:60px;height:20px;top:64px;left:80%;opacity:0.8;"></div>
     `;
   }
   // 雨3段階
@@ -3502,14 +3510,22 @@ function getWeatherOverlayHTML(category) {
       const len = category === 'rainHeavy' ? 16 : (category === 'rainMedium' ? 12 : 9);
       drops += `<div class="weather-raindrop" style="left:${left}%;width:${config.width}px;height:${len}px;opacity:${config.opacity};animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
     }
-    // 雨の時は空全体を厚い雲で覆う
+    // 雨の時は空全体を厚い雲で覆う（さまざまな大きさ）
     const clouds = `
-      <div class="weather-cloud-overlay dark" style="width:60%;height:36px;top:4px;left:-6%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:55%;height:32px;top:10px;left:45%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:62%;height:34px;top:32px;left:6%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay dark" style="width:52%;height:30px;top:38px;left:56%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:58%;height:28px;top:60px;left:-4%;opacity:0.85;"></div>
-      <div class="weather-cloud-overlay dark" style="width:50%;height:26px;top:64px;left:52%;opacity:0.8;"></div>
+      <div class="weather-cloud-overlay dark" style="width:78px;height:26px;top:4px;left:-2%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:56px;height:20px;top:12px;left:18%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:90px;height:30px;top:2px;left:34%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:14px;left:60%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:72px;height:24px;top:6px;left:74%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:64px;height:22px;top:30px;left:0%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:82px;height:28px;top:26px;left:20%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:46px;height:18px;top:36px;left:48%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:74px;height:24px;top:30px;left:62%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:40px;left:84%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay dark" style="width:60px;height:20px;top:56px;left:4%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:72px;height:24px;top:60px;left:34%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:54px;height:18px;top:58px;left:60%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay dark" style="width:64px;height:22px;top:64px;left:80%;opacity:0.9;"></div>
     `;
     return clouds + drops;
   }
@@ -3539,11 +3555,19 @@ function getWeatherOverlayHTML(category) {
       drops += `<div class="weather-raindrop" style="left:${left}%;width:2.5px;height:14px;opacity:0.85;animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
     }
     const clouds = `
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:60%;height:36px;top:4px;left:-6%;animation-delay:0s;"></div>
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:55%;height:32px;top:10px;left:45%;animation-delay:3.5s;"></div>
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:62%;height:34px;top:32px;left:6%;animation-delay:6s;"></div>
-      <div class="weather-cloud-overlay dark" style="width:52%;height:30px;top:38px;left:56%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:58%;height:28px;top:60px;left:-4%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:80px;height:26px;top:4px;left:-2%;animation-delay:0s;"></div>
+      <div class="weather-cloud-overlay dark" style="width:54px;height:20px;top:14px;left:20%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:92px;height:30px;top:2px;left:34%;animation-delay:3.5s;"></div>
+      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:14px;left:62%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:70px;height:24px;top:6px;left:76%;animation-delay:6s;"></div>
+      <div class="weather-cloud-overlay dark" style="width:64px;height:22px;top:30px;left:2%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:82px;height:28px;top:26px;left:22%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:46px;height:18px;top:36px;left:50%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:74px;height:24px;top:30px;left:64%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:40px;left:86%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay dark" style="width:60px;height:20px;top:56px;left:6%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:72px;height:24px;top:60px;left:36%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:54px;height:18px;top:58px;left:62%;opacity:0.85;"></div>
     `;
     return clouds + drops;
   }
