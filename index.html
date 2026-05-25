@@ -342,6 +342,23 @@
   #garden-scene.sky-evening { background: linear-gradient(180deg, #ff9966 0%, #ffb38a 18%, #ffd1a1 35%, #7ba888 35.1%, #5d8e6f 55%, #4a7860 100%); }
   #garden-scene.sky-night   { background: linear-gradient(180deg, #1a2748 0%, #2c3e63 20%, #3d5278 35%, #2d4a3a 35.1%, #1f3a2c 55%, #15281f 100%); }
 
+  /* 天気による空の彩度低下（植物には影響させないため、空エリアにだけ重ねる） */
+  #garden-scene.weather-cloudy::after,
+  #garden-scene.weather-rain::after,
+  #garden-scene.weather-thunder::after,
+  #garden-scene.weather-fog::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 35%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #garden-scene.weather-cloudy::after { background: rgba(140,150,160,0.30); }
+  #garden-scene.weather-rain::after,
+  #garden-scene.weather-thunder::after { background: rgba(80,90,100,0.45); }
+  #garden-scene.weather-fog::after { background: rgba(200,200,200,0.30); }
+
   /* Sky elements */
   .garden-sun {
     position: absolute;
@@ -3462,18 +3479,20 @@ function getWeatherOverlayHTML(category) {
   }
   if (category === 'cloudy') {
     return `
-      <div class="weather-cloud-overlay" style="width:110px;height:32px;top:14px;left:8%;"></div>
-      <div class="weather-cloud-overlay" style="width:88px;height:26px;top:40px;left:42%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay" style="width:74px;height:24px;top:24px;left:64%;opacity:0.85;"></div>
-      <div class="weather-cloud-overlay" style="width:60px;height:20px;top:60px;left:18%;opacity:0.7;"></div>
+      <div class="weather-cloud-overlay" style="width:55%;height:34px;top:6px;left:-5%;"></div>
+      <div class="weather-cloud-overlay" style="width:50%;height:30px;top:14px;left:42%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay" style="width:60%;height:32px;top:34px;left:8%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay" style="width:48%;height:28px;top:42px;left:60%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay" style="width:55%;height:26px;top:62px;left:-3%;opacity:0.8;"></div>
+      <div class="weather-cloud-overlay" style="width:46%;height:24px;top:68px;left:54%;opacity:0.75;"></div>
     `;
   }
   // 雨3段階
   if (category === 'rainLight' || category === 'rainMedium' || category === 'rainHeavy') {
     const config = {
-      rainLight:  { count: 15, dur: [1.2, 1.6], width: 1.5, opacity: 0.5, clouds: 'med' },
-      rainMedium: { count: 30, dur: [0.9, 1.2], width: 2,   opacity: 0.75, clouds: 'med' },
-      rainHeavy:  { count: 55, dur: [0.6, 0.85], width: 2.5, opacity: 0.9, clouds: 'heavy' }
+      rainLight:  { count: 15, dur: [1.2, 1.6], width: 1.5, opacity: 0.5 },
+      rainMedium: { count: 30, dur: [0.9, 1.2], width: 2,   opacity: 0.75 },
+      rainHeavy:  { count: 55, dur: [0.6, 0.85], width: 2.5, opacity: 0.9 }
     }[category];
     let drops = '';
     for (let i = 0; i < config.count; i++) {
@@ -3483,15 +3502,14 @@ function getWeatherOverlayHTML(category) {
       const len = category === 'rainHeavy' ? 16 : (category === 'rainMedium' ? 12 : 9);
       drops += `<div class="weather-raindrop" style="left:${left}%;width:${config.width}px;height:${len}px;opacity:${config.opacity};animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
     }
-    const clouds = config.clouds === 'heavy' ? `
-      <div class="weather-cloud-overlay dark" style="width:130px;height:36px;top:6px;left:2%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:100px;height:30px;top:28px;left:34%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:90px;height:28px;top:14px;left:60%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:70px;height:22px;top:48px;left:14%;opacity:0.85;"></div>
-    ` : `
-      <div class="weather-cloud-overlay dark" style="width:120px;height:32px;top:8px;left:4%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:90px;height:26px;top:30px;left:38%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:80px;height:24px;top:14px;left:62%;"></div>
+    // 雨の時は空全体を厚い雲で覆う
+    const clouds = `
+      <div class="weather-cloud-overlay dark" style="width:60%;height:36px;top:4px;left:-6%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:55%;height:32px;top:10px;left:45%;"></div>
+      <div class="weather-cloud-overlay dark" style="width:62%;height:34px;top:32px;left:6%;opacity:0.95;"></div>
+      <div class="weather-cloud-overlay dark" style="width:52%;height:30px;top:38px;left:56%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:58%;height:28px;top:60px;left:-4%;opacity:0.85;"></div>
+      <div class="weather-cloud-overlay dark" style="width:50%;height:26px;top:64px;left:52%;opacity:0.8;"></div>
     `;
     return clouds + drops;
   }
@@ -3521,9 +3539,11 @@ function getWeatherOverlayHTML(category) {
       drops += `<div class="weather-raindrop" style="left:${left}%;width:2.5px;height:14px;opacity:0.85;animation-duration:${dur}s;animation-delay:${delay}s;"></div>`;
     }
     const clouds = `
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:130px;height:36px;top:6px;left:2%;animation-delay:0s;"></div>
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:100px;height:30px;top:28px;left:34%;animation-delay:3.5s;"></div>
-      <div class="weather-cloud-overlay dark thunder-flash" style="width:90px;height:28px;top:14px;left:60%;animation-delay:6s;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:60%;height:36px;top:4px;left:-6%;animation-delay:0s;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:55%;height:32px;top:10px;left:45%;animation-delay:3.5s;"></div>
+      <div class="weather-cloud-overlay dark thunder-flash" style="width:62%;height:34px;top:32px;left:6%;animation-delay:6s;"></div>
+      <div class="weather-cloud-overlay dark" style="width:52%;height:30px;top:38px;left:56%;opacity:0.9;"></div>
+      <div class="weather-cloud-overlay dark" style="width:58%;height:28px;top:60px;left:-4%;opacity:0.85;"></div>
     `;
     return clouds + drops;
   }
@@ -3541,21 +3561,26 @@ function getTimeOfDay() {
   return 'night';
 }
 
-function getSkyHTML(timeOfDay) {
+function getSkyHTML(timeOfDay, weather) {
+  // 晴れ以外（曇り・雨・雪・雷雨・霧）の時は、時間帯の雲は出さない（天気側の雲が出るため）
+  const hideClouds = weather && weather !== 'clear';
   if (timeOfDay === 'morning') {
     // 朝は太陽なし、雲だけ
+    if (hideClouds) return '';
     return `
       <div class="garden-cloud morning" style="width:72px;height:26px;top:22px;left:18px;"></div>
       <div class="garden-cloud morning" style="width:48px;height:18px;top:14px;left:68px;opacity:0.65;"></div>
       <div class="garden-cloud morning" style="width:60px;height:20px;top:42px;left:40%;opacity:0.6;"></div>
     `;
   } else if (timeOfDay === 'evening') {
-    // 夕方は太陽を地平線近くまで下げる（空の下端寄り）
-    return `
-      <div class="garden-sun evening" style="top:calc(35% - 24px);right:30px;"></div>
+    const cloudsHTML = hideClouds ? '' : `
       <div class="garden-cloud evening" style="width:80px;height:24px;top:24px;left:15px;"></div>
       <div class="garden-cloud evening" style="width:54px;height:20px;top:14px;left:60px;opacity:0.7;"></div>
       <div class="garden-cloud evening" style="width:46px;height:18px;top:42px;left:42%;opacity:0.55;"></div>
+    `;
+    return `
+      <div class="garden-sun evening" style="top:calc(35% - 56px);right:30px;"></div>
+      ${cloudsHTML}
     `;
   } else if (timeOfDay === 'night') {
     let stars = '';
@@ -3567,14 +3592,20 @@ function getSkyHTML(timeOfDay) {
     starPositions.forEach(([x, y], i) => {
       stars += `<div class="garden-star" style="left:${x}%;top:${y}px;animation-delay:${(i * 0.3) % 3}s;"></div>`;
     });
-    return `
-      ${stars}
-      <div class="garden-moon"></div>
+    const cloudsHTML = hideClouds ? '' : `
       <div class="garden-cloud night" style="width:64px;height:20px;top:48px;left:20px;"></div>
       <div class="garden-cloud night" style="width:48px;height:16px;top:60px;left:60%;opacity:0.5;"></div>
     `;
+    return `
+      ${stars}
+      <div class="garden-moon"></div>
+      ${cloudsHTML}
+    `;
   } else {
     // day
+    if (hideClouds) {
+      return `<div class="garden-sun"></div>`;
+    }
     return `
       <div class="garden-sun"></div>
       <div class="garden-cloud" style="width:72px;height:26px;top:22px;left:18px;"></div>
@@ -3591,13 +3622,22 @@ function applySkyClass(scene) {
   return tod;
 }
 
+function applyWeatherClass(scene, weather) {
+  scene.classList.remove('weather-cloudy', 'weather-rain', 'weather-thunder', 'weather-fog');
+  if (weather === 'cloudy' || weather === 'partlyCloudy') scene.classList.add('weather-cloudy');
+  else if (weather === 'rainLight' || weather === 'rainMedium' || weather === 'rainHeavy') scene.classList.add('weather-rain');
+  else if (weather === 'thunder') scene.classList.add('weather-thunder');
+  else if (weather === 'fog') scene.classList.add('weather-fog');
+}
+
 function renderGarden() {
   const scene = document.getElementById('garden-scene');
   const tod = applySkyClass(scene);
   const weather = weatherCache ? weatherCache.category : 'clear';
+  applyWeatherClass(scene, weather);
   const weatherHTML = getWeatherOverlayHTML(weather);
   if (!plants.length) {
-    scene.innerHTML = `${getSkyHTML(tod)}${weatherHTML}<div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
+    scene.innerHTML = `${getSkyHTML(tod, weather)}${weatherHTML}<div class="garden-empty">🌱<br>植物を登録すると<br>ここに庭が広がります</div>`;
     return;
   }
   const groups=[0,1,2,3,4].map(s=>plants.filter(p=>getGrowthStage(p)===s));
@@ -3657,7 +3697,7 @@ function renderGarden() {
     const fertEl  = hasFert  ? '<div class="effect-sparkle">✨</div>' : '';
     return `<div class="garden-plant" style="left:${x}%;top:${y}%;transform:translateX(-50%) translateY(-100%) scale(${depthScale.toFixed(2)});transform-origin:bottom center;z-index:${idx+1};opacity:${depthOpacity.toFixed(2)};"><div class="garden-plant-body" style="width:${tapW}px;height:${tapH}px;--svg-offset-x:${offsetX}px;--svg-offset-y:${offsetY}px" onclick="showGardenTooltip(event,'${p.id}')">${fertEl}${waterEl}${svg}</div></div>`;
   }).join('');
-  scene.innerHTML=`${getSkyHTML(tod)}${weatherHTML}${plants_html}`;
+  scene.innerHTML=`${getSkyHTML(tod, weather)}${weatherHTML}${plants_html}`;
 }
 
 function showGardenTooltip(e, plantId) {
