@@ -356,7 +356,7 @@
   }
   #garden-scene.weather-cloudy::after { background: rgba(40,55,75,0.22); }
   #garden-scene.weather-rain::after,
-  #garden-scene.weather-thunder::after { background: rgba(20,30,50,0.38); }
+  #garden-scene.weather-thunder::after { background: linear-gradient(180deg, rgba(20,30,50,0.55) 0%, rgba(20,30,50,0.20) 100%); }
   #garden-scene.weather-fog::after { background: rgba(220,225,230,0.30); }
 
   /* Sky elements */
@@ -3555,27 +3555,29 @@ function getWeatherOverlayHTML(category) {
       drops += `<div class="weather-raindrop" style="left:${left}%;width:${config.width}px;height:${len}px;opacity:${config.opacity};animation-duration:${dur}s;animation-delay:${delay.toFixed(2)}s;"></div>`;
     }
     // 雨の時は空全体を厚い雲で覆う（さまざまな大きさ20個）
+    // 小雨は雲を白っぽい色に（曇りと同じ）
+    const cloudClass = category === 'rainLight' ? 'weather-cloud-overlay' : 'weather-cloud-overlay dark';
     const clouds = `
-      <div class="weather-cloud-overlay dark" style="width:78px;height:26px;top:0px;left:-2%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:56px;height:20px;top:10px;left:14%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:90px;height:30px;top:-2px;left:28%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:8px;left:52%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay dark" style="width:72px;height:24px;top:2px;left:66%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:48px;height:18px;top:12px;left:84%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay dark" style="width:64px;height:22px;top:24px;left:-2%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay dark" style="width:44px;height:18px;top:20px;left:16%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:82px;height:28px;top:22px;left:30%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:46px;height:18px;top:30px;left:54%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:74px;height:24px;top:24px;left:66%;"></div>
-      <div class="weather-cloud-overlay dark" style="width:46px;height:18px;top:32px;left:86%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:60px;height:20px;top:46px;left:2%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:42px;left:22%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:72px;height:24px;top:48px;left:36%;opacity:0.95;"></div>
-      <div class="weather-cloud-overlay dark" style="width:50px;height:18px;top:44px;left:58%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:64px;height:22px;top:50px;left:72%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:46px;height:18px;top:64px;left:10%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:60px;height:20px;top:62px;left:38%;opacity:0.9;"></div>
-      <div class="weather-cloud-overlay dark" style="width:54px;height:18px;top:66px;left:68%;opacity:0.85;"></div>
+      <div class="${cloudClass}" style="width:78px;height:26px;top:0px;left:-2%;"></div>
+      <div class="${cloudClass}" style="width:56px;height:20px;top:10px;left:14%;"></div>
+      <div class="${cloudClass}" style="width:90px;height:30px;top:-2px;left:28%;"></div>
+      <div class="${cloudClass}" style="width:50px;height:18px;top:8px;left:52%;opacity:0.95;"></div>
+      <div class="${cloudClass}" style="width:72px;height:24px;top:2px;left:66%;"></div>
+      <div class="${cloudClass}" style="width:48px;height:18px;top:12px;left:84%;opacity:0.95;"></div>
+      <div class="${cloudClass}" style="width:64px;height:22px;top:24px;left:-2%;opacity:0.95;"></div>
+      <div class="${cloudClass}" style="width:44px;height:18px;top:20px;left:16%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:82px;height:28px;top:22px;left:30%;"></div>
+      <div class="${cloudClass}" style="width:46px;height:18px;top:30px;left:54%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:74px;height:24px;top:24px;left:66%;"></div>
+      <div class="${cloudClass}" style="width:46px;height:18px;top:32px;left:86%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:60px;height:20px;top:46px;left:2%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:50px;height:18px;top:42px;left:22%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:72px;height:24px;top:48px;left:36%;opacity:0.95;"></div>
+      <div class="${cloudClass}" style="width:50px;height:18px;top:44px;left:58%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:64px;height:22px;top:50px;left:72%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:46px;height:18px;top:64px;left:10%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:60px;height:20px;top:62px;left:38%;opacity:0.9;"></div>
+      <div class="${cloudClass}" style="width:54px;height:18px;top:66px;left:68%;opacity:0.85;"></div>
     `;
     return clouds + drops;
   }
