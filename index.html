@@ -133,6 +133,19 @@
   .detail-value { font-size: 13px; color: var(--ink); font-weight: 500; }
   .detail-value.none { color: var(--earth-light); font-style: italic; }
   .recent-logs { margin-top: 12px; }
+
+  /* PHOTOS */
+  .plant-photos { margin-top: 14px; }
+  .plant-photos-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .plant-photos-title { flex: 1; font-size: 11px; color: var(--earth-light); font-weight: 600; letter-spacing: 0.5px; }
+  .plant-photo-add-btn { background: var(--mist); border: none; border-radius: 8px; padding: 4px 10px; font-size: 11px; color: var(--ink); cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; }
+  .plant-photo-add-btn:active { background: var(--cream-dark); }
+  .plant-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .plant-photo-cell { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--mist); }
+  .plant-photo-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .plant-photo-date { position: absolute; left: 4px; bottom: 4px; right: 4px; background: rgba(30,42,31,0.6); color: white; font-size: 9px; padding: 1px 4px; border-radius: 4px; text-align: center; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+  .plant-photo-del { position: absolute; top: 2px; right: 2px; background: rgba(30,42,31,0.6); border: none; color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .plant-photo-empty { text-align: center; color: var(--earth-light); font-size: 11px; padding: 14px 0; }
   .recent-logs-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--earth-light); font-weight: 600; margin-bottom: 8px; }
   .log-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(168,197,171,0.2); font-size: 12px; }
   .log-item:last-child { border-bottom: none; }
@@ -1692,6 +1705,14 @@ function renderPlants() {
               <div class="log-date">${formatDateRel(l.date)}</div>
             </div>`).join('')}
         </div>` : ''}
+        <div class="plant-photos">
+          <div class="plant-photos-header">
+            <div class="plant-photos-title">📷 写真</div>
+            <input type="file" id="photo-input-${p.id}" accept="image/*" multiple style="display:none;" onchange="handlePhotoSelected('${p.id}', this.files); this.value='';">
+            <button class="plant-photo-add-btn" onclick="triggerPhotoInput('${p.id}')">＋ 追加</button>
+          </div>
+          <div id="photos-${p.id}"></div>
+        </div>
         <div class="card-edit-actions">
           <button class="action-btn btn-edit"   onclick="openEditPlantModal('${p.id}')">✏️ 編集</button>
           <button class="action-btn btn-delete" onclick="deletePlant('${p.id}')">🗑 削除</button>
@@ -1702,8 +1723,14 @@ function renderPlants() {
 }
 
 function toggleCard(id) {
-  document.getElementById('detail-'+id).classList.toggle('open');
-  document.getElementById('arrow-'+id).classList.toggle('open');
+  const detail = document.getElementById('detail-'+id);
+  const arrow = document.getElementById('arrow-'+id);
+  detail.classList.toggle('open');
+  arrow.classList.toggle('open');
+  // 開いたタイミングで写真を読み込む
+  if (detail.classList.contains('open')) {
+    renderPlantPhotos(id);
+  }
 }
 
 // ===== START DATE SELECT PICKER =====
@@ -1942,9 +1969,14 @@ function savePlant() {
 }
 function deletePlant(id) {
   const p = plants.find(x=>x.id===id);
-  showConfirm('🗑',`「${p.name}」を削除しますか？`,'関連する記録もすべて削除されます。','削除する',true,()=>{
+  showConfirm('🗑',`「${p.name}」を削除しますか？`,'関連する記録と写真もすべて削除されます。','削除する',true,async ()=>{
     plants = plants.filter(x=>x.id!==id);
     logs   = logs.filter(l=>l.plantId!==id);
+    // 関連する写真も削除
+    try {
+      const photos = await getPhotosByPlant(id);
+      for (const ph of photos) await deletePhoto(ph.id);
+    } catch (e) {}
     save(); renderPlants(); updateLogPlantFilter();
   });
 }
@@ -2998,6 +3030,167 @@ document.addEventListener('click', (e) => {
   const overlay = document.getElementById('tag-manage-overlay');
   if (overlay && e.target === overlay) closeTagManageSheet();
 });
+
+// ===== PHOTOS (IndexedDB) =====
+// 植物写真の永続保存。Blobとして保存。
+const PHOTO_DB_NAME = 'plant-tracker-photos';
+const PHOTO_DB_VERSION = 1;
+const PHOTO_STORE = 'photos';
+let _photoDB = null;
+
+function openPhotoDB() {
+  return new Promise((resolve, reject) => {
+    if (_photoDB) { resolve(_photoDB); return; }
+    const req = indexedDB.open(PHOTO_DB_NAME, PHOTO_DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PHOTO_STORE)) {
+        const store = db.createObjectStore(PHOTO_STORE, { keyPath: 'id' });
+        store.createIndex('plantId', 'plantId', { unique: false });
+        store.createIndex('takenAt', 'takenAt', { unique: false });
+      }
+    };
+    req.onsuccess = (e) => { _photoDB = e.target.result; resolve(_photoDB); };
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+// 画像をリサイズ・圧縮してBlobに変換
+function resizeImageToBlob(file, maxSize = 800, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = () => { img.src = reader.result; };
+    reader.onerror = () => reject(new Error('読み込み失敗'));
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > h) {
+        if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+      } else {
+        if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob); else reject(new Error('圧縮失敗'));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => reject(new Error('画像読み込み失敗'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function savePhoto(plantId, file) {
+  const blob = await resizeImageToBlob(file);
+  const db = await openPhotoDB();
+  const id = 'ph_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+  const record = {
+    id,
+    plantId,
+    takenAt: Date.now(),
+    blob,
+    size: blob.size
+  };
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readwrite');
+    tx.objectStore(PHOTO_STORE).add(record);
+    tx.oncomplete = () => resolve(record);
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getPhotosByPlant(plantId) {
+  const db = await openPhotoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readonly');
+    const index = tx.objectStore(PHOTO_STORE).index('plantId');
+    const req = index.getAll(plantId);
+    req.onsuccess = () => {
+      const arr = req.result || [];
+      arr.sort((a, b) => b.takenAt - a.takenAt);
+      resolve(arr);
+    };
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deletePhoto(id) {
+  const db = await openPhotoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readwrite');
+    tx.objectStore(PHOTO_STORE).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+// 植物詳細内の写真セクションを再描画
+async function renderPlantPhotos(plantId) {
+  const container = document.getElementById('photos-' + plantId);
+  if (!container) return;
+  try {
+    const photos = await getPhotosByPlant(plantId);
+    if (!photos.length) {
+      container.innerHTML = `<div class="plant-photo-empty">まだ写真がありません</div>`;
+      return;
+    }
+    container.innerHTML = `<div class="plant-photo-grid">${photos.map(p => {
+      const url = URL.createObjectURL(p.blob);
+      const date = new Date(p.takenAt);
+      const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+      return `
+        <div class="plant-photo-cell">
+          <img src="${url}" alt="">
+          <button class="plant-photo-del" onclick="confirmDeletePhoto('${p.id}','${plantId}')">×</button>
+          <div class="plant-photo-date">${dateStr}</div>
+        </div>
+      `;
+    }).join('')}</div>`;
+  } catch (e) {
+    container.innerHTML = `<div class="plant-photo-empty">写真の読み込みに失敗しました</div>`;
+  }
+}
+
+// 写真追加（hidden inputから呼ばれる）
+function triggerPhotoInput(plantId) {
+  const input = document.getElementById('photo-input-' + plantId);
+  if (input) input.click();
+}
+
+async function handlePhotoSelected(plantId, files) {
+  if (!files || !files.length) return;
+  showToast(`写真を保存中...`);
+  let saved = 0;
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) continue;
+    try {
+      await savePhoto(plantId, f);
+      saved++;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  if (saved > 0) {
+    showToast(`${saved}枚の写真を保存しました`);
+    renderPlantPhotos(plantId);
+  } else {
+    showToast('写真の保存に失敗しました');
+  }
+}
+
+function confirmDeletePhoto(photoId, plantId) {
+  showConfirm('🗑', 'この写真を削除しますか?', '', '削除する', true, async () => {
+    try {
+      await deletePhoto(photoId);
+      renderPlantPhotos(plantId);
+      showToast('写真を削除しました');
+    } catch (e) {
+      showToast('削除に失敗しました');
+    }
+  });
+}
 
 // ===== SHOPS =====
 
