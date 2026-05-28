@@ -133,6 +133,32 @@
   .detail-value { font-size: 13px; color: var(--ink); font-weight: 500; }
   .detail-value.none { color: var(--earth-light); font-style: italic; }
   .recent-logs { margin-top: 12px; }
+
+  /* FAVORITE PHOTOS */
+  .fav-photos { margin-top: 14px; }
+  .fav-photos-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .fav-photos-title { flex: 1; font-size: 11px; color: var(--earth-light); font-weight: 600; letter-spacing: 0.5px; }
+  .fav-photo-add-btn { background: var(--mist); border: none; border-radius: 8px; padding: 4px 10px; font-size: 11px; color: var(--ink); cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: rgba(126,142,108,0.2); touch-action: manipulation; }
+  .fav-photo-add-btn:active { background: var(--cream-dark); }
+  .fav-photo-add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .fav-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .fav-photo-cell { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--mist); cursor: pointer; }
+  .fav-photo-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .fav-photo-empty { text-align: center; color: var(--earth-light); font-size: 11px; padding: 14px 0; }
+
+  /* FAV PHOTO VIEWER */
+  .fav-viewer-overlay { position: fixed; inset: 0; background: rgba(20,25,20,0.95); z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; padding: env(safe-area-inset-top, 0px) 16px env(safe-area-inset-bottom, 0px); }
+  .fav-viewer-overlay.open { display: flex; }
+  .fav-viewer-top { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); left: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 2; }
+  .fav-viewer-close { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; }
+  .fav-viewer-spacer { flex: 1; }
+  .fav-viewer-action-btn { background: rgba(255,255,255,0.15); border: none; color: white; height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; }
+  .fav-viewer-action-btn.danger { background: rgba(200,80,80,0.4); }
+  .fav-viewer-image-wrap { width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; }
+  .fav-viewer-image { max-width: 100%; max-height: 70vh; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); object-fit: contain; }
+  .fav-viewer-info { margin-top: 18px; text-align: center; color: white; }
+  .fav-viewer-date { font-size: 14px; color: rgba(255,255,255,0.85); font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .fav-viewer-date-edit { background: rgba(255,255,255,0.15); border: none; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
   .recent-logs-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--earth-light); font-weight: 600; margin-bottom: 8px; }
   .log-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(168,197,171,0.2); font-size: 12px; }
   .log-item:last-child { border-bottom: none; }
@@ -272,6 +298,8 @@
   .modal-overlay { position: fixed; inset: 0; background: rgba(30,42,31,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
   /* タグ管理シートは confirm より下に置く */
   #tag-manage-overlay { z-index: 250; }
+  /* お気に入り写真の日付編集モーダルはビューア(500)より上、confirm(300)より上 */
+  #fav-date-modal { z-index: 550; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--card-bg); border-radius: 24px 24px 0 0; width: 100%; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 32px; animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1); }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -889,6 +917,41 @@
     </div>
     <div class="modal-footer">
       <button class="btn-save" onclick="closeShopMemoModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAVORITE PHOTO VIEWER -->
+<div class="fav-viewer-overlay" id="fav-viewer-overlay">
+  <div class="fav-viewer-top">
+    <button class="fav-viewer-close" onclick="closeFavViewer()">×</button>
+    <div class="fav-viewer-spacer"></div>
+    <button class="fav-viewer-action-btn" onclick="editFavViewerDate()">📅 日付編集</button>
+    <button class="fav-viewer-action-btn danger" onclick="confirmDeleteFavPhoto()">🗑 削除</button>
+  </div>
+  <div class="fav-viewer-image-wrap" id="fav-viewer-image-wrap"></div>
+  <div class="fav-viewer-info">
+    <div class="fav-viewer-date">
+      <span id="fav-viewer-date-text"></span>
+    </div>
+  </div>
+</div>
+
+<!-- FAV DATE EDIT MODAL -->
+<div class="modal-overlay" id="fav-date-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">日付を編集</div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">日付</label>
+        <input type="date" class="field-input" id="fav-date-input">
+        <div style="font-size:10px;color:var(--earth-light);margin-top:6px;line-height:1.5;">撮影日を変更できます</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeFavDateModal()">キャンセル</button>
+      <button class="btn-save" onclick="saveFavDate()">保存</button>
     </div>
   </div>
 </div>
@@ -1692,6 +1755,14 @@ function renderPlants() {
               <div class="log-date">${formatDateRel(l.date)}</div>
             </div>`).join('')}
         </div>` : ''}
+        <div class="fav-photos">
+          <div class="fav-photos-header">
+            <div class="fav-photos-title">⭐ お気に入りの写真</div>
+            <input type="file" id="fav-input-${p.id}" accept="image/*" style="display:none;" onchange="handleFavSelected('${p.id}', this.files); this.value='';">
+            <button class="fav-photo-add-btn" id="fav-add-btn-${p.id}" onclick="triggerFavInput('${p.id}')">＋ 追加</button>
+          </div>
+          <div id="favphotos-${p.id}"></div>
+        </div>
         <div class="card-edit-actions">
           <button class="action-btn btn-edit"   onclick="openEditPlantModal('${p.id}')">✏️ 編集</button>
           <button class="action-btn btn-delete" onclick="deletePlant('${p.id}')">🗑 削除</button>
@@ -1702,8 +1773,13 @@ function renderPlants() {
 }
 
 function toggleCard(id) {
-  document.getElementById('detail-'+id).classList.toggle('open');
-  document.getElementById('arrow-'+id).classList.toggle('open');
+  const detail = document.getElementById('detail-'+id);
+  const arrow = document.getElementById('arrow-'+id);
+  detail.classList.toggle('open');
+  arrow.classList.toggle('open');
+  if (detail.classList.contains('open')) {
+    renderFavPhotos(id);
+  }
 }
 
 // ===== START DATE SELECT PICKER =====
@@ -1942,9 +2018,10 @@ function savePlant() {
 }
 function deletePlant(id) {
   const p = plants.find(x=>x.id===id);
-  showConfirm('🗑',`「${p.name}」を削除しますか？`,'関連する記録もすべて削除されます。','削除する',true,()=>{
+  showConfirm('🗑',`「${p.name}」を削除しますか？`,'関連する記録と写真もすべて削除されます。','削除する',true,async ()=>{
     plants = plants.filter(x=>x.id!==id);
     logs   = logs.filter(l=>l.plantId!==id);
+    try { await deletePhotosByPlant(id); } catch (e) {}
     save(); renderPlants(); updateLogPlantFilter();
   });
 }
@@ -2998,6 +3075,314 @@ document.addEventListener('click', (e) => {
   const overlay = document.getElementById('tag-manage-overlay');
   if (overlay && e.target === overlay) closeTagManageSheet();
 });
+
+// ===== PHOTOS (IndexedDB) =====
+// 写真の永続保存。Blobとして保存。
+const PHOTO_DB_NAME = 'plant-tracker-photos';
+const PHOTO_DB_VERSION = 1;
+const PHOTO_STORE = 'photos';
+let _photoDB = null;
+
+function openPhotoDB() {
+  return new Promise((resolve, reject) => {
+    if (_photoDB) { resolve(_photoDB); return; }
+    const req = indexedDB.open(PHOTO_DB_NAME, PHOTO_DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PHOTO_STORE)) {
+        const store = db.createObjectStore(PHOTO_STORE, { keyPath: 'id' });
+        store.createIndex('plantId', 'plantId', { unique: false });
+        store.createIndex('kind', 'kind', { unique: false });
+        store.createIndex('takenAt', 'takenAt', { unique: false });
+      }
+    };
+    req.onsuccess = (e) => { _photoDB = e.target.result; resolve(_photoDB); };
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+// 画像をリサイズ・圧縮してBlobに変換
+function resizeImageToBlob(file, maxSize = 1200, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = () => { img.src = reader.result; };
+    reader.onerror = () => reject(new Error('読み込み失敗'));
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > h) {
+        if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+      } else {
+        if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob); else reject(new Error('圧縮失敗'));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => reject(new Error('画像読み込み失敗'));
+    reader.readAsDataURL(file);
+  });
+}
+
+// Exif撮影日を読み取る（簡易版）
+function readExifTakenAt(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const view = new DataView(e.target.result);
+        if (view.getUint16(0) !== 0xFFD8) { resolve(null); return; }
+        const len = view.byteLength;
+        let offset = 2;
+        while (offset < len) {
+          const marker = view.getUint16(offset);
+          offset += 2;
+          if (marker === 0xFFE1) {
+            // APP1 Exif
+            if (view.getUint32(offset + 2) !== 0x45786966) { resolve(null); return; }
+            const tiffOffset = offset + 8;
+            const little = view.getUint16(tiffOffset) === 0x4949;
+            const ifdOffset = view.getUint32(tiffOffset + 4, little);
+            const tags = view.getUint16(tiffOffset + ifdOffset, little);
+            for (let i = 0; i < tags; i++) {
+              const tagOffset = tiffOffset + ifdOffset + 2 + i * 12;
+              const tag = view.getUint16(tagOffset, little);
+              // DateTime / DateTimeOriginal SubIFD
+              if (tag === 0x8769) {
+                const subIfdOffset = view.getUint32(tagOffset + 8, little);
+                const subTags = view.getUint16(tiffOffset + subIfdOffset, little);
+                for (let j = 0; j < subTags; j++) {
+                  const subTagOffset = tiffOffset + subIfdOffset + 2 + j * 12;
+                  const subTag = view.getUint16(subTagOffset, little);
+                  if (subTag === 0x9003) { // DateTimeOriginal
+                    const valOffset = view.getUint32(subTagOffset + 8, little);
+                    let str = '';
+                    for (let k = 0; k < 19; k++) {
+                      str += String.fromCharCode(view.getUint8(tiffOffset + valOffset + k));
+                    }
+                    // 形式: "YYYY:MM:DD HH:MM:SS"
+                    const m = str.match(/^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
+                    if (m) {
+                      const d = new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]);
+                      resolve(d.getTime());
+                      return;
+                    }
+                  }
+                }
+              }
+            }
+            resolve(null);
+            return;
+          } else if ((marker & 0xFF00) !== 0xFF00) {
+            resolve(null);
+            return;
+          } else {
+            offset += view.getUint16(offset);
+          }
+        }
+        resolve(null);
+      } catch (err) {
+        resolve(null);
+      }
+    };
+    reader.onerror = () => resolve(null);
+    // 先頭128KBで十分（Exifは普通先頭付近）
+    reader.readAsArrayBuffer(file.slice(0, 131072));
+  });
+}
+
+async function savePhotoFromFile(plantId, file, kind) {
+  // 撮影日（Exif） or 現在時刻
+  const exifAt = await readExifTakenAt(file);
+  const takenAt = exifAt || Date.now();
+  const blob = await resizeImageToBlob(file);
+  const db = await openPhotoDB();
+  const id = (kind === 'fav' ? 'fav_' : 'ph_') + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+  const record = { id, plantId, kind, takenAt, blob, size: blob.size };
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readwrite');
+    tx.objectStore(PHOTO_STORE).add(record);
+    tx.oncomplete = () => resolve(record);
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getPhotos(plantId, kind) {
+  const db = await openPhotoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readonly');
+    const index = tx.objectStore(PHOTO_STORE).index('plantId');
+    const req = index.getAll(plantId);
+    req.onsuccess = () => {
+      let arr = req.result || [];
+      if (kind) arr = arr.filter(p => p.kind === kind);
+      arr.sort((a, b) => b.takenAt - a.takenAt);
+      resolve(arr);
+    };
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deletePhotoById(id) {
+  const db = await openPhotoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readwrite');
+    tx.objectStore(PHOTO_STORE).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function updatePhotoTakenAt(id, newTakenAt) {
+  const db = await openPhotoDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PHOTO_STORE, 'readwrite');
+    const store = tx.objectStore(PHOTO_STORE);
+    const getReq = store.get(id);
+    getReq.onsuccess = () => {
+      const rec = getReq.result;
+      if (!rec) { resolve(); return; }
+      rec.takenAt = newTakenAt;
+      store.put(rec);
+    };
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deletePhotosByPlant(plantId) {
+  const photos = await getPhotos(plantId);
+  for (const p of photos) await deletePhotoById(p.id);
+}
+
+// ===== FAVORITE PHOTOS UI =====
+const FAV_MAX = 3;
+
+async function renderFavPhotos(plantId) {
+  const container = document.getElementById('favphotos-' + plantId);
+  if (!container) return;
+  try {
+    const photos = await getPhotos(plantId, 'fav');
+    const addBtn = document.getElementById('fav-add-btn-' + plantId);
+    if (addBtn) addBtn.disabled = photos.length >= FAV_MAX;
+    if (!photos.length) {
+      container.innerHTML = `<div class="fav-photo-empty">お気に入りの写真をここに登録できます（最大${FAV_MAX}枚）</div>`;
+      return;
+    }
+    container.innerHTML = `<div class="fav-photo-grid">${photos.map(p => {
+      const url = URL.createObjectURL(p.blob);
+      return `<div class="fav-photo-cell" onclick="openFavViewer('${p.id}','${plantId}')"><img src="${url}" alt=""></div>`;
+    }).join('')}</div>`;
+  } catch (e) {
+    container.innerHTML = `<div class="fav-photo-empty">写真の読み込みに失敗しました</div>`;
+  }
+}
+
+function triggerFavInput(plantId) {
+  const input = document.getElementById('fav-input-' + plantId);
+  if (input) input.click();
+}
+
+async function handleFavSelected(plantId, files) {
+  if (!files || !files.length) return;
+  const f = files[0];
+  if (!f.type.startsWith('image/')) return;
+  // 上限チェック
+  const existing = await getPhotos(plantId, 'fav');
+  if (existing.length >= FAV_MAX) {
+    showToast(`お気に入り写真は最大${FAV_MAX}枚までです`);
+    return;
+  }
+  showToast('写真を保存中...');
+  try {
+    await savePhotoFromFile(plantId, f, 'fav');
+    showToast('お気に入りに追加しました');
+    renderFavPhotos(plantId);
+  } catch (e) {
+    showToast('保存に失敗しました');
+  }
+}
+
+// お気に入り写真ビューア（拡大表示）
+let _favViewer = { photoId: null, plantId: null, url: null };
+
+async function openFavViewer(photoId, plantId) {
+  const photos = await getPhotos(plantId, 'fav');
+  const p = photos.find(x => x.id === photoId);
+  if (!p) return;
+  if (_favViewer.url) URL.revokeObjectURL(_favViewer.url);
+  _favViewer = { photoId, plantId, url: URL.createObjectURL(p.blob) };
+  document.getElementById('fav-viewer-image-wrap').innerHTML =
+    `<img class="fav-viewer-image" src="${_favViewer.url}">`;
+  updateFavViewerDate(p.takenAt);
+  document.getElementById('fav-viewer-overlay').classList.add('open');
+}
+
+function closeFavViewer() {
+  document.getElementById('fav-viewer-overlay').classList.remove('open');
+  if (_favViewer.url) URL.revokeObjectURL(_favViewer.url);
+  _favViewer = { photoId: null, plantId: null, url: null };
+}
+
+function updateFavViewerDate(ts) {
+  const d = new Date(ts);
+  const s = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+  document.getElementById('fav-viewer-date-text').textContent = s;
+}
+
+function editFavViewerDate() {
+  if (!_favViewer.photoId) return;
+  // 日付入力モーダルを開く
+  const dEl = document.getElementById('fav-date-input');
+  // 現在値を入力欄にセット
+  const span = document.getElementById('fav-viewer-date-text').textContent;
+  const m = span.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+  if (m) dEl.value = `${m[1]}-${m[2]}-${m[3]}`;
+  document.getElementById('fav-date-modal').classList.add('open');
+}
+
+function closeFavDateModal() {
+  document.getElementById('fav-date-modal').classList.remove('open');
+}
+
+async function saveFavDate() {
+  if (!_favViewer.photoId) { closeFavDateModal(); return; }
+  const val = document.getElementById('fav-date-input').value;
+  if (!val) { showToast('日付を入力してください'); return; }
+  const [y, m, d] = val.split('-').map(Number);
+  if (!y || !m || !d) { showToast('日付の形式が不正です'); return; }
+  const newTs = new Date(y, m-1, d, 12, 0, 0).getTime();
+  try {
+    await updatePhotoTakenAt(_favViewer.photoId, newTs);
+    updateFavViewerDate(newTs);
+    closeFavDateModal();
+    showToast('日付を更新しました');
+    renderFavPhotos(_favViewer.plantId);
+  } catch (e) {
+    showToast('更新に失敗しました');
+  }
+}
+
+function confirmDeleteFavPhoto() {
+  if (!_favViewer.photoId) return;
+  const id = _favViewer.photoId;
+  const plantId = _favViewer.plantId;
+  // ビューアを先に閉じてから確認ダイアログを出す（z-index競合回避）
+  closeFavViewer();
+  showConfirm('🗑', 'この写真を削除しますか?', '', '削除する', true, async () => {
+    try {
+      await deletePhotoById(id);
+      renderFavPhotos(plantId);
+      showToast('写真を削除しました');
+    } catch (e) {
+      showToast('削除に失敗しました');
+    }
+  });
+}
 
 // ===== SHOPS =====
 
