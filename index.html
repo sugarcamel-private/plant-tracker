@@ -192,7 +192,7 @@
   .plant-diary-info { margin-top: 6px; font-size: 11px; color: var(--sage-dark); font-weight: 600; }
   .plant-trophy { display: inline-block; font-size: 11px; color: #b58a2a; background: rgba(232,201,122,0.18); padding: 2px 7px; border-radius: 8px; margin-left: 6px; vertical-align: middle; font-weight: 600; letter-spacing: 0.5px; }
 
-  /* DIARY CARD: 完走待ち */
+  /* DIARY CARD: 完了待ち */
   .diary-card.reached { background: linear-gradient(135deg, #fffaef 0%, #fff5db 100%); border: 1.5px solid #e8c97a; position: relative; }
 
   /* DIARY REACHED MODAL (達成おめでとう) */
@@ -949,7 +949,7 @@
       <div id="diary-active-list"></div>
     </div>
     <div class="diary-section" id="diary-finished-section" style="display:none;">
-      <div class="diary-section-title">完走 🎉</div>
+      <div class="diary-section-title">完了 🎉</div>
       <div id="diary-finished-list"></div>
     </div>
   </div>
@@ -1187,11 +1187,11 @@
     <div style="text-align:center;font-size:32px;margin-bottom:6px;">📸</div>
     <div class="modal-title" style="font-size:14px;">画面収録できましたか？</div>
     <div style="font-size:11px;color:var(--earth-light);text-align:center;margin-bottom:14px;line-height:1.6;">
-      写真を削除して完走バッジに切り替えますか？<br>
+      写真を削除して完了にしますか？<br>
       削除すると元には戻せません。
     </div>
     <div class="modal-footer" style="flex-direction:column;gap:6px;">
-      <button class="btn-save" style="width:100%;" onclick="confirmFinalizeDiary()">✅ 写真を削除して完走</button>
+      <button class="btn-save" style="width:100%;" onclick="confirmFinalizeDiary()">✅ 写真を削除して完了</button>
       <button class="btn-save" style="width:100%;background:white;color:var(--sage-dark);border:1.5px solid var(--cream-dark);" onclick="replayDiarySlideshow()">🎬 もう一度見る</button>
       <button class="btn-cancel" style="width:100%;" onclick="closeFinalizeDialog()">あとで削除する</button>
     </div>
@@ -1356,7 +1356,7 @@
     <div class="modal-body">
       <div style="font-size:12px;color:var(--earth-light);margin-bottom:12px;line-height:1.6;">
         進行中の百日日記を選んで、ダミー画像で写真を埋められます。<br>
-        完走機能の動作確認用です。
+        完了機能の動作確認用です。
       </div>
       <div class="field-group">
         <label class="field-label">対象の百日日記</label>
@@ -1367,8 +1367,8 @@
         <div class="item-selector" id="diary-debug-count-selector">
           <button type="button" class="item-chip" data-count="10" onclick="setDiaryDebugCount(10, this)">10枚</button>
           <button type="button" class="item-chip" data-count="50" onclick="setDiaryDebugCount(50, this)">50枚</button>
-          <button type="button" class="item-chip" data-count="99" onclick="setDiaryDebugCount(99, this)">99枚（完走目前）</button>
-          <button type="button" class="item-chip selected" data-count="100" onclick="setDiaryDebugCount(100, this)">100枚（完走）</button>
+          <button type="button" class="item-chip" data-count="99" onclick="setDiaryDebugCount(99, this)">99枚（完了目前）</button>
+          <button type="button" class="item-chip selected" data-count="100" onclick="setDiaryDebugCount(100, this)">100枚（完了）</button>
         </div>
       </div>
       <div style="font-size:11px;color:var(--earth-light);line-height:1.5;background:rgba(200,80,80,0.08);border-radius:8px;padding:8px 10px;margin-top:8px;">
@@ -2256,7 +2256,7 @@ function renderPlants() {
           const firstTs = getDiaryFirstPhotoTs(diary);
           let valueText;
           if (status === 'reached') {
-            valueText = `🎉 達成（完走待ち）`;
+            valueText = `🎉 達成`;
           } else if (diary.photoDays.length === 0) {
             valueText = `0/100日　まだ写真が登録されていません`;
           } else {
@@ -4191,7 +4191,7 @@ function confirmDeleteFavPhoto() {
 }
 
 // ===== 100-DAY DIARY =====
-// diaries: 進行中・完走の百日日記
+// diaries: 進行中・完了の百日日記
 // 構造: { id, plantId, startDate(ms), photoDays:[YYYY-MM-DD,...], finishedAt(ms|null) }
 const DIARY_MAX_ACTIVE = 5;
 const DIARY_TARGET = 100;
@@ -4261,7 +4261,7 @@ function renderDiaryTab() {
     activeTitle.textContent = `進行中 (${active.length}/${DIARY_MAX_ACTIVE})`;
   }
 
-  // 並び順: 完走待ち(reached)を上、進行中(progress)を下
+  // 並び順: 完了待ち(reached)を上、進行中(progress)を下
   const sortedActive = [...active].sort((a, b) => {
     const sa = getDiaryStatus(a);
     const sb = getDiaryStatus(b);
@@ -4278,7 +4278,7 @@ function renderDiaryTab() {
     activeList.innerHTML = sortedActive.map(d => renderDiaryCard(d)).join('');
   }
 
-  // 完走一覧
+  // 完了一覧
   const finishedSection = document.getElementById('diary-finished-section');
   const finishedList = document.getElementById('diary-finished-list');
   if (finished.length) {
@@ -4297,7 +4297,7 @@ function renderDiaryCard(d) {
   const status = getDiaryStatus(d);
 
   if (status === 'reached') {
-    // 完走待ち（100枚揃ったが、まだ削除してない）
+    // 完了待ち（100枚揃ったが、まだ削除してない）
     const firstTs = getDiaryFirstPhotoTs(d);
     const lastTs = getDiaryLastPhotoTs(d);
     const periodLine = (firstTs && lastTs) ? `${fmtDateYmd(firstTs)} 〜 ${fmtDateYmd(lastTs)}` : '';
@@ -5036,7 +5036,7 @@ function openDiaryReachedModal(diaryId) {
   // 3択にする：すでにreachedAtがある = 「あとで」開いた状態なら3択、最初の達成なら2択
   const actionsHtml = `
     <button class="diary-reached-btn primary" onclick="startDiarySlideshow()">🎬 記念スライドショーを再生</button>
-    <button class="diary-reached-btn outline" onclick="reachedToFinalize()">写真を削除して完走</button>
+    <button class="diary-reached-btn outline" onclick="reachedToFinalize()">写真を削除して完了</button>
     <button class="diary-reached-btn outline" onclick="closeDiaryReachedModal()">あとで</button>
   `;
   document.getElementById('diary-reached-actions').innerHTML = actionsHtml;
@@ -5044,7 +5044,7 @@ function openDiaryReachedModal(diaryId) {
   document.getElementById('diary-reached-overlay').classList.add('open');
 }
 
-// 達成モーダルから直接「写真を削除して完走」
+// 達成モーダルから直接「写真を削除して完了」
 function reachedToFinalize() {
   if (!_reachedDiaryId) return;
   _slideshowDiaryId = _reachedDiaryId;
@@ -5312,13 +5312,13 @@ async function confirmFinalizeDiary() {
   if (!diary) { closeFinalizeDialog(); return; }
   closeFinalizeDialog();
   showConfirm('🗑', '本当に写真を削除しますか？',
-    '完走バッジは残りますが、写真本体は復元できません。',
-    '削除して完走', true, async () => {
+    '完了の記録は残りますが、写真本体は復元できません。',
+    '削除して完了', true, async () => {
       try {
         // 写真を全削除
         const photos = await getPhotos(diary.plantId, 'diary:' + diary.id);
         for (const ph of photos) await deletePhotoById(ph.id);
-        // finishedAtを設定（完走状態）
+        // finishedAtを設定（完了状態）
         diary.finishedAt = Date.now();
         // 写真の日付一覧は記念として残す（=delete しない）
         saveDiaries();
@@ -5328,7 +5328,7 @@ async function confirmFinalizeDiary() {
         if (document.getElementById('diary-detail-overlay').classList.contains('open')) {
           closeDiaryDetail();
         }
-        showToast('🎉 完走しました！');
+        showToast('🎉 完了しました！');
       } catch (e) {
         console.error(e);
         showToast('削除に失敗しました');
