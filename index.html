@@ -147,18 +147,19 @@
   .fav-photo-empty { text-align: center; color: var(--earth-light); font-size: 11px; padding: 14px 0; }
 
   /* FAV PHOTO VIEWER */
-  .fav-viewer-overlay { position: fixed; inset: 0; background: rgba(20,25,20,0.95); z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; padding: env(safe-area-inset-top, 0px) 16px env(safe-area-inset-bottom, 0px); }
+  .fav-viewer-overlay { position: fixed; inset: 0; background: radial-gradient(ellipse at top, rgba(232,201,122,0.15), transparent 60%), radial-gradient(ellipse at bottom, rgba(122,158,126,0.18), transparent 70%), linear-gradient(180deg, #f5ede0 0%, #ebe0c8 100%); z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; padding: env(safe-area-inset-top, 0px) 16px env(safe-area-inset-bottom, 0px); overflow: hidden; }
   .fav-viewer-overlay.open { display: flex; }
   .fav-viewer-top { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); left: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 2; }
-  .fav-viewer-close { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; }
+  .fav-viewer-close { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); color: var(--ink); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
   .fav-viewer-spacer { flex: 1; }
-  .fav-viewer-action-btn { background: rgba(255,255,255,0.15); border: none; color: white; height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; }
-  .fav-viewer-action-btn.danger { background: rgba(200,80,80,0.4); }
-  .fav-viewer-image-wrap { width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center; }
-  .fav-viewer-image { max-width: 100%; max-height: 70vh; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); object-fit: contain; }
-  .fav-viewer-info { margin-top: 18px; text-align: center; color: white; }
-  .fav-viewer-date { font-size: 14px; color: rgba(255,255,255,0.85); font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .fav-viewer-date-edit { background: rgba(255,255,255,0.15); border: none; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+  .fav-viewer-action-btn { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); color: var(--ink); height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .fav-viewer-action-btn.danger { background: rgba(200,80,80,0.85); color: white; border-color: transparent; }
+  .fav-viewer-image-wrap { width: 100%; max-width: 460px; padding: 0 8px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+  .fav-viewer-frame { background: #ffffff; padding: 12px 12px 50px; border-radius: 4px; box-shadow: 0 8px 24px rgba(60,40,20,0.18), 0 2px 6px rgba(60,40,20,0.12); transform: rotate(-1deg); position: relative; max-width: 100%; }
+  .fav-viewer-frame::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 60px; height: 16px; background: linear-gradient(180deg, rgba(200,180,140,0.6), rgba(200,180,140,0.3)); border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .fav-viewer-frame img { width: 100%; max-height: 60vh; object-fit: contain; display: block; }
+  .fav-viewer-frame-caption { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-family: 'Shippori Mincho', serif; color: var(--earth-light); font-size: 13px; }
+  .fav-viewer-frame-caption .day-num { font-weight: 600; color: var(--sage-dark); margin-right: 12px; }
 
   /* 100-DAY DIARY */
   .diary-actions { margin-bottom: 18px; }
@@ -1297,10 +1298,10 @@
     <button class="fav-viewer-action-btn" onclick="editFavViewerDate()">📅 日付編集</button>
     <button class="fav-viewer-action-btn danger" onclick="confirmDeleteFavPhoto()">🗑 削除</button>
   </div>
-  <div class="fav-viewer-image-wrap" id="fav-viewer-image-wrap"></div>
-  <div class="fav-viewer-info">
-    <div class="fav-viewer-date">
-      <span id="fav-viewer-date-text"></span>
+  <div class="fav-viewer-image-wrap" id="fav-viewer-image-wrap">
+    <div class="fav-viewer-frame">
+      <img id="fav-viewer-img" src="" alt="">
+      <div class="fav-viewer-frame-caption"><span class="day-num" id="fav-viewer-daynum" style="display:none;"></span><span id="fav-viewer-datecap"></span></div>
     </div>
   </div>
 </div>
@@ -4084,16 +4085,17 @@ async function handleFavSelected(plantId, files) {
 }
 
 // お気に入り写真ビューア（拡大表示）
-let _favViewer = { photoId: null, plantId: null, url: null };
+let _favViewer = { photoId: null, plantId: null, url: null, takenAt: null, diaryId: null };
 
 async function openFavViewer(photoId, plantId) {
   const photos = await getPhotos(plantId, 'fav');
   const p = photos.find(x => x.id === photoId);
   if (!p) return;
   if (_favViewer.url) URL.revokeObjectURL(_favViewer.url);
-  _favViewer = { photoId, plantId, url: URL.createObjectURL(p.blob) };
-  document.getElementById('fav-viewer-image-wrap').innerHTML =
-    `<img class="fav-viewer-image" src="${_favViewer.url}">`;
+  _favViewer = { photoId, plantId, url: URL.createObjectURL(p.blob), takenAt: p.takenAt, diaryId: null };
+  document.getElementById('fav-viewer-img').src = _favViewer.url;
+  // お気に入りはDay番号なし
+  document.getElementById('fav-viewer-daynum').style.display = 'none';
   updateFavViewerDate(p.takenAt);
   document.getElementById('fav-viewer-overlay').classList.add('open');
 }
@@ -4101,23 +4103,23 @@ async function openFavViewer(photoId, plantId) {
 function closeFavViewer() {
   document.getElementById('fav-viewer-overlay').classList.remove('open');
   if (_favViewer.url) URL.revokeObjectURL(_favViewer.url);
-  _favViewer = { photoId: null, plantId: null, url: null };
+  _favViewer = { photoId: null, plantId: null, url: null, takenAt: null, diaryId: null };
 }
 
 function updateFavViewerDate(ts) {
   const d = new Date(ts);
   const s = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
-  document.getElementById('fav-viewer-date-text').textContent = s;
+  document.getElementById('fav-viewer-datecap').textContent = s;
+  _favViewer.takenAt = ts;
 }
 
 function editFavViewerDate() {
   if (!_favViewer.photoId) return;
-  // 日付入力モーダルを開く
   const dEl = document.getElementById('fav-date-input');
-  // 現在値を入力欄にセット
-  const span = document.getElementById('fav-viewer-date-text').textContent;
-  const m = span.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
-  if (m) dEl.value = `${m[1]}-${m[2]}-${m[3]}`;
+  if (_favViewer.takenAt) {
+    const d = new Date(_favViewer.takenAt);
+    dEl.value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
   document.getElementById('fav-date-modal').classList.add('open');
 }
 
@@ -4683,9 +4685,14 @@ async function openDiaryPhotoViewer(photoId, diaryId) {
   const p = photos.find(x => x.id === photoId);
   if (!p) return;
   if (_favViewer.url) URL.revokeObjectURL(_favViewer.url);
-  _favViewer = { photoId, plantId: diary.plantId, url: URL.createObjectURL(p.blob), diaryId };
-  document.getElementById('fav-viewer-image-wrap').innerHTML =
-    `<img class="fav-viewer-image" src="${_favViewer.url}">`;
+  _favViewer = { photoId, plantId: diary.plantId, url: URL.createObjectURL(p.blob), takenAt: p.takenAt, diaryId };
+  document.getElementById('fav-viewer-img').src = _favViewer.url;
+  // Day番号（古い順での位置）
+  const sorted = [...photos].sort((a, b) => a.takenAt - b.takenAt);
+  const dayNum = sorted.findIndex(x => x.id === photoId) + 1;
+  const dayEl = document.getElementById('fav-viewer-daynum');
+  dayEl.style.display = '';
+  dayEl.textContent = `Day ${dayNum}`;
   updateFavViewerDate(p.takenAt);
   document.getElementById('fav-viewer-overlay').classList.add('open');
 }
@@ -5253,8 +5260,11 @@ function toggleDiarySsPause() {
     clearTimeout(dssTimer);
     overlay.classList.remove('immersive');
   } else {
+    // 再生開始：UIが消えるのを待ってから最初の送りを始める（1秒の猶予）
     overlay.classList.add('immersive');
-    scheduleDiarySsNext();
+    clearTimeout(dssTimer);
+    const firstDelay = Math.max(1000, diarySsState.speed * 1000);
+    dssTimer = setTimeout(() => advanceDiarySs(), firstDelay);
   }
 }
 // 画面タップでUI表示＆一時停止に戻す
