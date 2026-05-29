@@ -257,7 +257,7 @@
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  .diary-ss-frame img { width: 100%; max-height: 60vh; object-fit: contain; display: block; }
+  .diary-ss-frame img { width: 100%; height: 60vh; object-fit: contain; display: block; background: #faf8f3; }
   .diary-ss-frame-caption {
     position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
     font-family: 'Shippori Mincho', serif; color: var(--earth-light); font-size: 13px;
@@ -1164,7 +1164,12 @@
     <button class="diary-ss-ctrl-btn" id="diary-ss-loop-btn" onclick="toggleDiarySsLoop()">🔁 Off</button>
     <button class="diary-ss-ctrl-btn" id="diary-ss-logs-btn" onclick="toggleDiarySsLogs()">📝 記録 On</button>
   </div>
-  <div class="diary-ss-image-wrap" id="diary-ss-image-wrap"></div>
+  <div class="diary-ss-image-wrap" id="diary-ss-image-wrap">
+    <div class="diary-ss-frame">
+      <img id="diary-ss-img" src="" alt="">
+      <div class="diary-ss-frame-caption"><span class="day-num" id="diary-ss-daynum"></span><span id="diary-ss-datecap"></span></div>
+    </div>
+  </div>
   <div class="diary-ss-info">
     <div class="diary-ss-plant-name" id="diary-ss-plant-name"></div>
     <div class="diary-ss-date" id="diary-ss-date"></div>
@@ -5053,6 +5058,7 @@ const DIARY_SS_SPEEDS = [0.5, 1, 2, 3];
 const DIARY_SS_DEFAULTS = { speed: 1, order: 'asc', loop: false, showLogs: true };
 let diarySsState = { ...DIARY_SS_DEFAULTS };
 let dssPhotos = [];
+let dssOldestSorted = [];
 let dssPlantName = '';
 let dssPlantId = null;
 let dssIndex = 0;
@@ -5092,6 +5098,7 @@ async function openDiarySlideshow(diaryId) {
   // 毎回デフォルト設定にリセット
   diarySsState = { ...DIARY_SS_DEFAULTS };
   dssPhotos = photos;
+  dssOldestSorted = [...photos].sort((a, b) => a.takenAt - b.takenAt);
   dssPlantName = plant.name;
   dssPlantId = diary.plantId;
   applyDiarySsOrder();
@@ -5130,19 +5137,22 @@ function applyDiarySsOrder() {
 function showDiarySsPhoto() {
   if (!dssPhotos.length) return;
   const photo = dssPhotos[dssIndex];
-  if (dssCurrentUrl) URL.revokeObjectURL(dssCurrentUrl);
-  dssCurrentUrl = URL.createObjectURL(photo.blob);
-  // Day番号は古い順での順位（古い順での位置=Day N）
-  const sortedByTime = [...dssPhotos].sort((a, b) => a.takenAt - b.takenAt);
-  const dayNum = sortedByTime.findIndex(p => p.id === photo.id) + 1;
+  // 新しいURLを先に作り、img.srcを差し替えてから古いURLを解放（チラつき防止）
+  const newUrl = URL.createObjectURL(photo.blob);
+  const img = document.getElementById('diary-ss-img');
+  const oldUrl = dssCurrentUrl;
+  img.src = newUrl;
+  dssCurrentUrl = newUrl;
+  if (oldUrl) {
+    // 次フレームで解放（描画反映後）
+    setTimeout(() => URL.revokeObjectURL(oldUrl), 50);
+  }
+  // Day番号は古い順での順位
+  const dayNum = (dssOldestSorted || []).findIndex(p => p.id === photo.id) + 1;
   const d = new Date(photo.takenAt);
   const dateShort = `${d.getMonth()+1}/${d.getDate()}`;
-  document.getElementById('diary-ss-image-wrap').innerHTML = `
-    <div class="diary-ss-frame">
-      <img src="${dssCurrentUrl}">
-      <div class="diary-ss-frame-caption"><span class="day-num">Day ${dayNum}</span>${dateShort}</div>
-    </div>
-  `;
+  document.getElementById('diary-ss-daynum').textContent = `Day ${dayNum}`;
+  document.getElementById('diary-ss-datecap').textContent = dateShort;
   document.getElementById('diary-ss-plant-name').textContent = dssPlantName;
   const dateStr = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
   document.getElementById('diary-ss-date').textContent = dateStr;
