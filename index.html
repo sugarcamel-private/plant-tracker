@@ -262,11 +262,10 @@
     position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
     font-family: 'Shippori Mincho', serif; color: var(--earth-light); font-size: 13px;
   }
-  .diary-ss-frame-caption .day-num { font-weight: 600; color: var(--sage-dark); margin-right: 8px; }
+  .diary-ss-frame-caption .day-num { font-weight: 600; color: var(--sage-dark); margin-right: 12px; }
 
   .diary-ss-info { margin-top: 20px; text-align: center; color: var(--ink); position: relative; z-index: 1; }
   .diary-ss-plant-name { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; color: var(--ink); }
-  .diary-ss-date { font-size: 12px; color: var(--earth-light); font-family: 'DM Sans', sans-serif; letter-spacing: 1px; }
 
   .diary-ss-bottom { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); left: 0; right: 0; display: flex; justify-content: center; gap: 8px; align-items: center; z-index: 2; }
   .diary-ss-pause-btn { background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.06); color: var(--ink); height: 40px; padding: 0 18px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; box-shadow: 0 2px 8px rgba(0,0,0,0.06); font-weight: 600; }
@@ -1172,7 +1171,6 @@
   </div>
   <div class="diary-ss-info">
     <div class="diary-ss-plant-name" id="diary-ss-plant-name"></div>
-    <div class="diary-ss-date" id="diary-ss-date"></div>
     <div class="diary-ss-logs" id="diary-ss-logs"></div>
   </div>
   <div class="diary-ss-bottom">
@@ -5150,12 +5148,10 @@ function showDiarySsPhoto() {
   // Day番号は古い順での順位
   const dayNum = (dssOldestSorted || []).findIndex(p => p.id === photo.id) + 1;
   const d = new Date(photo.takenAt);
-  const dateShort = `${d.getMonth()+1}/${d.getDate()}`;
+  const dateFull = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
   document.getElementById('diary-ss-daynum').textContent = `Day ${dayNum}`;
-  document.getElementById('diary-ss-datecap').textContent = dateShort;
+  document.getElementById('diary-ss-datecap').textContent = dateFull;
   document.getElementById('diary-ss-plant-name').textContent = dssPlantName;
-  const dateStr = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
-  document.getElementById('diary-ss-date').textContent = dateStr;
   document.getElementById('diary-ss-counter').textContent = `${dssIndex + 1} / ${dssPhotos.length}`;
   // 記録情報の表示
   renderDssLogs(photo.takenAt);
