@@ -172,6 +172,8 @@
   .diary-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .diary-card-icon { font-size: 20px; }
   .diary-card-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--ink); }
+  .diary-card-no { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--sage-dark); background: rgba(122,158,126,0.12); padding: 2px 8px; border-radius: 8px; flex-shrink: 0; }
+  .diary-finished-no { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--sage-dark); opacity: 0.7; margin-left: 4px; }
   .diary-card-sub { font-size: 11px; color: var(--earth-light); margin-bottom: 8px; }
   .diary-progress-bar { height: 6px; background: var(--mist); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
   .diary-progress-fill { height: 100%; background: var(--sage); transition: width 0.3s; }
@@ -232,6 +234,7 @@
   /* 上部タイトル */
   .diary-ss-album-title { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 56px); left: 0; right: 0; text-align: center; font-family: 'Shippori Mincho', serif; font-size: 13px; color: var(--earth-light); letter-spacing: 4px; font-weight: 600; z-index: 1; }
   .diary-ss-album-title::before, .diary-ss-album-title::after { content: '─'; opacity: 0.4; margin: 0 8px; }
+  .diary-ss-album-no { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 74px); left: 0; right: 0; text-align: center; font-family: 'Shippori Mincho', serif; font-size: 12px; color: var(--earth-light); letter-spacing: 3px; opacity: 0.7; z-index: 1; }
 
   .diary-ss-top { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); left: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 2; }
   .diary-ss-close { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); color: var(--ink); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
@@ -294,6 +297,7 @@
   .diary-detail-close { background: var(--mist); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; flex-shrink: 0; }
   .diary-detail-title-wrap { flex: 1; min-width: 0; }
   .diary-detail-title-name { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .diary-no-badge { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--sage-dark); background: rgba(122,158,126,0.14); padding: 2px 7px; border-radius: 7px; vertical-align: middle; margin-left: 4px; letter-spacing: 0.5px; }
   .diary-detail-title-meta { font-size: 11px; color: var(--earth-light); margin-top: 2px; }
   .diary-detail-body { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 30px); }
   .diary-detail-progress-section { background: white; border-radius: 12px; padding: 14px; margin-bottom: 14px; border: 1px solid var(--cream-dark); }
@@ -789,7 +793,7 @@
 <!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v4.0</span></div>
+    <div class="app-title">植物手帖<span>Plant Journal &nbsp; v4.1</span></div>
     <div class="header-btns">
       <div style="position:relative;">
         <button class="opt-btn" onclick="toggleOptMenu(event)">⋯</button>
@@ -1156,6 +1160,7 @@
   <div class="diary-ss-deco d3">🌱</div>
   <div class="diary-ss-deco d4">🌿</div>
   <div class="diary-ss-album-title">100 DAYS DIARY</div>
+  <div class="diary-ss-album-no" id="diary-ss-album-no"></div>
   <div class="diary-ss-top">
     <button class="diary-ss-close" onclick="closeDiarySlideshow()">×</button>
     <div class="diary-ss-spacer"></div>
@@ -1830,9 +1835,41 @@ let driveBackupEnabled = JSON.parse(localStorage.getItem('driveBackupEnabled') |
 // ⚠️ 開発者：ここに自分のClient IDを設定してください
 const DRIVE_CLIENT_ID = '570804289602-qur2685jlouvt6sirc38r2baaai8681e.apps.googleusercontent.com';
 let driveAccessToken = null;
+let driveTokenExpiry = 0;
 let driveFileId = null;
 const DRIVE_FILE_NAME = 'plant-tracker-backup.json';
 const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+
+// 起動時に保存済みトークンを復元（期限内なら再利用）
+(function loadSavedDriveToken() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('driveToken') || 'null');
+    if (saved && saved.token && saved.expiry && Date.now() < saved.expiry) {
+      driveAccessToken = saved.token;
+      driveTokenExpiry = saved.expiry;
+    }
+  } catch (e) {}
+})();
+
+function saveDriveToken(token, expiresInSec) {
+  // 期限は安全マージンとして実際より5分短く扱う
+  const expiry = Date.now() + (expiresInSec - 300) * 1000;
+  driveAccessToken = token;
+  driveTokenExpiry = expiry;
+  try {
+    localStorage.setItem('driveToken', JSON.stringify({ token, expiry }));
+  } catch (e) {}
+}
+
+function clearDriveToken() {
+  driveAccessToken = null;
+  driveTokenExpiry = 0;
+  localStorage.removeItem('driveToken');
+}
+
+function driveTokenValid() {
+  return driveAccessToken && Date.now() < driveTokenExpiry;
+}
 
 function initDriveBackupUI() {
   const sw = document.getElementById('drive-backup-toggle');
@@ -1844,7 +1881,7 @@ function toggleDriveBackup() {
   localStorage.setItem('driveBackupEnabled', JSON.stringify(driveBackupEnabled));
   initDriveBackupUI();
   if (driveBackupEnabled) {
-    driveAuth().then(() => driveLoadWithChoice());
+    ensureDriveToken().then(() => driveLoadWithChoice()).catch(() => {});
   }
 }
 
@@ -1871,9 +1908,7 @@ function triConfirmCancel() {
 
 async function driveLoadWithChoice() {
   if (!driveBackupEnabled) return;
-  if (!driveAccessToken) {
-    try { await driveAuth(); } catch(e) { return; }
-  }
+  try { await ensureDriveToken(); } catch(e) { return; }
   try {
     await driveGetOrCreateFile();
     if (!driveFileId) {
@@ -1887,7 +1922,7 @@ async function driveLoadWithChoice() {
       `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
       { headers: { Authorization: 'Bearer ' + driveAccessToken } }
     );
-    if (!res.ok) { driveAccessToken = null; showToast('⚠️ Drive読み込みに失敗しました'); return; }
+    if (!res.ok) { clearDriveToken(); showToast('⚠️ Drive読み込みに失敗しました'); return; }
     const data = await res.json();
     if (!data.plants || !data.logs) { await driveBackupSave(); return; }
     const savedAt = data.savedAt ? new Date(data.savedAt).toLocaleDateString('ja-JP') : '不明';
@@ -1918,9 +1953,7 @@ async function driveLoadWithChoice() {
 async function driveLoad() {
   // 起動時読み込み：ローカルが空のときだけDriveから全データ復元
   if (!driveBackupEnabled) return;
-  if (!driveAccessToken) {
-    try { await driveAuth(); } catch(e) { return; }
-  }
+  try { await ensureDriveToken(); } catch(e) { return; }
   try {
     await driveGetOrCreateFile();
     if (!driveFileId) return;
@@ -1928,7 +1961,7 @@ async function driveLoad() {
       `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
       { headers: { Authorization: 'Bearer ' + driveAccessToken } }
     );
-    if (!res.ok) { driveAccessToken = null; return; }
+    if (!res.ok) { clearDriveToken(); return; }
     const data = await res.json();
     if (!data.plants || !data.logs) return;
     const localEmpty = !plants.length && !logs.length;
@@ -1941,32 +1974,53 @@ async function driveLoad() {
   }
 }
 
-function driveAuth() {
+function driveAuth(silent = false) {
   return new Promise((resolve, reject) => {
-    
     const params = new URLSearchParams({
       client_id: DRIVE_CLIENT_ID,
       redirect_uri: location.origin + '/',
       response_type: 'token',
-      scope: DRIVE_SCOPE,
-      prompt: 'consent'
+      scope: DRIVE_SCOPE
     });
+    // silent時は同意・選択画面を出さず、既存セッションで通す試み
+    if (silent) {
+      params.set('prompt', 'none');
+    }
     const w = window.open('https://accounts.google.com/o/oauth2/v2/auth?' + params, '_blank', 'width=500,height=600');
     const poll = setInterval(() => {
       try {
         const url = new URL(w.location.href);
         const hash = new URLSearchParams(url.hash.slice(1));
         const token = hash.get('access_token');
+        const expiresIn = parseInt(hash.get('expires_in') || '3600', 10);
+        const err = hash.get('error');
         if (token) {
           clearInterval(poll);
-          driveAccessToken = token;
+          saveDriveToken(token, expiresIn);
           w.close();
           resolve(token);
+        } else if (err) {
+          // silentで失敗（要再同意）→ 呼び出し側で通常認証にフォールバック
+          clearInterval(poll);
+          try { w.close(); } catch(e){}
+          reject(new Error(err));
         }
       } catch(e) {}
-      if (w.closed) { clearInterval(poll); reject(); }
+      if (w.closed) { clearInterval(poll); reject(new Error('closed')); }
     }, 500);
   });
+}
+
+// トークンを確保（期限内ならそのまま、切れてたらsilent→通常の順で再取得）
+async function ensureDriveToken() {
+  if (driveTokenValid()) return driveAccessToken;
+  // まずsilentで試す（同意画面を出さずに）
+  try {
+    return await driveAuth(true);
+  } catch (e) {
+    // silent失敗 → 通常の認証（同意/アカウント選択が出る）
+    return await driveAuth(false);
+  }
 }
 
 async function driveGetOrCreateFile() {
@@ -1986,9 +2040,9 @@ async function driveGetOrCreateFile() {
 
 async function driveBackupSave() {
   if (!driveBackupEnabled) return;
-  if (!driveAccessToken) {
-    try { await driveAuth(); } catch(e) { return; }
-  }
+  try {
+    await ensureDriveToken();
+  } catch(e) { return; }
   try {
     await driveGetOrCreateFile();
     const data = JSON.stringify(buildBackupData());
@@ -2007,9 +2061,9 @@ async function driveBackupSave() {
       driveFileId = f.id;
       showToast('☁️ Driveに保存しました');
     } else {
-      // token expired
-      driveAccessToken = null;
-      showToast('⚠️ Drive保存失敗。再認証してください');
+      // token expired or invalid
+      clearDriveToken();
+      showToast('⚠️ Drive保存失敗。次回再同期されます');
     }
   } catch(e) {
     showToast('⚠️ Drive保存に失敗しました');
@@ -4220,6 +4274,19 @@ function getDiaryStatus(d) {
   return 'progress';
 }
 
+// その植物の何冊目か（中止は除外＝今diariesに残ってるものだけ、開始日順）
+function getDiaryOrdinal(d) {
+  const sameplant = diaries
+    .filter(x => x.plantId === d.plantId)
+    .sort((a, b) => a.startDate - b.startDate);
+  const idx = sameplant.findIndex(x => x.id === d.id);
+  return idx >= 0 ? idx + 1 : 1;
+}
+// #01 形式の文字列
+function diaryNoLabel(d) {
+  return '#' + String(getDiaryOrdinal(d)).padStart(2, '0');
+}
+
 // 写真の日付（YYYY-MM-DD配列）から開始日・終了日を算出
 // 写真がない場合は null
 function getDiaryFirstPhotoTs(d) {
@@ -4306,6 +4373,7 @@ function renderDiaryCard(d) {
         <div class="diary-card-header">
           <div class="diary-card-icon">${plant.emoji || '🌱'}</div>
           <div class="diary-card-name">${plant.name}</div>
+          <div class="diary-card-no">${diaryNoLabel(d)}</div>
         </div>
         ${periodLine ? `<div class="diary-card-sub">${plant.type || ''}${plant.type ? ' ・ ' : ''}${periodLine}</div>` : ''}
         <div class="diary-progress-bar"><div class="diary-progress-fill" style="width:100%"></div></div>
@@ -4328,6 +4396,7 @@ function renderDiaryCard(d) {
       <div class="diary-card-header">
         <div class="diary-card-icon">${plant.emoji || '🌱'}</div>
         <div class="diary-card-name">${plant.name}</div>
+        <div class="diary-card-no">${diaryNoLabel(d)}</div>
       </div>
       <div class="diary-card-sub">${subLine}</div>
       <div class="diary-progress-bar"><div class="diary-progress-fill" style="width:${pct}%"></div></div>
@@ -4351,7 +4420,7 @@ function renderFinishedCard(d) {
   const days = Math.ceil((endTs - startTs) / (24*60*60*1000)) + 1;
   return `
     <div class="diary-finished-card">
-      <div class="diary-finished-name">🏆 ${name}</div>
+      <div class="diary-finished-name">🏆 ${name} <span class="diary-finished-no">${diaryNoLabel(d)}</span></div>
       <div class="diary-finished-meta">${type ? type + ' ・ ' : ''}${fmtDateYmd(startTs)} 〜 ${fmtDateYmd(endTs)}（${days}日間で達成）</div>
     </div>
   `;
@@ -4622,7 +4691,7 @@ async function renderDiaryDetail(diaryId) {
   const status = getDiaryStatus(diary);
 
   // ヘッダー
-  document.getElementById('diary-detail-name').textContent = `${plant.emoji || '🌱'} ${plant.name}`;
+  document.getElementById('diary-detail-name').innerHTML = `${plant.emoji || '🌱'} ${escapeHtml(plant.name)} <span class="diary-no-badge">${diaryNoLabel(diary)}</span>`;
   const firstTs = getDiaryFirstPhotoTs(diary);
   const lastTs = getDiaryLastPhotoTs(diary);
   let metaLine;
@@ -5065,6 +5134,7 @@ let diarySsState = { ...DIARY_SS_DEFAULTS };
 let dssPhotos = [];
 let dssOldestSorted = [];
 let dssPlantName = '';
+let dssDiaryNo = '';
 let dssPlantId = null;
 let dssIndex = 0;
 let dssTimer = null;
@@ -5105,7 +5175,9 @@ async function openDiarySlideshow(diaryId) {
   dssPhotos = photos;
   dssOldestSorted = [...photos].sort((a, b) => a.takenAt - b.takenAt);
   dssPlantName = plant.name;
+  dssDiaryNo = diaryNoLabel(diary);
   dssPlantId = diary.plantId;
+  document.getElementById('diary-ss-album-no').textContent = dssDiaryNo;
   applyDiarySsOrder();
   dssIndex = 0;
   dssPaused = true;  // 初回は一時停止状態で開く
